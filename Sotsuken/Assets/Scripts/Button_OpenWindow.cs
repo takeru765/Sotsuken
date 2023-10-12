@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dev_Button : MonoBehaviour
+public class Button_OpenWindow : MonoBehaviour
 {
     // Start is called before the first frame update
 
