@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -30,17 +32,45 @@ public class GameManager : MonoBehaviour
 
 
     //ミッション関連
-    int goal = 0; //設定した目標
+    int goal = 1; //設定した目標
     int count = 0; //現在のマーク獲得数
     int mark = 0; //設定したマークの種類
     int markRec1 = 0; //前日のマークの種類
     int markRec2 = 0; //前々日のマークの種類
+    [SerializeField] TextMeshProUGUI goalText;
 
     //ミッションのマークを設定する。
     public void SetMark(int m)
     {
         mark = m;
         Debug.Log("mark = " + mark);
+    }
+
+    //ミッションの目標数を増減する
+    public void AddReason(int i)
+    {
+        goal += i;
+
+        //目標の上限下限を超えないようにする
+        if(goal < 1)
+        {
+            goal = 1;
+        }
+
+        if(goal > 10)
+        {
+            goal = 10;
+        }
+
+        //UI上の目標の表示を変更する
+        if(goal != 10)
+        {
+            goalText.text = string.Format(" {0:G}", goal);
+        }
+        else
+        {
+            goalText.text = string.Format("{0:G}", goal);
+        }
     }
 
 
