@@ -6,6 +6,43 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    //UI(ウィンドウ)関連
+    [SerializeField] GameObject BuildWindow; //建設用ウィンドウ
+    [SerializeField] GameObject MissionWindow; //ミッション用ウィンドウ
+    bool open = false; //既に何らかのウィンドウが開いているフラグ
+
+    //建設ウィンドウの開閉
+    public void OpenBuild()
+    {
+        if(open == false)
+        {
+            BuildWindow.SetActive(true);
+            open = true;
+        }
+    }
+
+    public void CloseBuild()
+    {
+        BuildWindow.SetActive(false);
+        open = false;
+    }
+
+    //ミッションウィンドウの開閉
+    public void OpenMission()
+    {
+        if(open == false)
+        {
+            MissionWindow.SetActive(true);
+            open = true;
+        }
+    }
+
+    public void CloseMission()
+    {
+        MissionWindow.SetActive(false);
+        open = false;
+    }
+
     //各種ポイント
     int alumiPoint = 0; //アルミ缶
     int stealPoint = 0; //スチール缶

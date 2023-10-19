@@ -741,9 +741,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 856339127}
-        m_TargetAssemblyTypeName: Dev_Button, Assembly-CSharp
-        m_MethodName: OnClick
+      - m_Target: {fileID: 1378342782}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: OpenBuild
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1703,9 +1703,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1302953941}
-        m_TargetAssemblyTypeName: Close_DevWin, Assembly-CSharp
-        m_MethodName: CloseDevWin
+      - m_Target: {fileID: 1378342782}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: CloseMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2150,6 +2150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4846b1a04693d2e4b8b8aeb6e320f379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BuildWindow: {fileID: 1601811338}
+  MissionWindow: {fileID: 1637510504}
   goalText: {fileID: 977251400}
 --- !u!1 &1430228628
 GameObject:
@@ -2626,7 +2628,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1637510505
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2892,9 +2894,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1727124622}
-        m_TargetAssemblyTypeName: Dev_Button, Assembly-CSharp
-        m_MethodName: OnClick
+      - m_Target: {fileID: 1378342782}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: OpenMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3374,9 +3376,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1786483896}
-        m_TargetAssemblyTypeName: Close_DevWin, Assembly-CSharp
-        m_MethodName: CloseDevWin
+      - m_Target: {fileID: 1378342782}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: CloseBuild
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
