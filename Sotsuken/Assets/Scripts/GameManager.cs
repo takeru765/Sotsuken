@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class GameManager : MonoBehaviour
 {
+    //現在日時を保存
+    DateTime time;
+
     //UI(ウィンドウ)関連
     [SerializeField] GameObject BuildWindow; //建設用ウィンドウ
     [SerializeField] GameObject MissionWindow; //ミッション用ウィンドウ
@@ -51,6 +55,13 @@ public class GameManager : MonoBehaviour
     int paperPoint = 0; //紙製容器包装
     int allPoint = 0; //累計ポイント
 
+    //当日獲得したポイント(ミッション用)
+    int todayAlumi = 0; //アルミ缶
+    int todaySteal = 0; //スチール缶
+    int todayPet = 0; //ペットボトル
+    int todayPla = 0; //プラスチック
+    int todayPaper = 0; //紙
+
     //建築フラグ等
     int place_A = 0; //建築場所その1の建物
     int lv_A = 0; //建築場所その1のレベル
@@ -74,19 +85,29 @@ public class GameManager : MonoBehaviour
     int mark = 0; //設定したマークの種類
     int markRec1 = 0; //前日のマークの種類
     int markRec2 = 0; //前々日のマークの種類
-    [SerializeField] TextMeshProUGUI goalText;
+    [SerializeField] TextMeshProUGUI goalText; //目標の数値テキスト
+    bool setMission = false; //ミッション確定済みフラグ
+    int setYear = 0; //ミッション確定年
+    int setMonth = 0; //ミッション確定月
+    int setDay = 0; //ミッション確定日
 
     //ミッションのマークを設定する。
     public void SetMark(int m)
     {
-        mark = m;
-        Debug.Log("mark = " + mark);
+        if(!setMission)
+        {
+            mark = m;
+            Debug.Log("mark = " + mark);
+        }
     }
 
     //ミッションの目標数を増減する
     public void AddReason(int i)
     {
-        goal += i;
+        if(!setMission)
+        {
+            goal += i;
+        }
 
         //目標の上限下限を超えないようにする
         if(goal < 1)
@@ -100,7 +121,7 @@ public class GameManager : MonoBehaviour
         }
 
         //UI上の目標の表示を変更する
-        if(goal != 10)
+        if(goal < 10)
         {
             goalText.text = string.Format(" {0:G}", goal);
         }
@@ -110,6 +131,35 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //ミッション確定
+    public void SetMission()
+    {
+        setMission = true;
+
+        //今日の日付を保存
+        setYear = time.Year;
+        setMonth = time.Month;
+        setDay = time.Day;
+    }
+
+    //ミッション達成判定
+    void CheckMission()
+    {
+        if(count >= goal)
+        {
+            //ここにミッション成功時の処理を入れる
+
+        }
+        else
+        {
+            //翌日になってるか判定
+            if()
+            {
+                //ここに失敗時の処理を入れる
+
+            }
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -120,6 +170,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //現在日時を取得。処理が重い場合、別の場所(画面切り替え時等)に移すかも
+        time = DateTime.Now;
     }
 }
