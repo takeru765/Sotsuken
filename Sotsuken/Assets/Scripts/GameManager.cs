@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
     //ミッション関連
     int goal = 1; //設定した目標
     int count = 0; //現在のマーク獲得数
-    int mark = 0; //設定したマークの種類
+    int mark = 0; //設定したマークの種類 1～5=アルミ、スチール、ペット、プラ、紙
     int markRec1 = 0; //前日のマークの種類
     int markRec2 = 0; //前々日のマークの種類
     [SerializeField] TextMeshProUGUI goalText; //目標の数値テキスト
@@ -97,8 +97,9 @@ public class GameManager : MonoBehaviour
         if(!setMission)
         {
             mark = m;
-            Debug.Log("mark = " + mark);
         }
+
+        Debug.Log("mark = " + mark);
     }
 
     //ミッションの目標数を増減する
@@ -145,20 +146,121 @@ public class GameManager : MonoBehaviour
     //ミッション達成判定
     void CheckMission()
     {
+        switch(mark)
+        {
+            case 1:
+                count = todayAlumi;
+                break;
+            case 2:
+                count = todaySteal;
+                break;
+            case 3:
+                count = todayPet;
+                break;
+            case 4:
+                count = todayPla;
+                break;
+            case 5:
+                count = todayPaper;
+                break;
+        }
+
         if(count >= goal)
         {
             //ここにミッション成功時の処理を入れる
-
+            SuccessMission();
         }
         else
         {
             //翌日になってるか判定
-            if()
+            if(time.Year > setYear || time.Month > setMonth || time.Day > setDay)
             {
                 //ここに失敗時の処理を入れる
-
+                FailedMission();
             }
         }
+
+        Debug.Log("ポイントは" + alumiPoint + "," + stealPoint + "," + plaPoint + "," + petPoint + "," + paperPoint);
+    }
+
+    //ミッション成功処理
+    void SuccessMission()
+    {
+        int reward = 0;
+
+        //獲得ポイントを計算
+        for(int i = 1; i <= goal; i++)
+        {
+            reward += i;
+        }
+
+        //設定したマークにポイント加算
+        switch(mark)
+        {
+            case 1:
+                alumiPoint += reward;
+                break;
+            case 2:
+                stealPoint += reward;
+                break;
+            case 3:
+                petPoint += reward;
+                break;
+            case 4:
+                plaPoint += reward;
+                break;
+            case 5:
+                paperPoint += reward;
+                break;
+        }
+
+        //前日、前々日のマークを更新
+        markRec2 = markRec1;
+        markRec1 = mark;
+
+        //ミッション決定フラグを解除
+        setMission = false;
+    }
+
+    //ミッション失敗処理
+    void FailedMission()
+    {
+        int reward = 0;
+
+        //獲得ポイントの計算
+        for(int i = 1; i < count; i++)
+        {
+            reward += i;
+        }
+
+        reward += count / 2;
+
+        //設定したマークにポイントを加算
+        switch (mark)
+        {
+            case 1:
+                alumiPoint += reward;
+                break;
+            case 2:
+                stealPoint += reward;
+                break;
+            case 3:
+                petPoint += reward;
+                break;
+            case 4:
+                plaPoint += reward;
+                break;
+            case 5:
+                paperPoint += reward;
+                break;
+        }
+
+        //前日、前々日のマークを更新
+        markRec2 = markRec1;
+        markRec1 = mark;
+
+        //ミッション決定フラグを解除
+        setMission = false;
     }
 
     // Start is called before the first frame update
