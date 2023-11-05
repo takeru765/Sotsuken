@@ -10,9 +10,35 @@ public class GameManager : MonoBehaviour
     //現在日時を保存
     DateTime time;
 
+    //日付変更チェック
+    int day = 0;
+    int month = 0;
+    int year = 0;
+    void CheckDate()
+    {
+        if(time.Year > year || time.Month > month || time.Day > day)
+        {
+            //各種数値・フラグをリセット
+            setMission = false;
+            successMission = false;
+            count = 0;
+            todayAlumi = 0;
+            todaySteal = 0;
+            todayPet = 0;
+            todayPla = 0;
+            todayPaper = 0;
+
+            //日付を更新
+            year = time.Year;
+            month = time.Month;
+            day = time.Day;
+        }
+    }
+
     //UI(ウィンドウ)関連
     [SerializeField] GameObject BuildWindow; //建設用ウィンドウ
     [SerializeField] GameObject MissionWindow; //ミッション用ウィンドウ
+    [SerializeField] GameObject InputWindow; //リサイクルマーク入力用ウィンドウ
     bool open = false; //既に何らかのウィンドウが開いているフラグ
 
     //建設ウィンドウの開閉
@@ -38,12 +64,32 @@ public class GameManager : MonoBehaviour
         {
             MissionWindow.SetActive(true);
             open = true;
+
+            //ミッションの成功・失敗を判定
+            CheckMission();
+            CheckDate();
         }
     }
 
     public void CloseMission()
     {
         MissionWindow.SetActive(false);
+        open = false;
+    }
+
+    //リサイクルマーク入力ウィンドウの開閉
+    public void OpenInput()
+    {
+        if (open == false)
+        {
+            InputWindow.SetActive(true);
+            open = true;
+        }
+    }
+
+    public void CloseInput()
+    {
+        InputWindow.SetActive(false);
         open = false;
     }
 
@@ -76,20 +122,280 @@ public class GameManager : MonoBehaviour
     int place_F = 0;
     int lv_F = 0;
 
+
+    //リサイクルマーク入力関連
+    int tmpAlumi = 0; //入力途中の一時保存用
+    int tmpSteal = 0;
+    int tmpPet = 0;
+    int tmpPla = 0;
+    int tmpPaper = 0;
+
+    [SerializeField] TextMeshProUGUI alumiText; //入力途中の表示用
+    [SerializeField] TextMeshProUGUI stealText;
+    [SerializeField] TextMeshProUGUI petText;
+    [SerializeField] TextMeshProUGUI plaText;
+    [SerializeField] TextMeshProUGUI paperText;
+
+    //マーク増加ボタン
+    public void AddInputMark(int mark) //markは1=アルミ缶、2=スチール缶、3=ペットボトル、4=プラスチック、5=紙
+    {
+        switch(mark)
+        {
+            case 1:
+                tmpAlumi += 1;
+                //一応、上限を10にしておく
+                if(tmpAlumi > 10)
+                {
+                    tmpAlumi = 10;
+                }
+
+                //テキスト同期
+                if (tmpAlumi < 10)
+                {
+                    alumiText.text = string.Format(" {0:G}", tmpAlumi);
+                }
+                else
+                {
+                    alumiText.text = string.Format("{0:G}", tmpAlumi);
+                }
+                break;
+
+            case 2:
+                tmpSteal += 1;
+                //一応、上限を10にしておく
+                if (tmpSteal > 10)
+                {
+                    tmpSteal = 10;
+                }
+
+                //テキスト同期
+                if (tmpSteal < 10)
+                {
+                    stealText.text = string.Format(" {0:G}", tmpSteal);
+                }
+                else
+                {
+                    stealText.text = string.Format("{0:G}", tmpSteal);
+                }
+                break;
+
+            case 3:
+                tmpPet += 1;
+                //一応、上限を10にしておく
+                if (tmpPet > 10)
+                {
+                    tmpPet = 10;
+                }
+
+                //テキスト同期
+                if (tmpPet < 10)
+                {
+                    petText.text = string.Format(" {0:G}", tmpPet);
+                }
+                else
+                {
+                    petText.text = string.Format("{0:G}", tmpPet);
+                }
+                break;
+
+            case 4:
+                tmpPla += 1;
+                //一応、上限を10にしておく
+                if (tmpPla > 10)
+                {
+                    tmpPla = 10;
+                }
+
+                //テキスト同期
+                if (tmpPla < 10)
+                {
+                    plaText.text = string.Format(" {0:G}", tmpPla);
+                }
+                else
+                {
+                    plaText.text = string.Format("{0:G}", tmpPla);
+                }
+                break;
+
+            case 5:
+                tmpPaper += 1;
+                //一応、上限を10にしておく
+                if (tmpPaper > 10)
+                {
+                    tmpPaper = 10;
+                }
+
+                //テキスト同期
+                if (tmpPaper < 10)
+                {
+                    paperText.text = string.Format(" {0:G}", tmpPaper);
+                }
+                else
+                {
+                    paperText.text = string.Format("{0:G}", tmpPaper);
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    //マーク減少ボタン
+    public void MinusInputMark(int mark) //markは1=アルミ缶、2=スチール缶、3=ペットボトル、4=プラスチック、5=紙
+    {
+        switch (mark)
+        {
+            case 1:
+                tmpAlumi -= 1;
+                //一応、下限を0にしておく
+                if (tmpAlumi < 0)
+                {
+                    tmpAlumi = 0;
+                }
+
+                //テキスト同期
+                if (tmpAlumi < 10)
+                {
+                    alumiText.text = string.Format(" {0:G}", tmpAlumi);
+                }
+                else
+                {
+                    alumiText.text = string.Format("{0:G}", tmpAlumi);
+                }
+                break;
+
+            case 2:
+                tmpSteal -= 1;
+                
+                if (tmpSteal < 0)
+                {
+                    tmpSteal = 0;
+                }
+
+                //テキスト同期
+                if (tmpSteal < 10)
+                {
+                    stealText.text = string.Format(" {0:G}", tmpSteal);
+                }
+                else
+                {
+                    stealText.text = string.Format("{0:G}", tmpSteal);
+                }
+                break;
+
+            case 3:
+                tmpPet -= 1;
+                
+                if (tmpPet < 0)
+                {
+                    tmpPet = 0;
+                }
+
+                //テキスト同期
+                if (tmpPet < 10)
+                {
+                    petText.text = string.Format(" {0:G}", tmpPet);
+                }
+                else
+                {
+                    petText.text = string.Format("{0:G}", tmpPet);
+                }
+                break;
+
+            case 4:
+                tmpPla -= 1;
+                
+                if (tmpPla < 0)
+                {
+                    tmpPla = 0;
+                }
+
+                //テキスト同期
+                if (tmpPla < 10)
+                {
+                    plaText.text = string.Format(" {0:G}", tmpPla);
+                }
+                else
+                {
+                    plaText.text = string.Format("{0:G}", tmpPla);
+                }
+                break;
+
+            case 5:
+                tmpPaper -= 1;
+                
+                if (tmpPaper < 0)
+                {
+                    tmpPaper = 0;
+                }
+
+                //テキスト同期
+                if (tmpPaper < 10)
+                {
+                    paperText.text = string.Format(" {0:G}", tmpPaper);
+                }
+                else
+                {
+                    paperText.text = string.Format("{0:G}", tmpPaper);
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    public void InputEnter() //リサイクルマーク入力を確定
+    {
+        //各マークのポイントと当日の入力数を反映
+        alumiPoint += tmpAlumi * 5;
+        stealPoint += tmpSteal * 5;
+        petPoint += tmpPet * 5;
+        plaPoint += tmpPla * 5;
+        paperPoint += tmpPaper * 5;
+        todayAlumi += tmpAlumi;
+        todaySteal += tmpSteal;
+        todayPet += tmpPet;
+        todayPla += tmpPla;
+        todaySteal += tmpSteal;
+        allPoint += (tmpAlumi + tmpSteal + tmpPet + tmpPla + tmpPaper) * 5;
+
+        //tmp○○を初期化
+        tmpAlumi = 0;
+        tmpSteal = 0;
+        tmpPet = 0;
+        tmpPla = 0;
+        tmpPaper = 0;
+        //表示UIに反映
+        alumiText.text = string.Format(" {0:G}", tmpAlumi);
+        stealText.text = string.Format(" {0:G}", tmpSteal);
+        petText.text = string.Format(" {0:G}", tmpPet);
+        plaText.text = string.Format(" {0:G}", tmpPla) ;
+        paperText.text = string.Format(" {0:G}", tmpPaper);
+
+        //デバッグ表示
+        Debug.Log("アルミ=" + alumiPoint + "、スチール=" + stealPoint + "、ペットボトル=" + petPoint + "、プラスチック=" + plaPoint + "、紙=" + paperPoint);
+    }
+
     //イベント関連
 
 
     //ミッション関連
     int goal = 1; //設定した目標
     int count = 0; //現在のマーク獲得数
-    int mark = 0; //設定したマークの種類 1～5=アルミ、スチール、ペット、プラ、紙
+    int mark = 1; //設定したマークの種類 1～5=アルミ、スチール、ペット、プラ、紙
     int markRec1 = 0; //前日のマークの種類
     int markRec2 = 0; //前々日のマークの種類
     [SerializeField] TextMeshProUGUI goalText; //目標の数値テキスト
     bool setMission = false; //ミッション確定済みフラグ
-    int setYear = 0; //ミッション確定年
-    int setMonth = 0; //ミッション確定月
-    int setDay = 0; //ミッション確定日
+    bool successMission = false; //ミッション達成済みフラグ
+    int setYear = 10000; //ミッション確定年
+    int setMonth = 10000; //ミッション確定月
+    int setDay = 10000; //ミッション確定日
+
+    [SerializeField] GameObject MissionSuccess; //ミッション成功メッセージ
+    [SerializeField] GameObject MissionFailed; //ミッション失敗メッセージ
 
     //ミッションのマークを設定する。
     public void SetMark(int m)
@@ -163,19 +469,20 @@ public class GameManager : MonoBehaviour
             case 5:
                 count = todayPaper;
                 break;
+            default:
+                break;
         }
 
-        if(count >= goal)
+        if(setMission == true && count >= goal && successMission == false)
         {
             //ここにミッション成功時の処理を入れる
             SuccessMission();
         }
-        else
+
+        if (time.Year > setYear || time.Month > setMonth || time.Day > setDay) //翌日になってるか判定
         {
-            //翌日になってるか判定
-            if(time.Year > setYear || time.Month > setMonth || time.Day > setDay)
+            if(setMission ==true && successMission ==false)
             {
-                //ここに失敗時の処理を入れる
                 FailedMission();
             }
         }
@@ -191,7 +498,7 @@ public class GameManager : MonoBehaviour
         //獲得ポイントを計算
         for(int i = 1; i <= goal; i++)
         {
-            reward += i;
+            reward += i * 5;
         }
 
         //設定したマークにポイント加算
@@ -213,13 +520,17 @@ public class GameManager : MonoBehaviour
                 paperPoint += reward;
                 break;
         }
+        allPoint += reward;
 
         //前日、前々日のマークを更新
         markRec2 = markRec1;
         markRec1 = mark;
 
-        //ミッション決定フラグを解除
-        setMission = false;
+        //ミッション達成フラグをON
+        successMission = true;
+
+        //ミッション成功ウィンドウを表示
+        MissionSuccess.SetActive(true);
     }
 
     //ミッション失敗処理
@@ -230,10 +541,10 @@ public class GameManager : MonoBehaviour
         //獲得ポイントの計算
         for(int i = 1; i < count; i++)
         {
-            reward += i;
+            reward += i * 5;
         }
 
-        reward += count / 2;
+        reward += count * 5 / 2;
 
         //設定したマークにポイントを加算
         switch (mark)
@@ -261,12 +572,21 @@ public class GameManager : MonoBehaviour
 
         //ミッション決定フラグを解除
         setMission = false;
+
+        //ミッション失敗ウィンドウを表示
+        MissionFailed.SetActive(true);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        time = DateTime.Now;
+
+        day = time.Day;
+        month = time.Month;
+        year = time.Year;
+
+        Debug.Log(year + "/" + month + "/" + day);
     }
 
     // Update is called once per frame
