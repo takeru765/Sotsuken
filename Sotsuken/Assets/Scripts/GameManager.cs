@@ -109,18 +109,98 @@ public class GameManager : MonoBehaviour
     int todayPaper = 0; //紙
 
     //建築フラグ等
-    int place_A = 0; //建築場所その1の建物
-    int lv_A = 0; //建築場所その1のレベル
-    int place_B = 0;
-    int lv_B = 0;
-    int place_C = 0;
-    int lv_C = 0;
-    int place_D = 0;
-    int lv_D = 0;
-    int place_E = 0;
-    int lv_E = 0;
-    int place_F = 0;
-    int lv_F = 0;
+    int place_1 = 0; //建築場所その1の建物
+    int lv_1 = 0; //建築場所その1のレベル
+    int place_2 = 0;
+    int lv_2 = 0;
+    int place_3 = 0;
+    int lv_3 = 0;
+    int place_4 = 0;
+    int lv_4 = 0;
+    int place_5 = 0;
+    int lv_5 = 0;
+    int place_6 = 0;
+    int lv_6 = 0;
+
+    //建築によるボーナス
+    float inputRate = 1f; //マーク入力倍率
+    float eventRate = 1f; //イベント倍率
+
+    //建築ボーナスの再計算
+    void calcBuildBonus()
+    {
+        //各種ボーナスの初期化
+        inputRate = 1f;
+        eventRate = 1f;
+
+        //建築フラグを元に再計算
+        switch(place_1)
+        {
+            case 1:
+                inputRate += 0.2f * lv_1;
+                break;
+            case 2:
+                eventRate += 0.2f * lv_1;
+                break;
+            default:
+                break;
+        }
+        switch (place_2)
+        {
+            case 1:
+                inputRate += 0.2f * lv_2;
+                break;
+            case 2:
+                eventRate += 0.2f * lv_2;
+                break;
+            default:
+                break;
+        }
+        switch (place_3)
+        {
+            case 1:
+                inputRate += 0.2f * lv_3;
+                break;
+            case 2:
+                eventRate += 0.2f * lv_3;
+                break;
+            default:
+                break;
+        }
+        switch (place_4)
+        {
+            case 1:
+                inputRate += 0.2f * lv_4;
+                break;
+            case 2:
+                eventRate += 0.2f * lv_4;
+                break;
+            default:
+                break;
+        }
+        switch (place_5)
+        {
+            case 1:
+                inputRate += 0.2f * lv_5;
+                break;
+            case 2:
+                eventRate += 0.2f * lv_5;
+                break;
+            default:
+                break;
+        }
+        switch (place_6)
+        {
+            case 1:
+                inputRate += 0.2f * lv_6;
+                break;
+            case 2:
+                eventRate += 0.2f * lv_6;
+                break;
+            default:
+                break;
+        }
+    }
 
 
     //リサイクルマーク入力関連
@@ -349,11 +429,11 @@ public class GameManager : MonoBehaviour
     public void InputEnter() //リサイクルマーク入力を確定
     {
         //各マークのポイントと当日の入力数を反映
-        alumiPoint += tmpAlumi * 5;
-        stealPoint += tmpSteal * 5;
-        petPoint += tmpPet * 5;
-        plaPoint += tmpPla * 5;
-        paperPoint += tmpPaper * 5;
+        alumiPoint += (int) (tmpAlumi * 5 * inputRate);
+        stealPoint += (int) (tmpSteal * 5 * inputRate);
+        petPoint += (int) (tmpPet * 5 * inputRate);
+        plaPoint += (int) (tmpPla * 5 * inputRate);
+        paperPoint += (int) (tmpPaper * 5 * inputRate);
         todayAlumi += tmpAlumi;
         todaySteal += tmpSteal;
         todayPet += tmpPet;
