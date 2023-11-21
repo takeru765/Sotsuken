@@ -438,8 +438,8 @@ public class GameManager : MonoBehaviour
         todaySteal += tmpSteal;
         todayPet += tmpPet;
         todayPla += tmpPla;
-        todaySteal += tmpSteal;
-        allPoint += (tmpAlumi + tmpSteal + tmpPet + tmpPla + tmpPaper) * 5;
+        todayPaper += tmpPaper;
+        allPoint += (int)((tmpAlumi + tmpSteal + tmpPet + tmpPla + tmpPaper) * 5 * inputRate);
 
         //tmp››‚ğ‰Šú‰»
         tmpAlumi = 0;
