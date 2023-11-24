@@ -92,9 +92,20 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject InputWindow; //リサイクルマーク入力用ウィンドウ
     bool open = false; //既に何らかのウィンドウが開いているフラグ
 
+    [SerializeField] Image build1Picture;
+
     //建設ウィンドウの開閉
     public void OpenBuild(int i)
     {
+        if(lv[i] == 0)
+        {
+            OpenBuild0(i);
+        }
+        else
+        {
+            OpenBuild1(i);
+        }
+        /*
         switch(i)
         {
             case 1:
@@ -160,6 +171,7 @@ public class GameManager : MonoBehaviour
             default:
                 break;
         }
+        */
     }
     public void OpenBuild0(int i) //OpenBuild内で呼び出し
     {
@@ -173,7 +185,7 @@ public class GameManager : MonoBehaviour
 
     public void CloseBuild0()
     {
-        selectedPlace = 0;
+        selectedPlace = -1;
         selectedBuilding = 0;
         BuildWindow0.SetActive(false);
         open = false;
@@ -182,11 +194,66 @@ public class GameManager : MonoBehaviour
     public void OpenBuild1(int i) //OpenBuild内で呼び出し
     {
         selectedPlace = i;
+        /*
+        switch(i)
+        {
+            case 1:
+                if(place_1 == 1)
+                {
+                    build1Picture.sprite = recycleImage;
+                }
+                else if(place_1 ==  2)
+                {
+                    build1Picture.sprite = amusementImage;
+                }
+                break;
+            case 2:
+                if (place_2 == 1)
+                {
+                    build1Picture.sprite = recycleImage;
+                }
+                else if (place_2 == 2)
+                {
+                    build1Picture.sprite = amusementImage;
+                }
+                break;
+            case 3:
+                if (place_3 == 1)
+                {
+                    build1Picture.sprite = recycleImage;
+                }
+                else if (place_3 == 2)
+                {
+                    build1Picture.sprite = amusementImage;
+                }
+                break;
+            case 4:
+                if (place_4 == 1)
+                {
+                    build1Picture.sprite = recycleImage;
+                }
+                else if (place_4 == 2)
+                {
+                    build1Picture.sprite = amusementImage;
+                }
+                break;
+
+        }
+        */
         if (open == false)
         {
             selectedPlace = i;
             BuildWindow1.SetActive(true);
             open = true;
+            //建設物に合わせた画像を表示
+            if (place[i] == 1)
+            {
+                build1Picture.sprite = recycleImage;
+            }
+            else if (place[i] == 2)
+            {
+                build1Picture.sprite = amusementImage;
+            }
         }
     }
 
@@ -249,11 +316,14 @@ public class GameManager : MonoBehaviour
     int todayPaper = 0; //紙
 
     //選択中の建築場所
-    int selectedPlace = 0; //1～6が対応。0は初期値。
+    int selectedPlace = -1; //0～5が対応。-1は初期値。
     //選択中の建築物
     int selectedBuilding = 0; //BuildWindow0で使用。1がリサイクル場、2が娯楽施設
 
     //建築フラグ等
+    int[] place = {0, 0, 0, 0, 0, 0}; //建築場所1～6の建物。1がリサイクル場、2が娯楽施設
+    int[] lv = {0, 0, 0, 0, 0, 0}; //建築場所1～6のレベル
+    /*
     int place_1 = 0; //建築場所その1の建物、1がリサイクル場、2が娯楽施設
     int lv_1 = 0; //建築場所その1のレベル
     int place_2 = 0;
@@ -266,14 +336,15 @@ public class GameManager : MonoBehaviour
     int lv_5 = 0;
     int place_6 = 0;
     int lv_6 = 0;
+    */
 
     //各建築場所の画像
+    [SerializeField] Image buildImage0;
     [SerializeField] Image buildImage1;
     [SerializeField] Image buildImage2;
     [SerializeField] Image buildImage3;
     [SerializeField] Image buildImage4;
     [SerializeField] Image buildImage5;
-    [SerializeField] Image buildImage6;
     //リサイクル場、娯楽施設の画像
     [SerializeField] Sprite recycleImage;
     [SerializeField] Sprite amusementImage;
@@ -289,6 +360,74 @@ public class GameManager : MonoBehaviour
     {
         if(selectedBuilding != 0)
         {
+            place[selectedPlace] = selectedBuilding;
+            lv[selectedPlace] = 1;
+            switch(selectedPlace)
+            {
+                case 0:
+                    if (selectedBuilding == 1)
+                    {
+                        buildImage0.sprite = recycleImage;
+                    }
+                    else if (selectedBuilding == 2)
+                    {
+                        buildImage0.sprite = amusementImage;
+                    }
+                    break;
+                case 1:
+                    if (selectedBuilding == 1)
+                    {
+                        buildImage1.sprite = recycleImage;
+                    }
+                    else if (selectedBuilding == 2)
+                    {
+                        buildImage1.sprite = amusementImage;
+                    }
+                    break;
+                case 2:
+                    if (selectedBuilding == 1)
+                    {
+                        buildImage2.sprite = recycleImage;
+                    }
+                    else if (selectedBuilding == 2)
+                    {
+                        buildImage2.sprite = amusementImage;
+                    }
+                    break;
+                case 3:
+                    if (selectedBuilding == 1)
+                    {
+                        buildImage3.sprite = recycleImage;
+                    }
+                    else if (selectedBuilding == 2)
+                    {
+                        buildImage3.sprite = amusementImage;
+                    }
+                    break;
+                case 4:
+                    if (selectedBuilding == 1)
+                    {
+                        buildImage4.sprite = recycleImage;
+                    }
+                    else if (selectedBuilding == 2)
+                    {
+                        buildImage4.sprite = amusementImage;
+                    }
+                    break;
+                case 5:
+                    if (selectedBuilding == 1)
+                    {
+                        buildImage5.sprite = recycleImage;
+                    }
+                    else if (selectedBuilding == 2)
+                    {
+                        buildImage5.sprite = amusementImage;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            /*
             switch(selectedPlace)
             {
                 case 1:
@@ -366,9 +505,59 @@ public class GameManager : MonoBehaviour
                 default:
                     break;
             }
-
+            */
+            PointViewerChange();
             CloseBuild0();
         }
+    }
+
+    //建築物レベルアップボタン
+    public void DecideLevelUp()
+    {
+        switch(lv[selectedPlace])
+        {
+            case 1:
+                if(place[selectedPlace] == 1 && alumiPoint >= 5)
+                {
+                    lv[selectedPlace] += 1;
+                    alumiPoint -= 5;
+                }
+                else if(place[selectedPlace] == 2 && stealPoint >= 5)
+                {
+                    lv[selectedPlace] += 1;
+                    stealPoint -= 5;
+                }
+                break;
+            case 2:
+                if (place[selectedPlace] == 1 && alumiPoint >= 10)
+                {
+                    lv[selectedPlace] += 1;
+                    alumiPoint -= 10;
+                }
+                else if (place[selectedPlace] == 2 && stealPoint >= 10)
+                {
+                    lv[selectedPlace] += 1;
+                    stealPoint -= 10;
+                }
+                break;
+            case 3:
+                if (place[selectedPlace] == 1 && alumiPoint >= 15)
+                {
+                    lv[selectedPlace] += 1;
+                    alumiPoint -= 15;
+                }
+                else if (place[selectedPlace] == 2 && stealPoint >= 15)
+                {
+                    lv[selectedPlace] += 1;
+                    stealPoint -= 15;
+                }
+                break;
+        }
+
+        PointViewerChange();
+        Debug.Log(lv[0] + "," + lv[1] + "," + lv[2]);
+        CalcBuildBonus();
+        Debug.Log(inputRate + "," + (int)(5 * (inputRate + 0.01f)));
     }
 
     //建築によるボーナス
@@ -376,13 +565,25 @@ public class GameManager : MonoBehaviour
     float eventRate = 1f; //イベント倍率
 
     //建築ボーナスの再計算
-    void calcBuildBonus()
+    void CalcBuildBonus()
     {
         //各種ボーナスの初期化
         inputRate = 1f;
         eventRate = 1f;
 
         //建築フラグを元に再計算
+        for(int i = 0; i < 6; i++)
+        {
+            if(place[i] == 1)
+            {
+                inputRate += 0.2f * lv[i] + 0.001f; //そのまま計算すると端数の都合で答えがおかしくなることがあるため、+0.001してます。
+            }
+            else if(place[i] == 2)
+            {
+                eventRate += 0.2f * lv[i] + 0.001f; //イベントの報酬量に応じ、.00...1の部分は変えてください。
+            }
+        }
+        /*
         switch(place_1)
         {
             case 1:
@@ -449,6 +650,7 @@ public class GameManager : MonoBehaviour
             default:
                 break;
         }
+        */
     }
 
 
@@ -678,7 +880,7 @@ public class GameManager : MonoBehaviour
     public void InputEnter() //リサイクルマーク入力を確定
     {
         //建築ボーナス・イベントボーナスを計算
-        calcBuildBonus();
+        CalcBuildBonus();
 
         //各マークのポイントと当日の入力数を反映
         alumiPoint += (int) (tmpAlumi * 5 * inputRate);

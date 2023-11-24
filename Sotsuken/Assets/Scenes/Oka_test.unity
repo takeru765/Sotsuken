@@ -1205,7 +1205,7 @@ GameObject:
   - component: {fileID: 256333585}
   - component: {fileID: 256333584}
   m_Layer: 5
-  m_Name: BuildPlace1
+  m_Name: BuildPlace0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1282,7 +1282,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3154,7 +3154,7 @@ GameObject:
   - component: {fileID: 648817773}
   - component: {fileID: 648817772}
   m_Layer: 5
-  m_Name: BuildPlace2
+  m_Name: BuildPlace1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3231,7 +3231,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3287,7 +3287,7 @@ GameObject:
   - component: {fileID: 659452964}
   - component: {fileID: 659452963}
   m_Layer: 5
-  m_Name: BuildPlace3
+  m_Name: BuildPlace2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3364,7 +3364,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 3
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -5160,7 +5160,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1047539334}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1378342782}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: DecideLevelUp
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1047539334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7425,7 +7437,7 @@ GameObject:
   - component: {fileID: 1336916952}
   - component: {fileID: 1336916951}
   m_Layer: 5
-  m_Name: BuildPlace5
+  m_Name: BuildPlace4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7502,7 +7514,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 5
+          m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -7692,7 +7704,7 @@ GameObject:
   - component: {fileID: 1342946056}
   - component: {fileID: 1342946055}
   m_Layer: 5
-  m_Name: BuildPlace4
+  m_Name: BuildPlace3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7769,7 +7781,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 4
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -8338,12 +8350,13 @@ MonoBehaviour:
   BuildWindow1: {fileID: 2092001309}
   MissionWindow: {fileID: 1512342004}
   InputWindow: {fileID: 1944815347}
-  buildImage1: {fileID: 436463514}
-  buildImage2: {fileID: 737311108}
-  buildImage3: {fileID: 361567320}
-  buildImage4: {fileID: 1899999717}
-  buildImage5: {fileID: 1945556646}
-  buildImage6: {fileID: 348474752}
+  build1Picture: {fileID: 1849391110}
+  buildImage0: {fileID: 436463514}
+  buildImage1: {fileID: 737311108}
+  buildImage2: {fileID: 361567320}
+  buildImage3: {fileID: 1899999717}
+  buildImage4: {fileID: 1945556646}
+  buildImage5: {fileID: 348474752}
   recycleImage: {fileID: 21300000, guid: e8b2872759d05f748a9acc09c3741529, type: 3}
   amusementImage: {fileID: 21300000, guid: ddfbcd4383e507840800b9ce9e68649c, type: 3}
   alumiText: {fileID: 484506528}
@@ -11765,7 +11778,7 @@ GameObject:
   - component: {fileID: 2031813059}
   - component: {fileID: 2031813058}
   m_Layer: 5
-  m_Name: BuildPlace6
+  m_Name: BuildPlace5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11842,7 +11855,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 6
+          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
