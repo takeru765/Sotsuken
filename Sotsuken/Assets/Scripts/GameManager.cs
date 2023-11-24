@@ -105,73 +105,6 @@ public class GameManager : MonoBehaviour
         {
             OpenBuild1(i);
         }
-        /*
-        switch(i)
-        {
-            case 1:
-                if(lv_1 == 0)
-                {
-                    OpenBuild0(i);
-                }
-                else
-                {
-                    OpenBuild1(i);
-                }
-                break;
-            case 2:
-                if (lv_2 == 0)
-                {
-                    OpenBuild0(i);
-                }
-                else
-                {
-                    OpenBuild1(i);
-                }
-                break;
-            case 3:
-                if (lv_3 == 0)
-                {
-                    OpenBuild0(i);
-                }
-                else
-                {
-                    OpenBuild1(i);
-                }
-                break;
-            case 4:
-                if (lv_4 == 0)
-                {
-                    OpenBuild0(i);
-                }
-                else
-                {
-                    OpenBuild1(i);
-                }
-                break;
-            case 5:
-                if (lv_5 == 0)
-                {
-                    OpenBuild0(i);
-                }
-                else
-                {
-                    OpenBuild1(i);
-                }
-                break;
-            case 6:
-                if (lv_6 == 0)
-                {
-                    OpenBuild0(i);
-                }
-                else
-                {
-                    OpenBuild1(i);
-                }
-                break;
-            default:
-                break;
-        }
-        */
     }
     public void OpenBuild0(int i) //OpenBuild内で呼び出し
     {
@@ -323,20 +256,6 @@ public class GameManager : MonoBehaviour
     //建築フラグ等
     int[] place = {0, 0, 0, 0, 0, 0}; //建築場所1～6の建物。1がリサイクル場、2が娯楽施設
     int[] lv = {0, 0, 0, 0, 0, 0}; //建築場所1～6のレベル
-    /*
-    int place_1 = 0; //建築場所その1の建物、1がリサイクル場、2が娯楽施設
-    int lv_1 = 0; //建築場所その1のレベル
-    int place_2 = 0;
-    int lv_2 = 0;
-    int place_3 = 0;
-    int lv_3 = 0;
-    int place_4 = 0;
-    int lv_4 = 0;
-    int place_5 = 0;
-    int lv_5 = 0;
-    int place_6 = 0;
-    int lv_6 = 0;
-    */
 
     //各建築場所の画像
     [SerializeField] Image buildImage0;
@@ -427,85 +346,7 @@ public class GameManager : MonoBehaviour
                 default:
                     break;
             }
-            /*
-            switch(selectedPlace)
-            {
-                case 1:
-                    place_1 = selectedBuilding;
-                    lv_1 = 1;
-                    if(selectedBuilding == 1)
-                    {
-                        buildImage1.sprite = recycleImage;
-                    }
-                    else if(selectedBuilding == 2)
-                    {
-                        buildImage1.sprite = amusementImage;
-                    }
-                    break;
-                case 2:
-                    place_2 = selectedBuilding;
-                    lv_2 = 1;
-                    if (selectedBuilding == 1)
-                    {
-                        buildImage2.sprite = recycleImage;
-                    }
-                    else if (selectedBuilding == 2)
-                    {
-                        buildImage2.sprite = amusementImage;
-                    }
-                    break;
-                case 3:
-                    place_3 = selectedBuilding;
-                    lv_3 = 1;
-                    if (selectedBuilding == 1)
-                    {
-                        buildImage3.sprite = recycleImage;
-                    }
-                    else if (selectedBuilding == 2)
-                    {
-                        buildImage3.sprite = amusementImage;
-                    }
-                    break;
-                case 4:
-                    place_4 = selectedBuilding;
-                    lv_4 = 1;
-                    if (selectedBuilding == 1)
-                    {
-                        buildImage4.sprite = recycleImage;
-                    }
-                    else if (selectedBuilding == 2)
-                    {
-                        buildImage4.sprite = amusementImage;
-                    }
-                    break;
-                case 5:
-                    place_5 = selectedBuilding;
-                    lv_5 = 1;
-                    if (selectedBuilding == 1)
-                    {
-                        buildImage5.sprite = recycleImage;
-                    }
-                    else if (selectedBuilding == 2)
-                    {
-                        buildImage5.sprite = amusementImage;
-                    }
-                    break;
-                case 6:
-                    place_6 = selectedBuilding;
-                    lv_6 = 1;
-                    if (selectedBuilding == 1)
-                    {
-                        buildImage6.sprite = recycleImage;
-                    }
-                    else if (selectedBuilding == 2)
-                    {
-                        buildImage6.sprite = amusementImage;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            */
+            
             PointViewerChange();
             CloseBuild0();
         }
@@ -555,6 +396,7 @@ public class GameManager : MonoBehaviour
         }
 
         PointViewerChange();
+        //以下3行は動作確認用です。要らなくなったら消してください。
         Debug.Log(lv[0] + "," + lv[1] + "," + lv[2]);
         CalcBuildBonus();
         Debug.Log(inputRate + "," + (int)(5 * (inputRate + 0.01f)));
@@ -583,74 +425,6 @@ public class GameManager : MonoBehaviour
                 eventRate += 0.2f * lv[i] + 0.001f; //イベントの報酬量に応じ、.00...1の部分は変えてください。
             }
         }
-        /*
-        switch(place_1)
-        {
-            case 1:
-                inputRate += 0.2f * lv_1;
-                break;
-            case 2:
-                eventRate += 0.2f * lv_1;
-                break;
-            default:
-                break;
-        }
-        switch (place_2)
-        {
-            case 1:
-                inputRate += 0.2f * lv_2;
-                break;
-            case 2:
-                eventRate += 0.2f * lv_2;
-                break;
-            default:
-                break;
-        }
-        switch (place_3)
-        {
-            case 1:
-                inputRate += 0.2f * lv_3;
-                break;
-            case 2:
-                eventRate += 0.2f * lv_3;
-                break;
-            default:
-                break;
-        }
-        switch (place_4)
-        {
-            case 1:
-                inputRate += 0.2f * lv_4;
-                break;
-            case 2:
-                eventRate += 0.2f * lv_4;
-                break;
-            default:
-                break;
-        }
-        switch (place_5)
-        {
-            case 1:
-                inputRate += 0.2f * lv_5;
-                break;
-            case 2:
-                eventRate += 0.2f * lv_5;
-                break;
-            default:
-                break;
-        }
-        switch (place_6)
-        {
-            case 1:
-                inputRate += 0.2f * lv_6;
-                break;
-            case 2:
-                eventRate += 0.2f * lv_6;
-                break;
-            default:
-                break;
-        }
-        */
     }
 
 
@@ -907,9 +681,6 @@ public class GameManager : MonoBehaviour
         petText.text = string.Format(" {0:G}", tmpPet);
         plaText.text = string.Format(" {0:G}", tmpPla) ;
         paperText.text = string.Format(" {0:G}", tmpPaper);
-
-        //デバッグ表示
-        Debug.Log("アルミ=" + alumiPoint + "、スチール=" + stealPoint + "、ペットボトル=" + petPoint + "、プラスチック=" + plaPoint + "、紙=" + paperPoint);
 
         //ポイント表示UIに反映
         PointViewerChange();
