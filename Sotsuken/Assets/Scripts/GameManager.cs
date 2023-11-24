@@ -35,6 +35,56 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //UI(ポイント表示)関連
+    [SerializeField] TextMeshProUGUI alumiViewer;
+    [SerializeField] TextMeshProUGUI stealViewer;
+    [SerializeField] TextMeshProUGUI petViewer;
+    [SerializeField] TextMeshProUGUI plaViewer;
+    [SerializeField] TextMeshProUGUI paperViewer;
+    [SerializeField] TextMeshProUGUI allViewer;
+
+    //各ポイント表示の変更
+    void AlumiViewerChange(int i)
+    {
+        alumiViewer.text = "アルミ　" + string.Format(" {0:G}", i) + "pt";
+    }
+
+    void StealViewerChange(int i)
+    {
+        stealViewer.text = "スチール　" + string.Format(" {0:G}", i) + "pt";
+    }
+
+    void PetViewerChange(int i)
+    {
+        petViewer.text = "ペットボトル　" + string.Format(" {0:G}", i) + "pt";
+    }
+
+    void PlaViewerChange(int i)
+    {
+        plaViewer.text = "プラスチック　" + string.Format(" {0:G}", i) + "pt";
+    }
+
+    void PaperViewerChange(int i)
+    {
+        paperViewer.text = "かみ　" + string.Format(" {0:G}", i) + "pt";
+    }
+
+    void AllViewerChange(int i)
+    {
+        allViewer.text = "ごうけい　" + string.Format(" {0:G}", i) + "pt";
+    }
+
+    //全ポイント表示を一括変更
+    void PointViewerChange()
+    {
+        AlumiViewerChange(alumiPoint);
+        StealViewerChange(stealPoint);
+        PetViewerChange(petPoint);
+        PlaViewerChange(plaPoint);
+        PaperViewerChange(paperPoint);
+        AllViewerChange(allPoint);
+    }
+
     //UI(ウィンドウ)関連
     [SerializeField] GameObject BuildWindow; //建設用ウィンドウ
     [SerializeField] GameObject MissionWindow; //ミッション用ウィンドウ
@@ -428,18 +478,21 @@ public class GameManager : MonoBehaviour
 
     public void InputEnter() //リサイクルマーク入力を確定
     {
+        //建築ボーナス・イベントボーナスを計算
+        calcBuildBonus();
+
         //各マークのポイントと当日の入力数を反映
-        alumiPoint += (int) (tmpAlumi * 5 * inputRate);
-        stealPoint += (int) (tmpSteal * 5 * inputRate);
-        petPoint += (int) (tmpPet * 5 * inputRate);
-        plaPoint += (int) (tmpPla * 5 * inputRate);
-        paperPoint += (int) (tmpPaper * 5 * inputRate);
+        alumiPoint += (int) (tmpAlumi * 5 * inputRate * eventRate);
+        stealPoint += (int) (tmpSteal * 5 * inputRate * eventRate);
+        petPoint += (int) (tmpPet * 5 * inputRate * eventRate);
+        plaPoint += (int) (tmpPla * 5 * inputRate * eventRate);
+        paperPoint += (int) (tmpPaper * 5 * inputRate * eventRate);
         todayAlumi += tmpAlumi;
         todaySteal += tmpSteal;
         todayPet += tmpPet;
         todayPla += tmpPla;
         todayPaper += tmpPaper;
-        allPoint += (int)((tmpAlumi + tmpSteal + tmpPet + tmpPla + tmpPaper) * 5 * inputRate);
+        allPoint += (int)((tmpAlumi + tmpSteal + tmpPet + tmpPla + tmpPaper) * 5 * inputRate * eventRate);
 
         //tmp○○を初期化
         tmpAlumi = 0;
@@ -456,6 +509,9 @@ public class GameManager : MonoBehaviour
 
         //デバッグ表示
         Debug.Log("アルミ=" + alumiPoint + "、スチール=" + stealPoint + "、ペットボトル=" + petPoint + "、プラスチック=" + plaPoint + "、紙=" + paperPoint);
+
+        //ポイント表示UIに反映
+        PointViewerChange();
     }
 
     //イベント関連
@@ -567,7 +623,8 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        Debug.Log("ポイントは" + alumiPoint + "," + stealPoint + "," + plaPoint + "," + petPoint + "," + paperPoint);
+        //ポイント表示UIに反映
+        PointViewerChange();
     }
 
     //ミッション成功処理
