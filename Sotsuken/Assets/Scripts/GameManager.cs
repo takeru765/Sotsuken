@@ -246,10 +246,19 @@ public class GameManager : MonoBehaviour
             open = true;
 
             //イベント情報を設定
-            eventBonus = 1.2f;
-            alumiBonus = true;
-            petBonus = true;
-            paperBonus = true;
+            Event tmpEvent = ScriptableObject.CreateInstance("Event") as Event;
+            tmpEvent = eventDataBase.eventList[0]; //[]内の番号のイベント情報を取得
+
+            //各種数値を設定
+            eventBonus = tmpEvent.bonus;
+            alumiBonus = tmpEvent.alumi;
+            stealBonus = tmpEvent.steal;
+            petBonus = tmpEvent.pet;
+            plaBonus = tmpEvent.pla;
+            paperBonus = tmpEvent.paper;
+
+            //イベント説明テキストを変更
+            eventText1.text = tmpEvent.intro;
         }
     }
 
@@ -762,6 +771,12 @@ public class GameManager : MonoBehaviour
     }
 
     //イベント関連
+    [SerializeField] EventDataBase eventDataBase; //イベントデータベースの管理
+    public void AddEventData(Event i)
+    {
+        eventDataBase.eventList.Add(i);
+    }
+
     float eventBonus = 1.0f; //イベントによるボーナス倍率。
 
     //対象マーク
@@ -770,6 +785,9 @@ public class GameManager : MonoBehaviour
     bool petBonus = false;
     bool plaBonus = false;
     bool paperBonus = false;
+
+    //イベント説明テキスト
+    [SerializeField] TextMeshProUGUI eventText1; //ボーナス系イベント用
 
     //ミッション関連
     int goal = 1; //設定した目標

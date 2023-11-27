@@ -9085,6 +9085,8 @@ MonoBehaviour:
   petText: {fileID: 223775119}
   plaText: {fileID: 488624306}
   paperText: {fileID: 411379384}
+  eventDataBase: {fileID: 11400000, guid: a1e59b3a2a1048c48affb9ce0372db00, type: 2}
+  eventText1: {fileID: 353821736}
   goalText: {fileID: 977251400}
   MissionSuccess: {fileID: 1276110951}
   MissionFailed: {fileID: 726946238}
