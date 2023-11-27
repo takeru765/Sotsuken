@@ -32,6 +32,9 @@ public class GameManager : MonoBehaviour
             year = time.Year;
             month = time.Month;
             day = time.Day;
+
+            //イベントボーナスをリセット
+            eventBonus = 1.0f;
         }
     }
 
@@ -90,6 +93,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject BuildWindow1; //建築物レベルアップ用ウィンドウ
     [SerializeField] GameObject MissionWindow; //ミッション用ウィンドウ
     [SerializeField] GameObject InputWindow; //リサイクルマーク入力用ウィンドウ
+    [SerializeField] GameObject EventWindow; //イベント用ウィンドウ
     bool open = false; //既に何らかのウィンドウが開いているフラグ
 
     [SerializeField] Image build1Picture;
@@ -230,6 +234,28 @@ public class GameManager : MonoBehaviour
     public void CloseInput()
     {
         InputWindow.SetActive(false);
+        open = false;
+    }
+
+    //イベントウィンドウの開閉
+    public void OpenEvent1()
+    {
+        if(open == false)
+        {
+            EventWindow.SetActive(true);
+            open = true;
+
+            //イベント情報を設定
+            eventBonus = 1.2f;
+            alumiBonus = true;
+            petBonus = true;
+            paperBonus = true;
+        }
+    }
+
+    public void CloseEvent1()
+    {
+        EventWindow.SetActive(false);
         open = false;
     }
 
@@ -411,18 +437,18 @@ public class GameManager : MonoBehaviour
     {
         //各種ボーナスの初期化
         inputRate = 1f;
-        eventRate = 1f;
+        eventRate = eventBonus;
 
         //建築フラグを元に再計算
         for(int i = 0; i < 6; i++)
         {
             if(place[i] == 1)
             {
-                inputRate += 0.2f * lv[i] + 0.001f; //そのまま計算すると端数の都合で答えがおかしくなることがあるため、+0.001してます。
+                inputRate += 0.2f * lv[i] + 0.0001f; //そのまま計算すると端数の都合で答えがおかしくなることがあるため、+0.001してます。
             }
             else if(place[i] == 2)
             {
-                eventRate += 0.2f * lv[i] + 0.001f; //イベントの報酬量に応じ、.00...1の部分は変えてください。
+                eventRate += 0.2f * lv[i] + 0.0001f; //イベントの報酬量に応じ、.00...1の部分は変えてください。
             }
         }
     }
@@ -656,18 +682,67 @@ public class GameManager : MonoBehaviour
         //建築ボーナス・イベントボーナスを計算
         CalcBuildBonus();
 
-        //各マークのポイントと当日の入力数を反映
-        alumiPoint += (int) (tmpAlumi * 5 * inputRate);
-        stealPoint += (int) (tmpSteal * 5 * inputRate);
-        petPoint += (int) (tmpPet * 5 * inputRate);
-        plaPoint += (int) (tmpPla * 5 * inputRate);
-        paperPoint += (int) (tmpPaper * 5 * inputRate);
+        //当日の入力数を反映
         todayAlumi += tmpAlumi;
         todaySteal += tmpSteal;
         todayPet += tmpPet;
         todayPla += tmpPla;
         todayPaper += tmpPaper;
-        allPoint += (int)((tmpAlumi + tmpSteal + tmpPet + tmpPla + tmpPaper) * 5 * inputRate);
+
+        //加算するポイントを計算
+        if(alumiBonus == true)//アルミ
+        {
+            tmpAlumi = (int)(tmpAlumi * 5 * inputRate * eventRate);
+        }
+        else
+        {
+            tmpAlumi = (int)(tmpAlumi * 5 * inputRate);
+        }
+
+        if (stealBonus == true) //スチール
+        {
+            tmpSteal = (int)(tmpSteal * 5 * inputRate * eventRate);
+        }
+        else
+        {
+            tmpSteal = (int)(tmpSteal * 5 * inputRate);
+        }
+
+        if (petBonus == true)//ペットボトル
+        {
+            tmpPet = (int)(tmpPet * 5 * inputRate * eventRate);
+        }
+        else
+        {
+            tmpPet = (int)(tmpPet * 5 * inputRate);
+        }
+
+        if (plaBonus == true)//プラスチック
+        {
+            tmpPla = (int)(tmpPla * 5 * inputRate * eventRate);
+        }
+        else
+        {
+            tmpPla = (int)(tmpPla * 5 * inputRate);
+        }
+
+        if (paperBonus == true)//紙
+        {
+            tmpPaper = (int)(tmpPaper * 5 * inputRate * eventRate);
+        }
+        else
+        {
+            tmpPaper = (int)(tmpPaper * 5 * inputRate);
+        }
+
+
+        //各マークのポイントを反映
+        alumiPoint += tmpAlumi;
+        stealPoint += tmpSteal;
+        petPoint += tmpPet;
+        plaPoint += tmpPla;
+        paperPoint += tmpPaper;
+        allPoint += tmpAlumi + tmpSteal + tmpPet + tmpPla + tmpPaper;
 
         //tmp○○を初期化
         tmpAlumi = 0;
@@ -687,7 +762,14 @@ public class GameManager : MonoBehaviour
     }
 
     //イベント関連
+    float eventBonus = 1.0f; //イベントによるボーナス倍率。
 
+    //対象マーク
+    bool alumiBonus = false;
+    bool stealBonus = false;
+    bool petBonus = false;
+    bool plaBonus = false;
+    bool paperBonus = false;
 
     //ミッション関連
     int goal = 1; //設定した目標
