@@ -93,7 +93,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject BuildWindow1; //建築物レベルアップ用ウィンドウ
     [SerializeField] GameObject MissionWindow; //ミッション用ウィンドウ
     [SerializeField] GameObject InputWindow; //リサイクルマーク入力用ウィンドウ
-    [SerializeField] GameObject EventWindow; //イベント用ウィンドウ
+    [SerializeField] GameObject EventWindow1; //ボーナス系イベント用ウィンドウ
+    [SerializeField] GameObject EventWindow2; //クイズ系イベントウィンドウ
     bool open = false; //既に何らかのウィンドウが開いているフラグ
 
     [SerializeField] Image build1Picture;
@@ -238,36 +239,83 @@ public class GameManager : MonoBehaviour
     }
 
     //イベントウィンドウの開閉
-    public void OpenEvent1()
+    public void OpenEvent()
     {
         if(open == false)
         {
-            EventWindow.SetActive(true);
-            open = true;
-
-            //イベント情報を設定
+            //イベント情報を取得
             Event tmpEvent = ScriptableObject.CreateInstance("Event") as Event;
-            tmpEvent = eventDataBase.eventList[0]; //[]内の番号のイベント情報を取得
+            tmpEvent = eventDataBase.eventList[1]; //[]内の番号のイベント情報を取得
 
-            //各種数値を設定
-            eventBonus = tmpEvent.bonus;
-            alumiBonus = tmpEvent.alumi;
-            stealBonus = tmpEvent.steal;
-            petBonus = tmpEvent.pet;
-            plaBonus = tmpEvent.pla;
-            paperBonus = tmpEvent.paper;
+            if(tmpEvent.isQuiz == false) //ボーナス系イベントの場合
+            {
+                EventWindow1.SetActive(true);
 
-            //イベント説明テキストを変更
-            eventText1.text = tmpEvent.intro;
+                //各種数値を設定
+                eventBonus = tmpEvent.bonus;
+                alumiBonus = tmpEvent.alumi;
+                stealBonus = tmpEvent.steal;
+                petBonus = tmpEvent.pet;
+                plaBonus = tmpEvent.pla;
+                paperBonus = tmpEvent.paper;
 
-            //イベント画像を変更
-            eventImage1.sprite = tmpEvent.eventImage;
+                //イベント説明テキストを変更
+                eventText1.text = tmpEvent.intro;
+
+                //イベント画像を変更
+                eventImage1.sprite = tmpEvent.eventImage;
+            }
+            else //クイズ系イベントの場合
+            {
+                EventWindow2.SetActive(true);
+
+                //イベント説明テキストを変更
+                eventText2.text = tmpEvent.intro;
+                answerText1.text = tmpEvent.answer1;
+                answerText2.text = tmpEvent.answer2;
+                answerText3.text = tmpEvent.answer3;
+
+                //イベント画像を変更
+                eventImage2.sprite = tmpEvent.eventImage;
+
+                //クイズ処理に必要な情報を保存
+                correctAnswer = tmpEvent.ansewr;
+                rewardPoint = (int) tmpEvent.bonus;
+                if(tmpEvent.alumi == true)
+                {
+                    rewardMark = 1;
+                }
+                else if (tmpEvent.steal == true)
+                {
+                    rewardMark = 2;
+                }
+                else if (tmpEvent.pet == true)
+                {
+                    rewardMark = 3;
+                }
+                else if (tmpEvent.pla == true)
+                {
+                    rewardMark = 4;
+                }
+                else if (tmpEvent.paper == true)
+                {
+                    rewardMark = 5;
+                }
+            }
+
+            open = true;
         }
+    }
+
+    public void CloseEvent2()
+    {
+        EventWindow2.SetActive(false);
+        open = false;
     }
 
     public void CloseEvent1()
     {
-        EventWindow.SetActive(false);
+        EventWindow1.SetActive(false);
         open = false;
     }
 
@@ -689,7 +737,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void InputEnter() //リサイクルマーク入力を確定
+    //リサイクルマーク入力を確定
+    public void InputEnter()
     {
         //建築ボーナス・イベントボーナスを計算
         CalcBuildBonus();
@@ -789,13 +838,66 @@ public class GameManager : MonoBehaviour
     bool plaBonus = false;
     bool paperBonus = false;
 
+    //クイズの正解を管理
+    int correctAnswer = 0;
+
+    //クイズの報酬管理
+    int rewardPoint = 0; //報酬ポイント
+    int rewardMark = 0; //報酬のマーク種類、1～5で管理
+    bool answered = false; //正解済みフラグ
+
     //イベント説明テキスト
     [SerializeField] TextMeshProUGUI eventText1; //ボーナス系イベント用
     [SerializeField] TextMeshProUGUI eventText2; //クイズ系イベント用
+    [SerializeField] TextMeshProUGUI answerText1; //解答ボタン用1
+    [SerializeField] TextMeshProUGUI answerText2; //解答ボタン用2
+    [SerializeField] TextMeshProUGUI answerText3; //解答ボタン用3
 
     //イベント画像表示
     [SerializeField] Image eventImage1; //ボーナス系イベント用
     [SerializeField] Image eventImage2; //クイズ系イベント用
+
+    //クイズイベント解答処理
+    public void CheckAnswer(int i)
+    {
+        if (i == correctAnswer && answered == false)
+        {
+            //建築ボーナスを計算
+            for (int j = 0; j < 6; j++)
+            {
+                if (place[j] == 2)
+                {
+                    eventRate = 1 +0.2f * lv[j] + 0.0001f; //イベントの報酬量に応じ、.00...1の部分は変えてください。
+                }
+            }
+            switch (rewardMark)
+            {
+                case 1:
+                    alumiPoint += (int)(rewardPoint * eventRate);
+                    break;
+                case 2:
+                    stealPoint += (int)(rewardPoint * eventRate);
+                    break;
+                case 3:
+                    petPoint += (int)(rewardPoint * eventRate);
+                    break;
+                case 4:
+                    plaPoint += (int)(rewardPoint * eventRate);
+                    break;
+                case 5:
+                    paperPoint += (int)(rewardPoint * eventRate);
+                    break;
+                default:
+                    break;
+            }
+
+            //ポイント表示に反映
+            PointViewerChange();
+
+            //正解済みフラグをON
+            answered = true;
+        }
+    }
 
     //ミッション関連
     int goal = 1; //設定した目標
