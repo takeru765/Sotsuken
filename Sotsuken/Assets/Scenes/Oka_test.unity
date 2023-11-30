@@ -1725,7 +1725,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u4ECA\u65E5\u306F\u5EC3\u54C1\u56DE\u53CE\u3067\u3059\u3002\n\u96D1\u8A8C\u306A\u3069\u306E\u7D19\u30B4\u30DF\u3092\u96C6\u3081\u307E\u3057\u3087\u3046\uFF01\n(\u7D19\u30DD\u30A4\u30F3\u30C8\u306B\u30DC\u30FC\u30CA\u30B9\uFF01\uFF01)"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 98ed0a8d0b28f63468d57f864ab68722, type: 2}
   m_sharedMaterial: {fileID: -249066175137660830, guid: 98ed0a8d0b28f63468d57f864ab68722, type: 2}
@@ -1859,7 +1859,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f3bfc9ae8b66ace48a76ca8b81cac834, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9087,6 +9087,9 @@ MonoBehaviour:
   paperText: {fileID: 411379384}
   eventDataBase: {fileID: 11400000, guid: a1e59b3a2a1048c48affb9ce0372db00, type: 2}
   eventText1: {fileID: 353821736}
+  eventText2: {fileID: 0}
+  eventImage1: {fileID: 356892401}
+  eventImage2: {fileID: 0}
   goalText: {fileID: 977251400}
   MissionSuccess: {fileID: 1276110951}
   MissionFailed: {fileID: 726946238}

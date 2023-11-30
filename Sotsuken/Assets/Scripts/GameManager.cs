@@ -259,6 +259,9 @@ public class GameManager : MonoBehaviour
 
             //イベント説明テキストを変更
             eventText1.text = tmpEvent.intro;
+
+            //イベント画像を変更
+            eventImage1.sprite = tmpEvent.eventImage;
         }
     }
 
@@ -788,6 +791,11 @@ public class GameManager : MonoBehaviour
 
     //イベント説明テキスト
     [SerializeField] TextMeshProUGUI eventText1; //ボーナス系イベント用
+    [SerializeField] TextMeshProUGUI eventText2; //クイズ系イベント用
+
+    //イベント画像表示
+    [SerializeField] Image eventImage1; //ボーナス系イベント用
+    [SerializeField] Image eventImage2; //クイズ系イベント用
 
     //ミッション関連
     int goal = 1; //設定した目標
