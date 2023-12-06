@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using System.IO;
 
 public class GameManager : MonoBehaviour
 {
@@ -36,6 +37,108 @@ public class GameManager : MonoBehaviour
             //イベントボーナスをリセット
             eventBonus = 1.0f;
         }
+    }
+
+    //セーブデータ関連
+    [HideInInspector] public SaveData save; //セーブデータ
+    string filePath; //json(セーブデータ)ファイルのパス
+    string fileName = "save.json"; //jsonのファイル名
+
+    //セーブ処理
+    void Save(SaveData data)
+    {
+        //saveへの情報書き込み
+        save.year = year;
+        save.month = month;
+        save.day = day;
+
+        save.alumiPoint = alumiPoint;
+        save.stealPoint = stealPoint;
+        save.petPoint = petPoint;
+        save.plaPoint = plaPoint;
+        save.paperPoint = paperPoint;
+        save.allPoint = allPoint;
+
+        save.todayAlumi = todayAlumi;
+        save.todaySteal = todaySteal;
+        save.todayPet = todayPet;
+        save.todayPla = todayPla;
+        save.todayPaper = todayPaper;
+
+        save.place = place;
+        save.lv = lv;
+
+        save.goal = goal;
+        save.mark = mark;
+        save.markRec1 = markRec1;
+        save.markRec2 = markRec2;
+        save.setMission = setMission;
+        save.successMission = successMission;
+        save.setYear = setYear;
+        save.setMonth = setMonth;
+        save.setDay = setDay;
+
+        //データ自体の保存処理
+        string json = JsonUtility.ToJson(data); //SaveDataをjson形式に変換
+        StreamWriter wr = new StreamWriter(filePath, false); //jsonをfilePathの位置に書き込み
+        wr.WriteLine(json);
+        wr.Close();
+    }
+
+    //ロード処理1。jsonファイルをSaveData形式に変換する
+    SaveData Load1(string path)
+    {
+        StreamReader rd = new StreamReader(path); //ファイルパスを指定
+        string json = rd.ReadToEnd(); //ファイルパスにあるjsonファイルを読み込む
+        rd.Close();
+
+        return JsonUtility.FromJson<SaveData>(json); //SaveDataに変換して返す
+    }
+
+    //ロード処理2。SavaDataの内容をゲームに反映する
+    void Load2()
+    {
+        //各種数値の反映
+        year = save.year;
+        month = save.month;
+        day = save.month;
+
+        alumiPoint = save.alumiPoint;
+        stealPoint = save.stealPoint;
+        petPoint = save.petPoint;
+        plaPoint = save.plaPoint;
+        paperPoint = save.paperPoint;
+        allPoint = save.allPoint;
+
+        todayAlumi = save.todayAlumi;
+        todaySteal = save.todaySteal;
+        todayPet = save.todayPet;
+        todayPla = save.todayPla;
+        todayPaper = save.todayPaper;
+
+        place = save.place;
+        lv = save.lv;
+
+        goal = save.goal;
+        mark = save.mark;
+        markRec1 = save.markRec1;
+        markRec2 = save.markRec2;
+        setMission = save.setMission;
+        successMission = save.successMission;
+        setYear = save.setYear;
+        setMonth = save.setMonth;
+        setDay = save.setDay;
+    }
+
+    //デバッグ用セーブデータ消去
+    public void ResetSave()
+    {
+        //saveの初期化
+        save = new SaveData();
+        string json = JsonUtility.ToJson(save); //SaveDataをjson形式に変換
+        StreamWriter wr = new StreamWriter(filePath, false); //jsonをfilePathの位置に書き込み
+        wr.WriteLine(json);
+        wr.Close();
     }
 
     //UI(ポイント表示)関連
@@ -123,6 +226,8 @@ public class GameManager : MonoBehaviour
 
     public void CloseBuild0()
     {
+        Save(save); //オートセーブ
+
         selectedPlace = -1;
         selectedBuilding = 0;
         BuildWindow0.SetActive(false);
@@ -197,6 +302,8 @@ public class GameManager : MonoBehaviour
 
     public void CloseBuild1()
     {
+        Save(save); //オートセーブ
+
         selectedPlace = 0;
         BuildWindow1.SetActive(false);
         open = false;
@@ -205,6 +312,7 @@ public class GameManager : MonoBehaviour
     //ミッションウィンドウの開閉
     public void OpenMission()
     {
+
         if(open == false)
         {
             MissionWindow.SetActive(true);
@@ -214,10 +322,22 @@ public class GameManager : MonoBehaviour
             CheckMission();
             CheckDate();
         }
+
+        //UI上の目標の表示を変更する
+        if (goal < 10)
+        {
+            goalText.text = string.Format(" {0:G}", goal);
+        }
+        else
+        {
+            goalText.text = string.Format("{0:G}", goal);
+        }
     }
 
     public void CloseMission()
     {
+        Save(save); //オートセーブ
+
         MissionWindow.SetActive(false);
         open = false;
     }
@@ -234,6 +354,8 @@ public class GameManager : MonoBehaviour
 
     public void CloseInput()
     {
+        Save(save); //オートセーブ
+
         InputWindow.SetActive(false);
         open = false;
     }
@@ -309,12 +431,16 @@ public class GameManager : MonoBehaviour
 
     public void CloseEvent2()
     {
+        Save(save); //オートセーブ
+
         EventWindow2.SetActive(false);
         open = false;
     }
 
     public void CloseEvent1()
     {
+        Save(save); //オートセーブ
+
         EventWindow1.SetActive(false);
         open = false;
     }
@@ -353,6 +479,66 @@ public class GameManager : MonoBehaviour
     //リサイクル場、娯楽施設の画像
     [SerializeField] Sprite recycleImage;
     [SerializeField] Sprite amusementImage;
+
+    //建築ボタンへの画像の反映(起動時用を想定)
+    void CheckBuildImage()
+    {
+        for(int i = 0; i < 6; i++)
+        {
+            if (place[i] == 1)
+            {
+                switch(i)
+                {
+                    case 0:
+                        buildImage0.sprite = recycleImage;
+                        break;
+                    case 1:
+                        buildImage1.sprite = recycleImage;
+                        break;
+                    case 2:
+                        buildImage2.sprite = recycleImage;
+                        break;
+                    case 3:
+                        buildImage3.sprite = recycleImage;
+                        break;
+                    case 4:
+                        buildImage4.sprite = recycleImage;
+                        break;
+                    case 5:
+                        buildImage5.sprite = recycleImage;
+                        break;
+                    default:
+                        break;
+                } 
+            }
+            else if (place[i] == 2)
+            {
+                switch (i)
+                {
+                    case 0:
+                        buildImage0.sprite = amusementImage;
+                        break;
+                    case 1:
+                        buildImage1.sprite = amusementImage;
+                        break;
+                    case 2:
+                        buildImage2.sprite = amusementImage;
+                        break;
+                    case 3:
+                        buildImage3.sprite = amusementImage;
+                        break;
+                    case 4:
+                        buildImage4.sprite = amusementImage;
+                        break;
+                    case 5:
+                        buildImage5.sprite = amusementImage;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
 
     //建築物選択
     public void ChangeSelectedBuildeing(int i)
@@ -1096,6 +1282,29 @@ public class GameManager : MonoBehaviour
         MissionFailed.SetActive(true);
     }
 
+    //現状では、起動時のセーブデータ読み込みにのみ使用
+    private void Awake()
+    {
+        //パスを取得
+        filePath = Application.dataPath + "/" + fileName;
+
+        //ファイルが無い場合はファイルを作成
+        if(!File.Exists(filePath))
+        {
+            Save(save);
+        }
+
+        //ファイルを読み込んでsaveに格納
+        save = Load1(filePath);
+        //saveの内容を各変数に反映
+        Load2();
+
+        //ポイント表示UIに反映
+        PointViewerChange();
+
+        //建築ボタンの画像を反映
+        CheckBuildImage();
+    }
     // Start is called before the first frame update
     void Start()
     {
