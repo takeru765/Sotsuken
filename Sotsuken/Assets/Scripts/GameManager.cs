@@ -128,6 +128,10 @@ public class GameManager : MonoBehaviour
         setYear = save.setYear;
         setMonth = save.setMonth;
         setDay = save.setDay;
+
+        //各種UIに反映
+        PointViewerChange();
+        CheckBuildImage();
     }
 
     //デバッグ用セーブデータ消去
@@ -139,6 +143,10 @@ public class GameManager : MonoBehaviour
         StreamWriter wr = new StreamWriter(filePath, false); //jsonをfilePathの位置に書き込み
         wr.WriteLine(json);
         wr.Close();
+
+        //初期化したセーブデータを読み込み
+        Load1(filePath);
+        Load2();
     }
 
     //UI(ポイント表示)関連
@@ -200,7 +208,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject EventWindow2; //クイズ系イベントウィンドウ
     bool open = false; //既に何らかのウィンドウが開いているフラグ
 
+    //建築ウィンドウの画像、文章
     [SerializeField] Image build1Picture;
+    [SerializeField] TextMeshProUGUI buildIntro;
 
     //建設ウィンドウの開閉
     public void OpenBuild(int i)
@@ -237,52 +247,7 @@ public class GameManager : MonoBehaviour
     public void OpenBuild1(int i) //OpenBuild内で呼び出し
     {
         selectedPlace = i;
-        /*
-        switch(i)
-        {
-            case 1:
-                if(place_1 == 1)
-                {
-                    build1Picture.sprite = recycleImage;
-                }
-                else if(place_1 ==  2)
-                {
-                    build1Picture.sprite = amusementImage;
-                }
-                break;
-            case 2:
-                if (place_2 == 1)
-                {
-                    build1Picture.sprite = recycleImage;
-                }
-                else if (place_2 == 2)
-                {
-                    build1Picture.sprite = amusementImage;
-                }
-                break;
-            case 3:
-                if (place_3 == 1)
-                {
-                    build1Picture.sprite = recycleImage;
-                }
-                else if (place_3 == 2)
-                {
-                    build1Picture.sprite = amusementImage;
-                }
-                break;
-            case 4:
-                if (place_4 == 1)
-                {
-                    build1Picture.sprite = recycleImage;
-                }
-                else if (place_4 == 2)
-                {
-                    build1Picture.sprite = amusementImage;
-                }
-                break;
-
-        }
-        */
+        
         if (open == false)
         {
             selectedPlace = i;
@@ -296,6 +261,45 @@ public class GameManager : MonoBehaviour
             else if (place[i] == 2)
             {
                 build1Picture.sprite = amusementImage;
+            }
+            //建設LVに合わせた説明文を表示
+            switch(lv[i])
+            {
+                case 1:
+                    if(place[i] == 1)
+                    {
+                        buildIntro.text = "LV:1→2\nコスト:アルミ5pt\nボーナス:+20%→+40%";
+                    }
+                    else if(place[i] == 2)
+                    {
+                        buildIntro.text = "LV:1→2\nコスト:スチール5pt\nボーナス:+20%→+40%";
+                    }
+                    break;
+                case 2:
+                    if (place[i] == 1)
+                    {
+                        buildIntro.text = "LV:2→3\nコスト:アルミ10pt\nボーナス:+40%→+60%";
+                    }
+                    else if (place[i] == 2)
+                    {
+                        buildIntro.text = "LV:2→3\nコスト:スチール10pt\nボーナス:+40%→+60%";
+                    }
+                    break;
+                case 3:
+                    if (place[i] == 1)
+                    {
+                        buildIntro.text = "LV:3→4\nコスト:アルミ15pt\nボーナス:+60%→+80%";
+                    }
+                    else if (place[i] == 2)
+                    {
+                        buildIntro.text = "LV:3→4\nコスト:スチール15pt\nボーナス:+60%→+80%";
+                    }
+                    break;
+                case 4:
+                    buildIntro.text = "LV:4(Max)\nさいだいレベルです。";
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -485,7 +489,33 @@ public class GameManager : MonoBehaviour
     {
         for(int i = 0; i < 6; i++)
         {
-            if (place[i] == 1)
+            if(place[i] == 0)
+            {
+                switch (i)
+                {
+                    case 0:
+                        buildImage0.sprite = null;
+                        break;
+                    case 1:
+                        buildImage1.sprite = null;
+                        break;
+                    case 2:
+                        buildImage2.sprite = null;
+                        break;
+                    case 3:
+                        buildImage3.sprite = null;
+                        break;
+                    case 4:
+                        buildImage4.sprite = null;
+                        break;
+                    case 5:
+                        buildImage5.sprite = null;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else if (place[i] == 1)
             {
                 switch(i)
                 {
@@ -640,6 +670,7 @@ public class GameManager : MonoBehaviour
                     lv[selectedPlace] += 1;
                     stealPoint -= 5;
                 }
+                CloseBuild1();
                 break;
             case 2:
                 if (place[selectedPlace] == 1 && alumiPoint >= 10)
@@ -652,6 +683,7 @@ public class GameManager : MonoBehaviour
                     lv[selectedPlace] += 1;
                     stealPoint -= 10;
                 }
+                CloseBuild1();
                 break;
             case 3:
                 if (place[selectedPlace] == 1 && alumiPoint >= 15)
@@ -664,6 +696,10 @@ public class GameManager : MonoBehaviour
                     lv[selectedPlace] += 1;
                     stealPoint -= 15;
                 }
+                CloseBuild1();
+                break;
+            default:
+                CloseBuild1();
                 break;
         }
 
@@ -1286,7 +1322,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         //パスを取得
-        filePath = Application.dataPath + "/" + fileName;
+        filePath = Application.dataPath + "/SaveData/" + fileName;
 
         //ファイルが無い場合はファイルを作成
         if(!File.Exists(filePath))
@@ -1298,12 +1334,6 @@ public class GameManager : MonoBehaviour
         save = Load1(filePath);
         //saveの内容を各変数に反映
         Load2();
-
-        //ポイント表示UIに反映
-        PointViewerChange();
-
-        //建築ボタンの画像を反映
-        CheckBuildImage();
     }
     // Start is called before the first frame update
     void Start()

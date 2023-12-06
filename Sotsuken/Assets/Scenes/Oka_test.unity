@@ -6101,7 +6101,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -180}
+  m_AnchoredPosition: {x: 0, y: -200}
   m_SizeDelta: {x: 160, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1047539333
@@ -9307,8 +9307,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -50}
-  m_SizeDelta: {x: 300, y: 50}
+  m_AnchoredPosition: {x: 0, y: -75}
+  m_SizeDelta: {x: 600, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1337533058
 MonoBehaviour:
@@ -9330,7 +9330,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u3000\u3000LV\uFF1A1\u21922\n\u30DC\u30FC\u30CA\u30B9\uFF1A\xD71.2\u2192\xD71.4"
+  m_text: "LV\uFF1A1\u21922\n\u30DC\u30FC\u30CA\u30B9\uFF1A\xD71.2\u2192\xD71.4"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6eb9ab751a651e44ead6a27fd688d917, type: 2}
   m_sharedMaterial: {fileID: 2385106605801662650, guid: 6eb9ab751a651e44ead6a27fd688d917, type: 2}
@@ -9364,7 +9364,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -10230,6 +10230,7 @@ MonoBehaviour:
   EventWindow1: {fileID: 979892777}
   EventWindow2: {fileID: 1574964123}
   build1Picture: {fileID: 1849391110}
+  buildIntro: {fileID: 1337533058}
   buildImage0: {fileID: 436463514}
   buildImage1: {fileID: 737311108}
   buildImage2: {fileID: 361567320}
