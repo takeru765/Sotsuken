@@ -42,4 +42,5 @@ public class SaveData
 
     //イベント関連
     public int eventID;
+    public bool answered;
 }

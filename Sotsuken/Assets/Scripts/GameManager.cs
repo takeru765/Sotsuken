@@ -79,6 +79,8 @@ public class GameManager : MonoBehaviour
         save.setMonth = setMonth;
         save.setDay = setDay;
 
+        save.answered = answered;
+
         //データ自体の保存処理
         string json = JsonUtility.ToJson(data); //SaveDataをjson形式に変換
         StreamWriter wr = new StreamWriter(filePath, false); //jsonをfilePathの位置に書き込み
@@ -129,6 +131,8 @@ public class GameManager : MonoBehaviour
         setYear = save.setYear;
         setMonth = save.setMonth;
         setDay = save.setDay;
+
+        answered = save.answered;
 
         //各種UIに反映
         PointViewerChange();
