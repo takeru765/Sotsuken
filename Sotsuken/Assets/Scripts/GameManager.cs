@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 using System;
 using System.IO;
@@ -147,6 +148,47 @@ public class GameManager : MonoBehaviour
         //初期化したセーブデータを読み込み
         Load1(filePath);
         Load2();
+    }
+
+    //フェードイン・アウト処理
+    [SerializeField] Image fadeImage;
+    bool isFadeIn = true; //フェードイン中フラグ
+    bool isFadeOut = false; //フェードアウト中フラグ
+    float alfa = 1f; //フェード画像の不透明度
+
+    void FadeIn(float speed = 0.75f) //フェードイン処理。フェード速度も指定可能
+    {
+        alfa -= speed * Time.deltaTime; //時間経過に応じて不透明度を低下
+        fadeImage.color = new Color(0, 0, 0, alfa); //不透明度を反映
+
+        if(alfa < 0)
+        {
+            alfa = 0;
+            isFadeIn = false;
+
+            fadeImage.raycastTarget = false; //フェード画像のクリック判定を無効化(下にあるボタンをクリックさせるため)
+        }
+    }
+
+    void FadeOut(float speed = 0.75f)
+    {
+        fadeImage.raycastTarget = true; //フェード画像のクリック判定を有効化(各種ボタンをクリックできないようにする)
+
+        alfa += speed * Time.deltaTime; //時間経過に応じて不透明度を増加
+        fadeImage.color = new Color(0, 0, 0, alfa); //不透明度を反映
+
+        if (alfa >= 1)
+        {
+            alfa = 1;
+            isFadeOut = false;
+
+            SceneManager.LoadScene("Odajima_bookpart");
+        }
+    }
+
+    public void StartFadeOut()
+    {
+        isFadeOut = true;
     }
 
     //UI(ポイント表示)関連
@@ -1352,5 +1394,15 @@ public class GameManager : MonoBehaviour
     {
         //現在日時を取得。処理が重い場合、別の場所(画面切り替え時等)に移すかも
         time = DateTime.Now;
+
+        //フェードイン・アウト処理
+        if(isFadeIn == true)
+        {
+            FadeIn();
+        }
+        else if(isFadeOut == true)
+        {
+            FadeOut();
+        }
     }
 }

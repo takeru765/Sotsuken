@@ -5,8 +5,14 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    guid: 3fc8acdd13e6c734bafef6554d6fdbcd
+  - enabled: 1
+    path: Assets/Scenes/Oka_test.unity
+    guid: 70695c07948aa39478bc3d86968faa1b
+  - enabled: 1
+    path: Assets/Scenes/Odajima_bookpart.unity
+    guid: e7f31a40f6f506b43bc38b2b9d833bb4
   m_configObjects:
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 22ffb1657446213499f3b348c4d7da92, type: 2}
