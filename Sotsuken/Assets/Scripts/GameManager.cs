@@ -1364,6 +1364,30 @@ public class GameManager : MonoBehaviour
         MissionFailed.SetActive(true);
     }
 
+    //チュートリアル関連
+    [SerializeField] GameObject arrow; //強調用の矢印
+    bool blinking = false; //点滅中フラグ
+    int blinkInterval = 25; //点滅間隔のフレーム数
+    int intervalCount = 25; //経過フレームのカウント用
+    int blinkTimes = 3; //点滅する回数
+
+    void SetArrow(float xPos, float yPos, int interval = 50, int times = 3) //矢印点滅開始。矢印が必要な位置が少ないなら、矢印を複数作った方が楽かも。
+    {
+        //矢印の位置、点滅間隔・回数を設定
+        arrow.transform.localPosition = new Vector2(xPos, yPos);
+        blinkInterval = interval / 2;
+        intervalCount = interval / 2;
+        blinkTimes = times;
+
+        arrow.SetActive(true);
+        blinking = true; //点滅フラグをON
+    }
+
+    public void Debug_CallArrow() //点滅のデバッグボタン用。本実装では消していいはず。
+    {
+        SetArrow(-50f, -650f);
+    }
+
     //現状では、起動時のセーブデータ読み込みにのみ使用
     private void Awake()
     {
@@ -1407,6 +1431,29 @@ public class GameManager : MonoBehaviour
         else if(isFadeOut == true)
         {
             FadeOut();
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if(blinking == true)
+        {
+            //矢印の点滅処理
+            intervalCount -= 1;
+            if (intervalCount <= 0)
+            {
+                arrow.SetActive(!arrow.activeSelf);
+                if (arrow.activeSelf == false)
+                {
+                    blinkTimes -= 1;
+                }
+                if (blinkTimes <= 0)
+                {
+                    blinking = false;
+                }
+
+                intervalCount = blinkInterval;
+            }
         }
     }
 }
