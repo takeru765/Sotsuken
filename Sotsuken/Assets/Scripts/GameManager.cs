@@ -1371,6 +1371,24 @@ public class GameManager : MonoBehaviour
     int intervalCount = 25; //経過フレームのカウント用
     int blinkTimes = 3; //点滅する回数
 
+    [SerializeField] GameObject tutorialWindow;
+    [SerializeField] TextMeshProUGUI tutorialText;
+
+    void SetTutorial(float x, float y, float width, float height, string text) //チュートリアルウィンドウの配置
+    {
+        tutorialWindow.transform.localPosition = new Vector2(x, y); //ウィンドウの位置調整
+        tutorialWindow.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height); //ウィンドウのサイズ調整
+        tutorialText.text = text; //メッセージ変更
+
+        tutorialWindow.SetActive(true);
+    }
+
+    void PutArrow(float x, float y) //点滅しない矢印の配置
+    {
+        arrow.transform.localPosition = new Vector2(x, y);
+        arrow.SetActive(true);
+    }
+
     void SetArrow(float xPos, float yPos, int interval = 50, int times = 3) //矢印点滅開始。矢印が必要な位置が少ないなら、矢印を複数作った方が楽かも。
     {
         //矢印の位置、点滅間隔・回数を設定
@@ -1415,6 +1433,9 @@ public class GameManager : MonoBehaviour
         year = time.Year;
 
         Debug.Log(year + "/" + month + "/" + day);
+
+        SetTutorial(250f, -450f, 500f, 250f, "リサイクルマークを\n見つけたら、\nここをタップ！！");
+        PutArrow(350f, -650f);
     }
 
     // Update is called once per frame
