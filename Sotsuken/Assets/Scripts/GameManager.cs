@@ -1409,8 +1409,8 @@ public class GameManager : MonoBehaviour
     //現状では、起動時のセーブデータ読み込みにのみ使用
     private void Awake()
     {
-        //パスを取得
-        filePath = Application.dataPath + "/SaveData/" + fileName;
+        //パスを取得(Windowsの場合、「C:\Users\(ユーザー名)\AppData\LocalLow\DefaultCompany\Sotsuken」に保存される)
+        filePath = Application.persistentDataPath + "/" + fileName;
 
         //ファイルが無い場合はファイルを作成
         if(!File.Exists(filePath))
