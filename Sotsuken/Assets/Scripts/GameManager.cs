@@ -314,31 +314,31 @@ public class GameManager : MonoBehaviour
                 case 1:
                     if(place[i] == 1)
                     {
-                        buildIntro.text = "LV:1→2\nコスト:アルミ5pt\nボーナス:+20%→+40%";
+                        buildIntro.text = "LV:1→2\nコスト:各30pt\nボーナス:+20%→+40%";
                     }
                     else if(place[i] == 2)
                     {
-                        buildIntro.text = "LV:1→2\nコスト:スチール5pt\nボーナス:+20%→+40%";
+                        buildIntro.text = "LV:1→2\nコスト:各30pt\nボーナス:+20%→+40%";
                     }
                     break;
                 case 2:
                     if (place[i] == 1)
                     {
-                        buildIntro.text = "LV:2→3\nコスト:アルミ10pt\nボーナス:+40%→+60%";
+                        buildIntro.text = "LV:2→3\nコスト:各45pt\nボーナス:+40%→+60%";
                     }
                     else if (place[i] == 2)
                     {
-                        buildIntro.text = "LV:2→3\nコスト:スチール10pt\nボーナス:+40%→+60%";
+                        buildIntro.text = "LV:2→3\nコスト:各45pt\nボーナス:+40%→+60%";
                     }
                     break;
                 case 3:
                     if (place[i] == 1)
                     {
-                        buildIntro.text = "LV:3→4\nコスト:アルミ15pt\nボーナス:+60%→+80%";
+                        buildIntro.text = "LV:3→4\nコスト:各60pt\nボーナス:+60%→+80%";
                     }
                     else if (place[i] == 2)
                     {
-                        buildIntro.text = "LV:3→4\nコスト:スチール15pt\nボーナス:+60%→+80%";
+                        buildIntro.text = "LV:3→4\nコスト:各60pt\nボーナス:+60%→+80%";
                     }
                     break;
                 case 4:
@@ -623,7 +623,7 @@ public class GameManager : MonoBehaviour
     }
 
     //建設決定ボタン
-    public void DecideBuild()
+    public void DecideBuild() //消費ポイント修正中
     {
         if(selectedBuilding != 0)
         {
@@ -706,41 +706,65 @@ public class GameManager : MonoBehaviour
         switch(lv[selectedPlace])
         {
             case 1:
-                if(place[selectedPlace] == 1 && alumiPoint >= 5)
+                if (place[selectedPlace] == 1 && alumiPoint >= 30 && stealPoint >= 30 && petPoint >= 30 && plaPoint >= 30 && paperPoint >= 30)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 5;
+                    alumiPoint -= 30;
+                    stealPoint -= 30;
+                    petPoint -= 30;
+                    plaPoint -= 30;
+                    paperPoint -= 30;
                 }
-                else if(place[selectedPlace] == 2 && stealPoint >= 5)
+                else if (place[selectedPlace] == 2 && alumiPoint >= 30 && stealPoint >= 30 && petPoint >= 30 && plaPoint >= 30 && paperPoint >= 30)
                 {
                     lv[selectedPlace] += 1;
-                    stealPoint -= 5;
+                    alumiPoint -= 30;
+                    stealPoint -= 30;
+                    petPoint -= 30;
+                    plaPoint -= 30;
+                    paperPoint -= 30;
                 }
                 CloseBuild1();
                 break;
             case 2:
-                if (place[selectedPlace] == 1 && alumiPoint >= 10)
+                if (place[selectedPlace] == 1 && alumiPoint >= 45 && stealPoint >= 45 && petPoint >= 45 && plaPoint >= 45 && paperPoint >= 45)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 10;
+                    alumiPoint -= 45;
+                    stealPoint -= 45;
+                    petPoint -= 45;
+                    plaPoint -= 45;
+                    paperPoint -= 45;
                 }
-                else if (place[selectedPlace] == 2 && stealPoint >= 10)
+                else if (place[selectedPlace] == 2 && alumiPoint >= 45 && stealPoint >= 45 && petPoint >= 45 && plaPoint >= 45 && paperPoint >= 45)
                 {
                     lv[selectedPlace] += 1;
-                    stealPoint -= 10;
+                    alumiPoint -= 45;
+                    stealPoint -= 45;
+                    petPoint -= 45;
+                    plaPoint -= 45;
+                    paperPoint -= 45;
                 }
                 CloseBuild1();
                 break;
             case 3:
-                if (place[selectedPlace] == 1 && alumiPoint >= 15)
+                if (place[selectedPlace] == 1 && alumiPoint >= 60 && stealPoint >= 60 && petPoint >= 60 && plaPoint >= 60 && paperPoint >= 60)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 15;
+                    alumiPoint -= 60;
+                    stealPoint -= 60;
+                    petPoint -= 60;
+                    plaPoint -= 60;
+                    paperPoint -= 60;
                 }
-                else if (place[selectedPlace] == 2 && stealPoint >= 15)
+                else if (place[selectedPlace] == 2 && alumiPoint >= 60 && stealPoint >= 60 && petPoint >= 60 && plaPoint >= 60 && paperPoint >= 60)
                 {
                     lv[selectedPlace] += 1;
-                    stealPoint -= 15;
+                    alumiPoint -= 60;
+                    stealPoint -= 60;
+                    petPoint -= 60;
+                    plaPoint -= 60;
+                    paperPoint -= 60;
                 }
                 CloseBuild1();
                 break;
@@ -1021,29 +1045,29 @@ public class GameManager : MonoBehaviour
         //加算するポイントを計算
         if(alumiBonus == true)//アルミ
         {
-            tmpAlumi = (int)(tmpAlumi * 5 * inputRate * eventRate);
+            tmpAlumi = (int)(tmpAlumi * 15 * inputRate * eventRate);
         }
         else
         {
-            tmpAlumi = (int)(tmpAlumi * 5 * inputRate);
+            tmpAlumi = (int)(tmpAlumi * 15 * inputRate);
         }
 
         if (stealBonus == true) //スチール
         {
-            tmpSteal = (int)(tmpSteal * 5 * inputRate * eventRate);
+            tmpSteal = (int)(tmpSteal * 15 * inputRate * eventRate);
         }
         else
         {
-            tmpSteal = (int)(tmpSteal * 5 * inputRate);
+            tmpSteal = (int)(tmpSteal * 15 * inputRate);
         }
 
         if (petBonus == true)//ペットボトル
         {
-            tmpPet = (int)(tmpPet * 5 * inputRate * eventRate);
+            tmpPet = (int)(tmpPet * 15 * inputRate * eventRate);
         }
         else
         {
-            tmpPet = (int)(tmpPet * 5 * inputRate);
+            tmpPet = (int)(tmpPet * 15 * inputRate);
         }
 
         if (plaBonus == true)//プラスチック
@@ -1057,11 +1081,11 @@ public class GameManager : MonoBehaviour
 
         if (paperBonus == true)//紙
         {
-            tmpPaper = (int)(tmpPaper * 5 * inputRate * eventRate);
+            tmpPaper = (int)(tmpPaper * 15 * inputRate * eventRate);
         }
         else
         {
-            tmpPaper = (int)(tmpPaper * 5 * inputRate);
+            tmpPaper = (int)(tmpPaper * 15 * inputRate);
         }
 
 
@@ -1373,6 +1397,12 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameObject tutorialWindow;
     [SerializeField] TextMeshProUGUI tutorialText;
+
+    //チュートリアル中の各ボタン操作可能フラグ
+    bool canInput = true;
+    bool canBuild = true;
+    bool canMission = true;
+    bool canEvent = true;
 
     void SetTutorial(float x, float y, float width, float height, string text) //チュートリアルウィンドウの配置
     {
