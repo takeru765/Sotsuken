@@ -155,6 +155,7 @@ public class GameManager : MonoBehaviour
     }
 
     //フェードイン・アウト処理
+    [SerializeField] GameObject fadeObject;
     [SerializeField] Image fadeImage;
     bool isFadeIn = true; //フェードイン中フラグ
     bool isFadeOut = false; //フェードアウト中フラグ
@@ -162,6 +163,8 @@ public class GameManager : MonoBehaviour
 
     void FadeIn(float speed = 0.75f) //フェードイン処理。フェード速度も指定可能
     {
+        fadeObject.SetActive(true);
+
         alfa -= speed * Time.deltaTime; //時間経過に応じて不透明度を低下
         fadeImage.color = new Color(0, 0, 0, alfa); //不透明度を反映
 
@@ -192,7 +195,10 @@ public class GameManager : MonoBehaviour
 
     public void StartFadeOut()
     {
-        isFadeOut = true;
+        if(canBook == true && open == false)
+        {
+            isFadeOut = true;
+        }
     }
 
     //UI(ポイント表示)関連
@@ -261,13 +267,27 @@ public class GameManager : MonoBehaviour
     //建設ウィンドウの開閉
     public void OpenBuild(int i)
     {
-        if(lv[i] == 0)
+        if(canBuild == true)
         {
-            OpenBuild0(i);
-        }
-        else
-        {
-            OpenBuild1(i);
+            if (lv[i] == 0)
+            {
+                if(opSequence == 11) //チュートリアル用の条件。左上の土地だけを選択できるようにする。
+                {
+                    if(i == 0)
+                    {
+                        OpenBuild0(i);
+                        opSequence = 12;
+                    }
+                }
+                else //チュートリアル外
+                {
+                    OpenBuild0(i);
+                }
+            }
+            else
+            {
+                OpenBuild1(i);
+            }
         }
     }
     public void OpenBuild0(int i) //OpenBuild内で呼び出し
@@ -284,10 +304,13 @@ public class GameManager : MonoBehaviour
     {
         Save(save); //オートセーブ
 
-        selectedPlace = -1;
-        selectedBuilding = 0;
-        BuildWindow0.SetActive(false);
-        open = false;
+        if(canBuild == true)
+        {
+            selectedPlace = -1;
+            selectedBuilding = 0;
+            BuildWindow0.SetActive(false);
+            open = false;
+        }
     }
 
     public void OpenBuild1(int i) //OpenBuild内で呼び出し
@@ -354,16 +377,19 @@ public class GameManager : MonoBehaviour
     {
         Save(save); //オートセーブ
 
-        selectedPlace = 0;
-        BuildWindow1.SetActive(false);
-        open = false;
+        if(canBuild == true)
+        {
+            selectedPlace = 0;
+            BuildWindow1.SetActive(false);
+            open = false;
+        }
     }
 
     //ミッションウィンドウの開閉
     public void OpenMission()
     {
 
-        if(open == false)
+        if(open == false && canMission == true)
         {
             MissionWindow.SetActive(true);
             open = true;
@@ -388,17 +414,25 @@ public class GameManager : MonoBehaviour
     {
         Save(save); //オートセーブ
 
-        MissionWindow.SetActive(false);
-        open = false;
+        if (canMission == true)
+        {
+            MissionWindow.SetActive(false);
+            open = false;
+        }
     }
 
     //リサイクルマーク入力ウィンドウの開閉
     public void OpenInput()
     {
-        if (open == false)
+        if (open == false && canInput ==true)
         {
             InputWindow.SetActive(true);
             open = true;
+        }
+
+        if(opSequence == 3) //チュートリアル進行管理
+        {
+            opSequence = 4;
         }
     }
 
@@ -406,14 +440,17 @@ public class GameManager : MonoBehaviour
     {
         Save(save); //オートセーブ
 
-        InputWindow.SetActive(false);
-        open = false;
+        if(canInput == true)
+        {
+            InputWindow.SetActive(false);
+            open = false;
+        }
     }
 
     //イベントウィンドウの開閉
     public void OpenEvent()
     {
-        if(open == false)
+        if(open == false && canEvent == true)
         {
             //イベント情報を取得
             Event tmpEvent = ScriptableObject.CreateInstance("Event") as Event;
@@ -483,17 +520,24 @@ public class GameManager : MonoBehaviour
     {
         Save(save); //オートセーブ
 
-        EventWindow2.SetActive(false);
-        open = false;
+        if(canEvent == true)
+        {
+            EventWindow2.SetActive(false);
+            open = false;
+        }
     }
 
     public void CloseEvent1()
     {
         Save(save); //オートセーブ
 
-        EventWindow1.SetActive(false);
-        open = false;
+        if (canEvent == true)
+        {
+            EventWindow1.SetActive(false);
+            open = false;
+        }
     }
+
 
     //各種ポイント
     int alumiPoint = 0; //アルミ缶
@@ -1112,6 +1156,14 @@ public class GameManager : MonoBehaviour
 
         //ポイント表示UIに反映
         PointViewerChange();
+
+        //チュートリアル進行
+        if(opSequence == 4 && allPoint > 0)
+        {
+            canInput = true;
+            opSequence = 5;
+            CloseInput();
+        }
     }
 
     //イベント関連
@@ -1190,6 +1242,8 @@ public class GameManager : MonoBehaviour
             answered = true;
         }
     }
+
+
 
     //ミッション関連
     int goal = 1; //設定した目標
@@ -1388,6 +1442,158 @@ public class GameManager : MonoBehaviour
         MissionFailed.SetActive(true);
     }
 
+
+
+    //オープニング、チュートリアルの進行管理
+    [SerializeField] GameObject opWindow0; //文章のみのOP用ウィンドウ
+    [SerializeField] TextMeshProUGUI opText;
+    int opSequence = 0; //オープニング・チュートリアルの進行度
+
+    void ClickCheck() //クリック時に呼び出す。オープニングの進捗に応じて、画面クリックで進行するかを管理。制作中
+    {
+        switch(opSequence)
+        {
+            case 0:
+                opSequence = 1;
+                break;
+            case 1:
+                opSequence = 2;
+                    break;
+            case 2:
+                opSequence = 3;
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                opSequence = 6;
+                break;
+            case 6:
+                opSequence = 7;
+                break;
+            case 7:
+                opSequence = 8;
+                break;
+            case 8:
+                break;
+            case 9:
+                opSequence = 10;
+                break;
+            case 10:
+                opSequence = 11;
+                break;
+            case 11:
+                break;
+            default:
+                break;
+        }
+    }
+
+    void ControlOP() //オープニング・チュートリアルの進行管理
+    {
+        switch(opSequence)
+        {
+            case 0: //オープニング
+                canAll(false); //全ボタンの開閉を禁止
+
+                SetOPWindow0("プレイありがとうございます。\n\nあなたはこのリサイクルシティの市長です。\n\n現実で出たゴミを「リサイクル」しながら、\nこの町を発展させていくのが\nこのゲームの目的です。");
+                break;
+            case 1:
+                canAll(false);
+
+                SetOPWindow0("秘書「市長、就任おめでとうございます！」\n秘書「ゴミを資源として再利用する「リサイクル」。リサイクルを通じて、この町をキレイにしていきましょう！」");
+                break;
+            case 2:
+                canAll(false);
+
+                SetOPWindow0("秘書「まずは、あなたの身の回りにある、\n「リサイクルマーク」のついたゴミを探してみてください。」");
+                break;
+            case 3: //マーク入力チュートリアル
+                canAll(false);
+                canInput = true; //入力ボタンだけ使用を許可
+                opWindow0.SetActive(false);
+
+                SetTutorial(250f, -450f, 0.5f, "リサイクルマークを\n見つけたら、\nここをクリックしよう！！");
+                PutArrow(350f, -650f);
+                break;
+            case 4:
+                canAll(false);
+
+                SetTutorial(-100f, 750f, 0.7f, "見つけたマークの個数を入力して、\n「けってい」ボタンを押そう。");
+                PutArrow(-100f, 510f);
+                break;
+            case 5:
+                canAll(false);
+
+                SetTutorial(0f, 200f, 1f, "マークを入力すると、\nリサイクルポイントを獲得できるよ。");
+                PutArrow(0f, 550f, 135f);
+                break;
+            case 6:
+                canAll(false);
+                tutorialWindow.SetActive(false);
+                arrow.SetActive(false);
+
+                SetOPWindow0("秘書「おめでとうございます！！」\n秘書「さっそくリサイクルできたようですね！」");
+                break;
+            case 7:
+                canAll(false);
+
+                SetOPWindow0("秘書「実は私もリサイクルできるゴミを\n見つけてきました。」\n秘書「その分のポイントも差し上げますね。」");
+                break;
+            case 8:
+                canAll(false);
+
+                alumiPoint += 15;
+                stealPoint += 15;
+                petPoint += 15;
+                plaPoint += 15;
+                paperPoint += 15;
+                allPoint += 75;
+                PointViewerChange(); //ポイント表示UIに反映
+                opSequence = 9;
+                break;
+            case 9:
+                canAll(false);
+
+                SetOPWindow0("各ポイントを15ずつ獲得した！");
+                break;
+            case 10:
+                canAll(false);
+
+                SetOPWindow0("秘書「次は、獲得したポイントを使って、\n町を発展させてみましょう！」");
+                break;
+            case 11:
+                canAll(false);
+                canBuild = true;
+                opWindow0.SetActive(false);
+
+                SetTutorial(-200f, 0f, 0.5f, "土地をタップすると、建築画面に進むよ。");
+                PutArrow(-200f, 180f, 90f);
+                break;
+            case 12:
+                canAll(false);
+
+                SetTutorial(-100f, 750f, 0.7f, "「リサイクル場」か「娯楽施設」を\n建てられるよ。\n好きな方を選んで、\n「けってい」ボタンを押そう！");
+                PutArrow(-100f, 510f);
+                break;
+            default:
+                //ウィンドウ等を非表示に
+                opWindow0.SetActive(false);
+                tutorialWindow.SetActive(false);
+                arrow.SetActive(false);
+
+                canAll(true);
+                break;
+        }
+    }
+
+    void SetOPWindow0(string text) //オープニングイベント用ウィンドウの文章変更
+    {
+        opWindow0.SetActive(true);
+        opText.text = text;
+    }
+
     //チュートリアル関連
     [SerializeField] GameObject arrow; //強調用の矢印
     bool blinking = false; //点滅中フラグ
@@ -1403,26 +1609,39 @@ public class GameManager : MonoBehaviour
     bool canBuild = true;
     bool canMission = true;
     bool canEvent = true;
+    bool canBook = true;
 
-    void SetTutorial(float x, float y, float width, float height, string text) //チュートリアルウィンドウの配置
+    void canAll(bool i) //↑のフラグを一括変更
+    {
+        canInput = i;
+        canBuild = i;
+        canMission = i;
+        canEvent = i;
+        canBook = i;
+    }
+
+    void SetTutorial(float x, float y, float Scale, string text) //チュートリアルウィンドウの配置
     {
         tutorialWindow.transform.localPosition = new Vector2(x, y); //ウィンドウの位置調整
-        tutorialWindow.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height); //ウィンドウのサイズ調整
+        tutorialWindow.transform.localScale = new Vector2(Scale, Scale);
+        //tutorialWindow.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height); //ウィンドウのサイズ調整
         tutorialText.text = text; //メッセージ変更
 
         tutorialWindow.SetActive(true);
     }
 
-    void PutArrow(float x, float y) //点滅しない矢印の配置
+    void PutArrow(float x, float y, float rotation = 0f) //点滅しない矢印の配置
     {
         arrow.transform.localPosition = new Vector2(x, y);
+        arrow.transform.localEulerAngles = new Vector3(0, 0, rotation);
         arrow.SetActive(true);
     }
 
-    void SetArrow(float xPos, float yPos, int interval = 50, int times = 3) //矢印点滅開始。矢印が必要な位置が少ないなら、矢印を複数作った方が楽かも。
+    void SetArrow(float xPos, float yPos, float rotation = 0f, int interval = 50, int times = 3) //矢印点滅開始。矢印が必要な位置が少ないなら、矢印を複数作った方が楽かも。
     {
         //矢印の位置、点滅間隔・回数を設定
         arrow.transform.localPosition = new Vector2(xPos, yPos);
+        arrow.transform.localEulerAngles = new Vector3(0, 0, rotation);
         blinkInterval = interval / 2;
         intervalCount = interval / 2;
         blinkTimes = times;
@@ -1463,9 +1682,6 @@ public class GameManager : MonoBehaviour
         year = time.Year;
 
         Debug.Log(year + "/" + month + "/" + day);
-
-        SetTutorial(250f, -450f, 500f, 250f, "リサイクルマークを\n見つけたら、\nここをタップ！！");
-        PutArrow(350f, -650f);
     }
 
     // Update is called once per frame
@@ -1482,6 +1698,16 @@ public class GameManager : MonoBehaviour
         else if(isFadeOut == true)
         {
             FadeOut();
+        }
+
+        //オープニング・チュートリアル処理
+        if(isFadeIn == false)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                ClickCheck();
+            }
+            ControlOP();
         }
     }
 
