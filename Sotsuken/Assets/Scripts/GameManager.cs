@@ -66,6 +66,12 @@ public class GameManager : MonoBehaviour
         save.todayPla = todayPla;
         save.todayPaper = todayPaper;
 
+        save.alumiBook = alumiBook;
+        save.stealBook = stealBook;
+        save.petBook = petBook;
+        save.plaBook = plaBook;
+        save.paperBook = paperBook;
+
         save.place = place;
         save.lv = lv;
 
@@ -118,6 +124,12 @@ public class GameManager : MonoBehaviour
         todayPet = save.todayPet;
         todayPla = save.todayPla;
         todayPaper = save.todayPaper;
+
+        alumiBook = save.alumiBook;
+        stealBook = save.stealBook;
+        petBook = save.petBook;
+        plaBook = save.plaBook;
+        paperBook = save.paperBook;
 
         place = save.place;
         lv = save.lv;
@@ -582,6 +594,13 @@ public class GameManager : MonoBehaviour
     int todayPet = 0; //ペットボトル
     int todayPla = 0; //プラスチック
     int todayPaper = 0; //紙
+
+    //図鑑用フラグ
+    bool alumiBook = false;
+    bool stealBook = false;
+    bool petBook = false;
+    bool plaBook = false;
+    bool paperBook = false;
 
     //SE素材
     AudioSource audioSource;
@@ -1214,6 +1233,28 @@ public class GameManager : MonoBehaviour
         plaPoint += tmpPla;
         paperPoint += tmpPaper;
         allPoint += tmpAlumi + tmpSteal + tmpPet + tmpPla + tmpPaper;
+
+        //図鑑用フラグを設定
+        if(tmpAlumi > 0)
+        {
+            alumiBook = true;
+        }
+        if(tmpSteal > 0)
+        {
+            stealBook = true;
+        }
+        if(tmpPet > 0)
+        {
+            petBook = true;
+        }
+        if(tmpPla > 0)
+        {
+            plaBook = true;
+        }
+        if(tmpPaper > 0)
+        {
+            paperBook = true;
+        }
 
         //tmp○○を初期化
         tmpAlumi = 0;
