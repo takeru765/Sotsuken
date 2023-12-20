@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 using System;
 using System.IO;
@@ -78,6 +79,8 @@ public class GameManager : MonoBehaviour
         save.setMonth = setMonth;
         save.setDay = setDay;
 
+        save.answered = answered;
+
         //データ自体の保存処理
         string json = JsonUtility.ToJson(data); //SaveDataをjson形式に変換
         StreamWriter wr = new StreamWriter(filePath, false); //jsonをfilePathの位置に書き込み
@@ -129,6 +132,8 @@ public class GameManager : MonoBehaviour
         setMonth = save.setMonth;
         setDay = save.setDay;
 
+        answered = save.answered;
+
         //各種UIに反映
         PointViewerChange();
         CheckBuildImage();
@@ -147,6 +152,53 @@ public class GameManager : MonoBehaviour
         //初期化したセーブデータを読み込み
         Load1(filePath);
         Load2();
+    }
+
+    //フェードイン・アウト処理
+    [SerializeField] GameObject fadeObject;
+    [SerializeField] Image fadeImage;
+    bool isFadeIn = true; //フェードイン中フラグ
+    bool isFadeOut = false; //フェードアウト中フラグ
+    float alfa = 1f; //フェード画像の不透明度
+
+    void FadeIn(float speed = 0.75f) //フェードイン処理。フェード速度も指定可能
+    {
+        fadeObject.SetActive(true);
+
+        alfa -= speed * Time.deltaTime; //時間経過に応じて不透明度を低下
+        fadeImage.color = new Color(0, 0, 0, alfa); //不透明度を反映
+
+        if(alfa < 0)
+        {
+            alfa = 0;
+            isFadeIn = false;
+
+            fadeImage.raycastTarget = false; //フェード画像のクリック判定を無効化(下にあるボタンをクリックさせるため)
+        }
+    }
+
+    void FadeOut(float speed = 0.75f)
+    {
+        fadeImage.raycastTarget = true; //フェード画像のクリック判定を有効化(各種ボタンをクリックできないようにする)
+
+        alfa += speed * Time.deltaTime; //時間経過に応じて不透明度を増加
+        fadeImage.color = new Color(0, 0, 0, alfa); //不透明度を反映
+
+        if (alfa >= 1)
+        {
+            alfa = 1;
+            isFadeOut = false;
+
+            SceneManager.LoadScene("Odajima_bookpart");
+        }
+    }
+
+    public void StartFadeOut()
+    {
+        if(canBook == true && open == false)
+        {
+            isFadeOut = true;
+        }
     }
 
     //UI(ポイント表示)関連
@@ -215,13 +267,27 @@ public class GameManager : MonoBehaviour
     //建設ウィンドウの開閉
     public void OpenBuild(int i)
     {
-        if(lv[i] == 0)
+        if(canBuild == true)
         {
-            OpenBuild0(i);
-        }
-        else
-        {
-            OpenBuild1(i);
+            if (lv[i] == 0)
+            {
+                if(opSequence == 11) //チュートリアル用の条件。左上の土地だけを選択できるようにする。
+                {
+                    if(i == 0)
+                    {
+                        OpenBuild0(i);
+                        opSequence = 12;
+                    }
+                }
+                else //チュートリアル外
+                {
+                    OpenBuild0(i);
+                }
+            }
+            else
+            {
+                OpenBuild1(i);
+            }
         }
     }
     public void OpenBuild0(int i) //OpenBuild内で呼び出し
@@ -238,10 +304,13 @@ public class GameManager : MonoBehaviour
     {
         Save(save); //オートセーブ
 
-        selectedPlace = -1;
-        selectedBuilding = 0;
-        BuildWindow0.SetActive(false);
-        open = false;
+        if(canBuild == true)
+        {
+            selectedPlace = -1;
+            selectedBuilding = 0;
+            BuildWindow0.SetActive(false);
+            open = false;
+        }
     }
 
     public void OpenBuild1(int i) //OpenBuild内で呼び出し
@@ -268,31 +337,31 @@ public class GameManager : MonoBehaviour
                 case 1:
                     if(place[i] == 1)
                     {
-                        buildIntro.text = "LV:1→2\nコスト:アルミ5pt\nボーナス:+20%→+40%";
+                        buildIntro.text = "LV:1→2\nコスト:各30pt\nボーナス:+20%→+40%";
                     }
                     else if(place[i] == 2)
                     {
-                        buildIntro.text = "LV:1→2\nコスト:スチール5pt\nボーナス:+20%→+40%";
+                        buildIntro.text = "LV:1→2\nコスト:各30pt\nボーナス:+20%→+40%";
                     }
                     break;
                 case 2:
                     if (place[i] == 1)
                     {
-                        buildIntro.text = "LV:2→3\nコスト:アルミ10pt\nボーナス:+40%→+60%";
+                        buildIntro.text = "LV:2→3\nコスト:各45pt\nボーナス:+40%→+60%";
                     }
                     else if (place[i] == 2)
                     {
-                        buildIntro.text = "LV:2→3\nコスト:スチール10pt\nボーナス:+40%→+60%";
+                        buildIntro.text = "LV:2→3\nコスト:各45pt\nボーナス:+40%→+60%";
                     }
                     break;
                 case 3:
                     if (place[i] == 1)
                     {
-                        buildIntro.text = "LV:3→4\nコスト:アルミ15pt\nボーナス:+60%→+80%";
+                        buildIntro.text = "LV:3→4\nコスト:各60pt\nボーナス:+60%→+80%";
                     }
                     else if (place[i] == 2)
                     {
-                        buildIntro.text = "LV:3→4\nコスト:スチール15pt\nボーナス:+60%→+80%";
+                        buildIntro.text = "LV:3→4\nコスト:各60pt\nボーナス:+60%→+80%";
                     }
                     break;
                 case 4:
@@ -308,16 +377,19 @@ public class GameManager : MonoBehaviour
     {
         Save(save); //オートセーブ
 
-        selectedPlace = 0;
-        BuildWindow1.SetActive(false);
-        open = false;
+        if(canBuild == true)
+        {
+            selectedPlace = 0;
+            BuildWindow1.SetActive(false);
+            open = false;
+        }
     }
 
     //ミッションウィンドウの開閉
     public void OpenMission()
     {
 
-        if(open == false)
+        if(open == false && canMission == true)
         {
             MissionWindow.SetActive(true);
             open = true;
@@ -342,17 +414,25 @@ public class GameManager : MonoBehaviour
     {
         Save(save); //オートセーブ
 
-        MissionWindow.SetActive(false);
-        open = false;
+        if (canMission == true)
+        {
+            MissionWindow.SetActive(false);
+            open = false;
+        }
     }
 
     //リサイクルマーク入力ウィンドウの開閉
     public void OpenInput()
     {
-        if (open == false)
+        if (open == false && canInput ==true)
         {
             InputWindow.SetActive(true);
             open = true;
+        }
+
+        if(opSequence == 3) //チュートリアル進行管理
+        {
+            opSequence = 4;
         }
     }
 
@@ -360,14 +440,17 @@ public class GameManager : MonoBehaviour
     {
         Save(save); //オートセーブ
 
-        InputWindow.SetActive(false);
-        open = false;
+        if(canInput == true)
+        {
+            InputWindow.SetActive(false);
+            open = false;
+        }
     }
 
     //イベントウィンドウの開閉
     public void OpenEvent()
     {
-        if(open == false)
+        if(open == false && canEvent == true)
         {
             //イベント情報を取得
             Event tmpEvent = ScriptableObject.CreateInstance("Event") as Event;
@@ -437,17 +520,24 @@ public class GameManager : MonoBehaviour
     {
         Save(save); //オートセーブ
 
-        EventWindow2.SetActive(false);
-        open = false;
+        if(canEvent == true)
+        {
+            EventWindow2.SetActive(false);
+            open = false;
+        }
     }
 
     public void CloseEvent1()
     {
         Save(save); //オートセーブ
 
-        EventWindow1.SetActive(false);
-        open = false;
+        if (canEvent == true)
+        {
+            EventWindow1.SetActive(false);
+            open = false;
+        }
     }
+
 
     //各種ポイント
     int alumiPoint = 0; //アルミ缶
@@ -577,7 +667,7 @@ public class GameManager : MonoBehaviour
     }
 
     //建設決定ボタン
-    public void DecideBuild()
+    public void DecideBuild() //消費ポイント修正中
     {
         if(selectedBuilding != 0)
         {
@@ -660,41 +750,65 @@ public class GameManager : MonoBehaviour
         switch(lv[selectedPlace])
         {
             case 1:
-                if(place[selectedPlace] == 1 && alumiPoint >= 5)
+                if (place[selectedPlace] == 1 && alumiPoint >= 30 && stealPoint >= 30 && petPoint >= 30 && plaPoint >= 30 && paperPoint >= 30)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 5;
+                    alumiPoint -= 30;
+                    stealPoint -= 30;
+                    petPoint -= 30;
+                    plaPoint -= 30;
+                    paperPoint -= 30;
                 }
-                else if(place[selectedPlace] == 2 && stealPoint >= 5)
+                else if (place[selectedPlace] == 2 && alumiPoint >= 30 && stealPoint >= 30 && petPoint >= 30 && plaPoint >= 30 && paperPoint >= 30)
                 {
                     lv[selectedPlace] += 1;
-                    stealPoint -= 5;
+                    alumiPoint -= 30;
+                    stealPoint -= 30;
+                    petPoint -= 30;
+                    plaPoint -= 30;
+                    paperPoint -= 30;
                 }
                 CloseBuild1();
                 break;
             case 2:
-                if (place[selectedPlace] == 1 && alumiPoint >= 10)
+                if (place[selectedPlace] == 1 && alumiPoint >= 45 && stealPoint >= 45 && petPoint >= 45 && plaPoint >= 45 && paperPoint >= 45)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 10;
+                    alumiPoint -= 45;
+                    stealPoint -= 45;
+                    petPoint -= 45;
+                    plaPoint -= 45;
+                    paperPoint -= 45;
                 }
-                else if (place[selectedPlace] == 2 && stealPoint >= 10)
+                else if (place[selectedPlace] == 2 && alumiPoint >= 45 && stealPoint >= 45 && petPoint >= 45 && plaPoint >= 45 && paperPoint >= 45)
                 {
                     lv[selectedPlace] += 1;
-                    stealPoint -= 10;
+                    alumiPoint -= 45;
+                    stealPoint -= 45;
+                    petPoint -= 45;
+                    plaPoint -= 45;
+                    paperPoint -= 45;
                 }
                 CloseBuild1();
                 break;
             case 3:
-                if (place[selectedPlace] == 1 && alumiPoint >= 15)
+                if (place[selectedPlace] == 1 && alumiPoint >= 60 && stealPoint >= 60 && petPoint >= 60 && plaPoint >= 60 && paperPoint >= 60)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 15;
+                    alumiPoint -= 60;
+                    stealPoint -= 60;
+                    petPoint -= 60;
+                    plaPoint -= 60;
+                    paperPoint -= 60;
                 }
-                else if (place[selectedPlace] == 2 && stealPoint >= 15)
+                else if (place[selectedPlace] == 2 && alumiPoint >= 60 && stealPoint >= 60 && petPoint >= 60 && plaPoint >= 60 && paperPoint >= 60)
                 {
                     lv[selectedPlace] += 1;
-                    stealPoint -= 15;
+                    alumiPoint -= 60;
+                    stealPoint -= 60;
+                    petPoint -= 60;
+                    plaPoint -= 60;
+                    paperPoint -= 60;
                 }
                 CloseBuild1();
                 break;
@@ -975,29 +1089,29 @@ public class GameManager : MonoBehaviour
         //加算するポイントを計算
         if(alumiBonus == true)//アルミ
         {
-            tmpAlumi = (int)(tmpAlumi * 5 * inputRate * eventRate);
+            tmpAlumi = (int)(tmpAlumi * 15 * inputRate * eventRate);
         }
         else
         {
-            tmpAlumi = (int)(tmpAlumi * 5 * inputRate);
+            tmpAlumi = (int)(tmpAlumi * 15 * inputRate);
         }
 
         if (stealBonus == true) //スチール
         {
-            tmpSteal = (int)(tmpSteal * 5 * inputRate * eventRate);
+            tmpSteal = (int)(tmpSteal * 15 * inputRate * eventRate);
         }
         else
         {
-            tmpSteal = (int)(tmpSteal * 5 * inputRate);
+            tmpSteal = (int)(tmpSteal * 15 * inputRate);
         }
 
         if (petBonus == true)//ペットボトル
         {
-            tmpPet = (int)(tmpPet * 5 * inputRate * eventRate);
+            tmpPet = (int)(tmpPet * 15 * inputRate * eventRate);
         }
         else
         {
-            tmpPet = (int)(tmpPet * 5 * inputRate);
+            tmpPet = (int)(tmpPet * 15 * inputRate);
         }
 
         if (plaBonus == true)//プラスチック
@@ -1011,11 +1125,11 @@ public class GameManager : MonoBehaviour
 
         if (paperBonus == true)//紙
         {
-            tmpPaper = (int)(tmpPaper * 5 * inputRate * eventRate);
+            tmpPaper = (int)(tmpPaper * 15 * inputRate * eventRate);
         }
         else
         {
-            tmpPaper = (int)(tmpPaper * 5 * inputRate);
+            tmpPaper = (int)(tmpPaper * 15 * inputRate);
         }
 
 
@@ -1042,6 +1156,14 @@ public class GameManager : MonoBehaviour
 
         //ポイント表示UIに反映
         PointViewerChange();
+
+        //チュートリアル進行
+        if(opSequence == 4 && allPoint > 0)
+        {
+            canInput = true;
+            opSequence = 5;
+            CloseInput();
+        }
     }
 
     //イベント関連
@@ -1120,6 +1242,8 @@ public class GameManager : MonoBehaviour
             answered = true;
         }
     }
+
+
 
     //ミッション関連
     int goal = 1; //設定した目標
@@ -1318,11 +1442,224 @@ public class GameManager : MonoBehaviour
         MissionFailed.SetActive(true);
     }
 
+
+
+    //オープニング、チュートリアルの進行管理
+    [SerializeField] GameObject opWindow0; //文章のみのOP用ウィンドウ
+    [SerializeField] TextMeshProUGUI opText;
+    int opSequence = 0; //オープニング・チュートリアルの進行度
+
+    void ClickCheck() //クリック時に呼び出す。オープニングの進捗に応じて、画面クリックで進行するかを管理。制作中
+    {
+        switch(opSequence)
+        {
+            case 0:
+                opSequence = 1;
+                break;
+            case 1:
+                opSequence = 2;
+                    break;
+            case 2:
+                opSequence = 3;
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                opSequence = 6;
+                break;
+            case 6:
+                opSequence = 7;
+                break;
+            case 7:
+                opSequence = 8;
+                break;
+            case 8:
+                break;
+            case 9:
+                opSequence = 10;
+                break;
+            case 10:
+                opSequence = 11;
+                break;
+            case 11:
+                break;
+            default:
+                break;
+        }
+    }
+
+    void ControlOP() //オープニング・チュートリアルの進行管理
+    {
+        switch(opSequence)
+        {
+            case 0: //オープニング
+                canAll(false); //全ボタンの開閉を禁止
+
+                SetOPWindow0("プレイありがとうございます。\n\nあなたはこのリサイクルシティの市長です。\n\n現実で出たゴミを「リサイクル」しながら、\nこの町を発展させていくのが\nこのゲームの目的です。");
+                break;
+            case 1:
+                canAll(false);
+
+                SetOPWindow0("秘書「市長、就任おめでとうございます！」\n秘書「ゴミを資源として再利用する「リサイクル」。リサイクルを通じて、この町をキレイにしていきましょう！」");
+                break;
+            case 2:
+                canAll(false);
+
+                SetOPWindow0("秘書「まずは、あなたの身の回りにある、\n「リサイクルマーク」のついたゴミを探してみてください。」");
+                break;
+            case 3: //マーク入力チュートリアル
+                canAll(false);
+                canInput = true; //入力ボタンだけ使用を許可
+                opWindow0.SetActive(false);
+
+                SetTutorial(250f, -450f, 0.5f, "リサイクルマークを\n見つけたら、\nここをクリックしよう！！");
+                PutArrow(350f, -650f);
+                break;
+            case 4:
+                canAll(false);
+
+                SetTutorial(-100f, 750f, 0.7f, "見つけたマークの個数を入力して、\n「けってい」ボタンを押そう。");
+                PutArrow(-100f, 510f);
+                break;
+            case 5:
+                canAll(false);
+
+                SetTutorial(0f, 200f, 1f, "マークを入力すると、\nリサイクルポイントを獲得できるよ。");
+                PutArrow(0f, 550f, 135f);
+                break;
+            case 6:
+                canAll(false);
+                tutorialWindow.SetActive(false);
+                arrow.SetActive(false);
+
+                SetOPWindow0("秘書「おめでとうございます！！」\n秘書「さっそくリサイクルできたようですね！」");
+                break;
+            case 7:
+                canAll(false);
+
+                SetOPWindow0("秘書「実は私もリサイクルできるゴミを\n見つけてきました。」\n秘書「その分のポイントも差し上げますね。」");
+                break;
+            case 8:
+                canAll(false);
+
+                alumiPoint += 15;
+                stealPoint += 15;
+                petPoint += 15;
+                plaPoint += 15;
+                paperPoint += 15;
+                allPoint += 75;
+                PointViewerChange(); //ポイント表示UIに反映
+                opSequence = 9;
+                break;
+            case 9:
+                canAll(false);
+
+                SetOPWindow0("各ポイントを15ずつ獲得した！");
+                break;
+            case 10:
+                canAll(false);
+
+                SetOPWindow0("秘書「次は、獲得したポイントを使って、\n町を発展させてみましょう！」");
+                break;
+            case 11:
+                canAll(false);
+                canBuild = true;
+                opWindow0.SetActive(false);
+
+                SetTutorial(-200f, 0f, 0.5f, "土地をタップすると、建築画面に進むよ。");
+                PutArrow(-200f, 180f, 90f);
+                break;
+            case 12:
+                canAll(false);
+
+                SetTutorial(-100f, 750f, 0.7f, "「リサイクル場」か「娯楽施設」を\n建てられるよ。\n好きな方を選んで、\n「けってい」ボタンを押そう！");
+                PutArrow(-100f, 510f);
+                break;
+            default:
+                //ウィンドウ等を非表示に
+                opWindow0.SetActive(false);
+                tutorialWindow.SetActive(false);
+                arrow.SetActive(false);
+
+                canAll(true);
+                break;
+        }
+    }
+
+    void SetOPWindow0(string text) //オープニングイベント用ウィンドウの文章変更
+    {
+        opWindow0.SetActive(true);
+        opText.text = text;
+    }
+
+    //チュートリアル関連
+    [SerializeField] GameObject arrow; //強調用の矢印
+    bool blinking = false; //点滅中フラグ
+    int blinkInterval = 25; //点滅間隔のフレーム数
+    int intervalCount = 25; //経過フレームのカウント用
+    int blinkTimes = 3; //点滅する回数
+
+    [SerializeField] GameObject tutorialWindow;
+    [SerializeField] TextMeshProUGUI tutorialText;
+
+    //チュートリアル中の各ボタン操作可能フラグ
+    bool canInput = true;
+    bool canBuild = true;
+    bool canMission = true;
+    bool canEvent = true;
+    bool canBook = true;
+
+    void canAll(bool i) //↑のフラグを一括変更
+    {
+        canInput = i;
+        canBuild = i;
+        canMission = i;
+        canEvent = i;
+        canBook = i;
+    }
+
+    void SetTutorial(float x, float y, float Scale, string text) //チュートリアルウィンドウの配置
+    {
+        tutorialWindow.transform.localPosition = new Vector2(x, y); //ウィンドウの位置調整
+        tutorialWindow.transform.localScale = new Vector2(Scale, Scale);
+        //tutorialWindow.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height); //ウィンドウのサイズ調整
+        tutorialText.text = text; //メッセージ変更
+
+        tutorialWindow.SetActive(true);
+    }
+
+    void PutArrow(float x, float y, float rotation = 0f) //点滅しない矢印の配置
+    {
+        arrow.transform.localPosition = new Vector2(x, y);
+        arrow.transform.localEulerAngles = new Vector3(0, 0, rotation);
+        arrow.SetActive(true);
+    }
+
+    void SetArrow(float xPos, float yPos, float rotation = 0f, int interval = 50, int times = 3) //矢印点滅開始。矢印が必要な位置が少ないなら、矢印を複数作った方が楽かも。
+    {
+        //矢印の位置、点滅間隔・回数を設定
+        arrow.transform.localPosition = new Vector2(xPos, yPos);
+        arrow.transform.localEulerAngles = new Vector3(0, 0, rotation);
+        blinkInterval = interval / 2;
+        intervalCount = interval / 2;
+        blinkTimes = times;
+
+        arrow.SetActive(true);
+        blinking = true; //点滅フラグをON
+    }
+
+    public void Debug_CallArrow() //点滅のデバッグボタン用。本実装では消していいはず。
+    {
+        SetArrow(-50f, -650f);
+    }
+
     //現状では、起動時のセーブデータ読み込みにのみ使用
     private void Awake()
     {
-        //パスを取得
-        filePath = Application.dataPath + "/SaveData/" + fileName;
+        //パスを取得(Windowsの場合、「C:\Users\(ユーザー名)\AppData\LocalLow\DefaultCompany\Sotsuken」に保存される)
+        filePath = Application.persistentDataPath + "/" + fileName;
 
         //ファイルが無い場合はファイルを作成
         if(!File.Exists(filePath))
@@ -1352,5 +1689,48 @@ public class GameManager : MonoBehaviour
     {
         //現在日時を取得。処理が重い場合、別の場所(画面切り替え時等)に移すかも
         time = DateTime.Now;
+
+        //フェードイン・アウト処理
+        if(isFadeIn == true)
+        {
+            FadeIn();
+        }
+        else if(isFadeOut == true)
+        {
+            FadeOut();
+        }
+
+        //オープニング・チュートリアル処理
+        if(isFadeIn == false)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                ClickCheck();
+            }
+            ControlOP();
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if(blinking == true)
+        {
+            //矢印の点滅処理
+            intervalCount -= 1;
+            if (intervalCount <= 0)
+            {
+                arrow.SetActive(!arrow.activeSelf);
+                if (arrow.activeSelf == false)
+                {
+                    blinkTimes -= 1;
+                }
+                if (blinkTimes <= 0)
+                {
+                    blinking = false;
+                }
+
+                intervalCount = blinkInterval;
+            }
+        }
     }
 }
