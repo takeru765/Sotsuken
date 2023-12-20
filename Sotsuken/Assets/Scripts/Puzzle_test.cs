@@ -41,12 +41,17 @@ public class Puzzle_test : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     public void OnDrag(PointerEventData eventData)
     {
+        /*
         var mousePos = Input.mousePosition;//スクリーン座標,canvasRect.sizeDelta.xはキャンバス座標
         var magnification = canvasRect.sizeDelta.x / Screen.width;//スクリーンサイズ＝キャンバスサイズならそのまま代入すればいいが、サイズが違うため調整する。
-
+        
         mousePos.x = mousePos.x * magnification - canvasRect.sizeDelta.x /2 ;
         mousePos.y = mousePos.y * magnification - canvasRect.sizeDelta.y /2 ;
-        mousePos.z = transform.localPosition.z ;//この３つで座標の起点のずれを解消する。
+        mousePos.z = transform.localPosition.z ;//この３つで座標の起点のずれを解消する。*/
+
+        var mousePos = Camera.main.ScreenToWorldPoint(eventData.position);
+        mousePos.y -= 0.5f;
+        mousePos.z = transform.localPosition.z;
 
         transform.localPosition = mousePos;
 
@@ -54,7 +59,6 @@ public class Puzzle_test : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
         Debug.Log(transform.localPosition.z);
 
-     
 
     }
 
