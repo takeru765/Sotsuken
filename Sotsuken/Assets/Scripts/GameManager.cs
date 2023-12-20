@@ -173,6 +173,10 @@ public class GameManager : MonoBehaviour
             alfa = 0;
             isFadeIn = false;
 
+            if(opSequence == 0)
+            {
+                audioSource.PlayOneShot(openWindow); //チュートリアル開始時の効果音
+            }
             fadeImage.raycastTarget = false; //フェード画像のクリック判定を無効化(下にあるボタンをクリックさせるため)
         }
     }
@@ -297,10 +301,12 @@ public class GameManager : MonoBehaviour
             selectedPlace = i;
             BuildWindow0.SetActive(true);
             open = true;
+
+            audioSource.PlayOneShot(openWindow); //効果音再生
         }
     }
 
-    public void CloseBuild0()
+    public void CloseBuild0(bool i)
     {
         Save(save); //オートセーブ
 
@@ -310,6 +316,11 @@ public class GameManager : MonoBehaviour
             selectedBuilding = 0;
             BuildWindow0.SetActive(false);
             open = false;
+
+            if(i == true) //他の効果音がある場合は再生しないように
+            {
+                audioSource.PlayOneShot(closeWindow); //効果音再生
+            }
         }
     }
 
@@ -322,6 +333,8 @@ public class GameManager : MonoBehaviour
             selectedPlace = i;
             BuildWindow1.SetActive(true);
             open = true;
+            audioSource.PlayOneShot(openWindow); //効果音再生
+
             //建設物に合わせた画像を表示
             if (place[i] == 1)
             {
@@ -382,6 +395,8 @@ public class GameManager : MonoBehaviour
             selectedPlace = 0;
             BuildWindow1.SetActive(false);
             open = false;
+
+            audioSource.PlayOneShot(closeWindow); //効果音再生
         }
     }
 
@@ -393,6 +408,7 @@ public class GameManager : MonoBehaviour
         {
             MissionWindow.SetActive(true);
             open = true;
+            audioSource.PlayOneShot(openWindow); //効果音再生
 
             //ミッションの成功・失敗を判定
             CheckMission();
@@ -418,6 +434,8 @@ public class GameManager : MonoBehaviour
         {
             MissionWindow.SetActive(false);
             open = false;
+
+            audioSource.PlayOneShot(closeWindow); //効果音再生
         }
     }
 
@@ -428,6 +446,7 @@ public class GameManager : MonoBehaviour
         {
             InputWindow.SetActive(true);
             open = true;
+            audioSource.PlayOneShot(openWindow); //効果音再生
         }
 
         if(opSequence == 3) //チュートリアル進行管理
@@ -436,7 +455,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void CloseInput()
+    public void CloseInput(bool i)
     {
         Save(save); //オートセーブ
 
@@ -444,6 +463,11 @@ public class GameManager : MonoBehaviour
         {
             InputWindow.SetActive(false);
             open = false;
+
+            if(i == true)
+            {
+                audioSource.PlayOneShot(closeWindow); //効果音再生
+            }
         }
     }
 
@@ -513,17 +537,7 @@ public class GameManager : MonoBehaviour
             }
 
             open = true;
-        }
-    }
-
-    public void CloseEvent2()
-    {
-        Save(save); //オートセーブ
-
-        if(canEvent == true)
-        {
-            EventWindow2.SetActive(false);
-            open = false;
+            audioSource.PlayOneShot(openWindow); //効果音再生
         }
     }
 
@@ -535,6 +549,21 @@ public class GameManager : MonoBehaviour
         {
             EventWindow1.SetActive(false);
             open = false;
+
+            audioSource.PlayOneShot(closeWindow); //効果音再生
+        }
+    }
+
+    public void CloseEvent2()
+    {
+        Save(save); //オートセーブ
+
+        if (canEvent == true)
+        {
+            EventWindow2.SetActive(false);
+            open = false;
+
+            audioSource.PlayOneShot(closeWindow); //効果音再生
         }
     }
 
@@ -553,6 +582,14 @@ public class GameManager : MonoBehaviour
     int todayPet = 0; //ペットボトル
     int todayPla = 0; //プラスチック
     int todayPaper = 0; //紙
+
+    //SE素材
+    AudioSource audioSource;
+    [SerializeField] AudioClip openWindow;
+    [SerializeField] AudioClip closeWindow;
+    [SerializeField] AudioClip valueChange;
+    [SerializeField] AudioClip inputEnter;
+    [SerializeField] AudioClip enter;
 
     //選択中の建築場所
     int selectedPlace = -1; //0～5が対応。-1は初期値。
@@ -669,78 +706,111 @@ public class GameManager : MonoBehaviour
     //建設決定ボタン
     public void DecideBuild() //消費ポイント修正中
     {
-        if(selectedBuilding != 0)
+        if(selectedBuilding != 0) //建てるものを選択している
         {
-            place[selectedPlace] = selectedBuilding;
-            lv[selectedPlace] = 1;
-            switch(selectedPlace)
+            bool enoughBuildPoint = false;
+
+            switch(selectedBuilding) //建築に必要なポイントがあるか確認
             {
-                case 0:
-                    if (selectedBuilding == 1)
-                    {
-                        buildImage0.sprite = recycleImage;
-                    }
-                    else if (selectedBuilding == 2)
-                    {
-                        buildImage0.sprite = amusementImage;
-                    }
-                    break;
                 case 1:
-                    if (selectedBuilding == 1)
+                    if(alumiPoint >= 15 && stealPoint >= 15 && petPoint >= 15 && plaPoint >= 15 && paperPoint >= 15)
                     {
-                        buildImage1.sprite = recycleImage;
-                    }
-                    else if (selectedBuilding == 2)
-                    {
-                        buildImage1.sprite = amusementImage;
+                        enoughBuildPoint = true;
                     }
                     break;
                 case 2:
-                    if (selectedBuilding == 1)
+                    if (alumiPoint >= 15 && stealPoint >= 15 && petPoint >= 15 && plaPoint >= 15 && paperPoint >= 15)
                     {
-                        buildImage2.sprite = recycleImage;
-                    }
-                    else if (selectedBuilding == 2)
-                    {
-                        buildImage2.sprite = amusementImage;
-                    }
-                    break;
-                case 3:
-                    if (selectedBuilding == 1)
-                    {
-                        buildImage3.sprite = recycleImage;
-                    }
-                    else if (selectedBuilding == 2)
-                    {
-                        buildImage3.sprite = amusementImage;
-                    }
-                    break;
-                case 4:
-                    if (selectedBuilding == 1)
-                    {
-                        buildImage4.sprite = recycleImage;
-                    }
-                    else if (selectedBuilding == 2)
-                    {
-                        buildImage4.sprite = amusementImage;
-                    }
-                    break;
-                case 5:
-                    if (selectedBuilding == 1)
-                    {
-                        buildImage5.sprite = recycleImage;
-                    }
-                    else if (selectedBuilding == 2)
-                    {
-                        buildImage5.sprite = amusementImage;
+                        enoughBuildPoint = true;
                     }
                     break;
                 default:
                     break;
             }
+
+            //ポイントが足りてれば建築処理を実行
+            if(enoughBuildPoint == true)
+            {
+                place[selectedPlace] = selectedBuilding;
+                lv[selectedPlace] = 1;
+                switch (selectedPlace)
+                {
+                    case 0:
+                        if (selectedBuilding == 1)
+                        {
+                            buildImage0.sprite = recycleImage;
+                        }
+                        else if (selectedBuilding == 2)
+                        {
+                            buildImage0.sprite = amusementImage;
+                        }
+                        break;
+                    case 1:
+                        if (selectedBuilding == 1)
+                        {
+                            buildImage1.sprite = recycleImage;
+                        }
+                        else if (selectedBuilding == 2)
+                        {
+                            buildImage1.sprite = amusementImage;
+                        }
+                        break;
+                    case 2:
+                        if (selectedBuilding == 1)
+                        {
+                            buildImage2.sprite = recycleImage;
+                        }
+                        else if (selectedBuilding == 2)
+                        {
+                            buildImage2.sprite = amusementImage;
+                        }
+                        break;
+                    case 3:
+                        if (selectedBuilding == 1)
+                        {
+                            buildImage3.sprite = recycleImage;
+                        }
+                        else if (selectedBuilding == 2)
+                        {
+                            buildImage3.sprite = amusementImage;
+                        }
+                        break;
+                    case 4:
+                        if (selectedBuilding == 1)
+                        {
+                            buildImage4.sprite = recycleImage;
+                        }
+                        else if (selectedBuilding == 2)
+                        {
+                            buildImage4.sprite = amusementImage;
+                        }
+                        break;
+                    case 5:
+                        if (selectedBuilding == 1)
+                        {
+                            buildImage5.sprite = recycleImage;
+                        }
+                        else if (selectedBuilding == 2)
+                        {
+                            buildImage5.sprite = amusementImage;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                if (opSequence == 12) //チュートリアル管理用
+                {
+                    opSequence = 13;
+                    canBuild = true;
+                }
+
+
+                audioSource.PlayOneShot(enter); //効果音再生
+                PointViewerChange();
+                CloseBuild0(false);
+            }
             
-            PointViewerChange();
-            CloseBuild0();
         }
     }
 
@@ -966,6 +1036,8 @@ public class GameManager : MonoBehaviour
             default:
                 break;
         }
+
+        audioSource.PlayOneShot(valueChange); //効果音再生
     }
 
     //マーク減少ボタン
@@ -1071,6 +1143,8 @@ public class GameManager : MonoBehaviour
             default:
                 break;
         }
+
+        audioSource.PlayOneShot(valueChange); //効果音再生
     }
 
     //リサイクルマーク入力を確定
@@ -1157,12 +1231,14 @@ public class GameManager : MonoBehaviour
         //ポイント表示UIに反映
         PointViewerChange();
 
+        audioSource.PlayOneShot(inputEnter); //効果音再生
+
         //チュートリアル進行
-        if(opSequence == 4 && allPoint > 0)
+        if (opSequence == 4 && allPoint > 0)
         {
             canInput = true;
             opSequence = 5;
-            CloseInput();
+            CloseInput(false);
         }
     }
 
@@ -1300,11 +1376,17 @@ public class GameManager : MonoBehaviour
         {
             goalText.text = string.Format("{0:G}", goal);
         }
+
+        audioSource.PlayOneShot(valueChange); //効果音再生
     }
 
     //ミッション確定
     public void SetMission()
     {
+        if(setMission == false)
+        {
+            audioSource.PlayOneShot(enter); //効果音再生
+        }
         setMission = true;
 
         //今日の日付を保存
@@ -1454,12 +1536,15 @@ public class GameManager : MonoBehaviour
         switch(opSequence)
         {
             case 0:
+                audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 1;
                 break;
             case 1:
+                audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 2;
-                    break;
+                break;
             case 2:
+                audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 3;
                 break;
             case 3:
@@ -1467,9 +1552,11 @@ public class GameManager : MonoBehaviour
             case 4:
                 break;
             case 5:
+                audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 6;
                 break;
             case 6:
+                audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 7;
                 break;
             case 7:
@@ -1478,9 +1565,11 @@ public class GameManager : MonoBehaviour
             case 8:
                 break;
             case 9:
+                audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 10;
                 break;
             case 10:
+                audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 11;
                 break;
             case 11:
@@ -1551,12 +1640,14 @@ public class GameManager : MonoBehaviour
                 paperPoint += 15;
                 allPoint += 75;
                 PointViewerChange(); //ポイント表示UIに反映
+                audioSource.PlayOneShot(inputEnter); //効果音再生
                 opSequence = 9;
                 break;
             case 9:
                 canAll(false);
 
                 SetOPWindow0("各ポイントを15ずつ獲得した！");
+
                 break;
             case 10:
                 canAll(false);
@@ -1675,11 +1766,15 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //日付を保存
         time = DateTime.Now;
 
         day = time.Day;
         month = time.Month;
         year = time.Year;
+
+        //AudioSourceを取得
+        audioSource = GetComponent<AudioSource>();
 
         Debug.Log(year + "/" + month + "/" + day);
     }
