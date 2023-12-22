@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 3fc8acdd13e6c734bafef6554d6fdbcd
   - enabled: 1
+    path: Assets/Scenes/Title.unity
+    guid: ba1974f3679021a42996cc37246e2b94
+  - enabled: 1
     path: Assets/Scenes/Oka_test.unity
     guid: 70695c07948aa39478bc3d86968faa1b
   - enabled: 1

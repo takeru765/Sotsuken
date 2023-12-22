@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90e246fe6ac9ea64eae28be37479e2fe, type: 3}
+  m_Name: Quiz2
+  m_EditorClassIdentifier: 
+  id: 3
+  eventName: "\u30DA\u30C3\u30C8\u30DC\u30C8\u30EB\u30AF\u30A4\u30BA"
+  isQuiz: 1
+  bonus: 20
+  alumi: 0
+  steal: 0
+  pet: 1
+  pla: 0
+  paper: 0
+  ansewr: 2
+  answer1: "\u30D5\u30BF\u3092\u5916\u3059"
+  answer2: "\u30D5\u30BF\u3068\u30E9\u30D9\u30EB\u3092\u5916\u3059"
+  answer3: "\u305D\u306E\u307E\u307E\u3067\u3044\u3044"
+  intro: "\u30DA\u30C3\u30C8\u30DC\u30C8\u30EB\u3092\u30EA\u30B5\u30A4\u30AF\u30EB\u3057\u3088\u3046\uFF01\n\u4E2D\u3092\u6D17\u3063\u3066\u304B\u3089\u2026\u2026\u3001\n\u4F55\u304B\u3057\u306A\u3044\u3068\u3044\u3051\u306A\u304B\u3063\u305F\u3088\u3046\u306A\uFF1F"
+  eventImage: {fileID: 0}
