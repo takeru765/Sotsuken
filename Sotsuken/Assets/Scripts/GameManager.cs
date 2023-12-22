@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
         //各種数値の反映
         year = save.year;
         month = save.month;
-        day = save.month;
+        day = save.day;
 
         alumiPoint = save.alumiPoint;
         stealPoint = save.stealPoint;
@@ -156,6 +156,9 @@ public class GameManager : MonoBehaviour
     {
         //saveの初期化
         save = new SaveData();
+        save.day = time.Day;
+        save.month = time.Month;
+        save.year = time.Year;
         string json = JsonUtility.ToJson(save); //SaveDataをjson形式に変換
         StreamWriter wr = new StreamWriter(filePath, false); //jsonをfilePathの位置に書き込み
         wr.WriteLine(json);
@@ -758,60 +761,120 @@ public class GameManager : MonoBehaviour
                         if (selectedBuilding == 1)
                         {
                             buildImage0.sprite = recycleImage;
+                            alumiPoint -= 15;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage0.sprite = amusementImage;
+                            alumiPoint -= 15;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
                         }
                         break;
                     case 1:
                         if (selectedBuilding == 1)
                         {
                             buildImage1.sprite = recycleImage;
+                            alumiPoint -= 15;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage1.sprite = amusementImage;
+                            alumiPoint -= 15;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
                         }
                         break;
                     case 2:
                         if (selectedBuilding == 1)
                         {
                             buildImage2.sprite = recycleImage;
+                            alumiPoint -= 15;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage2.sprite = amusementImage;
+                            alumiPoint -= 15;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
                         }
                         break;
                     case 3:
                         if (selectedBuilding == 1)
                         {
                             buildImage3.sprite = recycleImage;
+                            alumiPoint -= 15;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage3.sprite = amusementImage;
+                            alumiPoint -= 15;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
                         }
                         break;
                     case 4:
                         if (selectedBuilding == 1)
                         {
                             buildImage4.sprite = recycleImage;
+                            alumiPoint -= 15;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage4.sprite = amusementImage;
+                            alumiPoint -= 15;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
                         }
                         break;
                     case 5:
                         if (selectedBuilding == 1)
                         {
                             buildImage5.sprite = recycleImage;
+                            alumiPoint -= 15;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage5.sprite = amusementImage;
+                            alumiPoint -= 15;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
                         }
                         break;
                     default:
@@ -1646,8 +1709,8 @@ public class GameManager : MonoBehaviour
                 canInput = true; //入力ボタンだけ使用を許可
                 opWindow0.SetActive(false);
 
-                SetTutorial(250f, -450f, 0.5f, "リサイクルマークを\n見つけたら、\nここをクリックしよう！！");
-                PutArrow(350f, -650f);
+                SetTutorial(250f, -350f, 0.5f, "リサイクルマークを\n見つけたら、\nここをクリックしよう！！");
+                PutArrow(350f, -550f);
                 break;
             case 4:
                 canAll(false);
@@ -1806,6 +1869,7 @@ public class GameManager : MonoBehaviour
         //saveの内容を各変数に反映
         Load2();
     }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -1829,7 +1893,7 @@ public class GameManager : MonoBehaviour
         time = DateTime.Now;
 
         //フェードイン・アウト処理
-        if(isFadeIn == true)
+        if (isFadeIn == true)
         {
             FadeIn();
         }
