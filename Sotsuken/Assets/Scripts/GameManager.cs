@@ -323,8 +323,6 @@ public class GameManager : MonoBehaviour
 
     public void CloseBuild0(bool i)
     {
-        Save(save); //オートセーブ
-
         if(canBuild == true)
         {
             selectedPlace = -1;
@@ -337,6 +335,11 @@ public class GameManager : MonoBehaviour
                 audioSource.PlayOneShot(closeWindow); //効果音再生
             }
         }
+
+        //ミッションの成功・失敗を判定
+        CheckMission();
+        CheckDate();
+        Save(save); //オートセーブ
     }
 
     public void OpenBuild1(int i) //OpenBuild内で呼び出し
@@ -403,8 +406,6 @@ public class GameManager : MonoBehaviour
 
     public void CloseBuild1()
     {
-        Save(save); //オートセーブ
-
         if(canBuild == true)
         {
             selectedPlace = 0;
@@ -413,6 +414,11 @@ public class GameManager : MonoBehaviour
 
             audioSource.PlayOneShot(closeWindow); //効果音再生
         }
+
+        //ミッションの成功・失敗を判定
+        CheckMission();
+        CheckDate();
+        Save(save); //オートセーブ
     }
 
     //ミッションウィンドウの開閉
@@ -424,10 +430,6 @@ public class GameManager : MonoBehaviour
             MissionWindow.SetActive(true);
             open = true;
             audioSource.PlayOneShot(openWindow); //効果音再生
-
-            //ミッションの成功・失敗を判定
-            CheckMission();
-            CheckDate();
         }
 
         //UI上の目標の表示を変更する
@@ -443,8 +445,6 @@ public class GameManager : MonoBehaviour
 
     public void CloseMission()
     {
-        Save(save); //オートセーブ
-
         if (canMission == true)
         {
             MissionWindow.SetActive(false);
@@ -452,6 +452,11 @@ public class GameManager : MonoBehaviour
 
             audioSource.PlayOneShot(closeWindow); //効果音再生
         }
+
+        //ミッションの成功・失敗を判定
+        CheckMission();
+        CheckDate();
+        Save(save); //オートセーブ
     }
 
     //リサイクルマーク入力ウィンドウの開閉
@@ -472,8 +477,6 @@ public class GameManager : MonoBehaviour
 
     public void CloseInput(bool i)
     {
-        Save(save); //オートセーブ
-
         if(canInput == true)
         {
             InputWindow.SetActive(false);
@@ -484,6 +487,11 @@ public class GameManager : MonoBehaviour
                 audioSource.PlayOneShot(closeWindow); //効果音再生
             }
         }
+
+        //ミッションの成功・失敗を判定
+        CheckMission();
+        CheckDate();
+        Save(save); //オートセーブ
     }
 
     //イベントウィンドウの開閉
@@ -493,7 +501,7 @@ public class GameManager : MonoBehaviour
         {
             //イベント情報を取得
             Event tmpEvent = ScriptableObject.CreateInstance("Event") as Event;
-            tmpEvent = eventDataBase.eventList[1]; //[]内の番号のイベント情報を取得
+            tmpEvent = eventDataBase.eventList[3]; //[]内の番号のイベント情報を取得
 
             if(tmpEvent.isQuiz == false) //ボーナス系イベントの場合
             {
@@ -558,8 +566,6 @@ public class GameManager : MonoBehaviour
 
     public void CloseEvent1()
     {
-        Save(save); //オートセーブ
-
         if (canEvent == true)
         {
             EventWindow1.SetActive(false);
@@ -567,12 +573,15 @@ public class GameManager : MonoBehaviour
 
             audioSource.PlayOneShot(closeWindow); //効果音再生
         }
+
+        //ミッションの成功・失敗を判定
+        CheckMission();
+        CheckDate();
+        Save(save); //オートセーブ
     }
 
     public void CloseEvent2()
     {
-        Save(save); //オートセーブ
-
         if (canEvent == true)
         {
             EventWindow2.SetActive(false);
@@ -580,6 +589,11 @@ public class GameManager : MonoBehaviour
 
             audioSource.PlayOneShot(closeWindow); //効果音再生
         }
+
+        //ミッションの成功・失敗を判定
+        CheckMission();
+        CheckDate();
+        Save(save); //オートセーブ
     }
 
 
@@ -598,12 +612,12 @@ public class GameManager : MonoBehaviour
     int todayPla = 0; //プラスチック
     int todayPaper = 0; //紙
 
-    //図鑑用フラグ
-    bool alumiBook = false;
-    bool stealBook = false;
-    bool petBook = false;
-    bool plaBook = false;
-    bool paperBook = false;
+    //これまで獲得した累計のマーク数(図鑑・称号用)
+    int alumiBook = 0;
+    int stealBook = 0;
+    int petBook = 0;
+    int plaBook = 0;
+    int paperBook = 0;
 
     //SE素材
     AudioSource audioSource;
@@ -629,7 +643,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] Image buildImage3;
     [SerializeField] Image buildImage4;
     [SerializeField] Image buildImage5;
-    //リサイクル場、娯楽施設の画像
+    //空き地、リサイクル場、娯楽施設の画像
+    [SerializeField] Sprite blankImage;
     [SerializeField] Sprite recycleImage;
     [SerializeField] Sprite amusementImage;
 
@@ -643,22 +658,22 @@ public class GameManager : MonoBehaviour
                 switch (i)
                 {
                     case 0:
-                        buildImage0.sprite = null;
+                        buildImage0.sprite = blankImage;
                         break;
                     case 1:
-                        buildImage1.sprite = null;
+                        buildImage1.sprite = blankImage;
                         break;
                     case 2:
-                        buildImage2.sprite = null;
+                        buildImage2.sprite = blankImage;
                         break;
                     case 3:
-                        buildImage3.sprite = null;
+                        buildImage3.sprite = blankImage;
                         break;
                     case 4:
-                        buildImage4.sprite = null;
+                        buildImage4.sprite = blankImage;
                         break;
                     case 5:
-                        buildImage5.sprite = null;
+                        buildImage5.sprite = blankImage;
                         break;
                     default:
                         break;
@@ -1242,6 +1257,13 @@ public class GameManager : MonoBehaviour
         todayPla += tmpPla;
         todayPaper += tmpPaper;
 
+        //累計マーク獲得数に反映
+        alumiBook += tmpAlumi;
+        stealBook += tmpSteal;
+        petBook += tmpPet;
+        plaBook += tmpPla;
+        paperBook += tmpPaper;
+
         //加算するポイントを計算
         if(alumiBonus == true)//アルミ
         {
@@ -1296,28 +1318,6 @@ public class GameManager : MonoBehaviour
         plaPoint += tmpPla;
         paperPoint += tmpPaper;
         allPoint += tmpAlumi + tmpSteal + tmpPet + tmpPla + tmpPaper;
-
-        //図鑑用フラグを設定
-        if(tmpAlumi > 0)
-        {
-            alumiBook = true;
-        }
-        if(tmpSteal > 0)
-        {
-            stealBook = true;
-        }
-        if(tmpPet > 0)
-        {
-            petBook = true;
-        }
-        if(tmpPla > 0)
-        {
-            plaBook = true;
-        }
-        if(tmpPaper > 0)
-        {
-            paperBook = true;
-        }
 
         //tmp○○を初期化
         tmpAlumi = 0;
@@ -1438,8 +1438,10 @@ public class GameManager : MonoBehaviour
     int setMonth = 10000; //ミッション確定月
     int setDay = 10000; //ミッション確定日
 
-    [SerializeField] GameObject MissionSuccess; //ミッション成功メッセージ
-    [SerializeField] GameObject MissionFailed; //ミッション失敗メッセージ
+    [SerializeField] GameObject MissionSuccess; //ミッション成功ウィンドウ
+    [SerializeField] TextMeshProUGUI MSuccessText; //ミッション成功テキスト
+    [SerializeField] GameObject MissionFailed; //ミッション失敗ウィンドウ
+    [SerializeField] TextMeshProUGUI MFailedText; //ミッション失敗テキスト
 
     //ミッションのマークを設定する。
     public void SetMark(int m)
@@ -1584,6 +1586,26 @@ public class GameManager : MonoBehaviour
 
         //ミッション成功ウィンドウを表示
         MissionSuccess.SetActive(true);
+        switch(mark)
+        {
+            case 1:
+                MSuccessText.text = "ミッション成功！\nアルミ缶ポイントを" + reward + "獲得した！";
+                break;
+            case 2:
+                MSuccessText.text = "ミッション成功！\nスチール缶ポイントを" + reward + "獲得した！";
+                break;
+            case 3:
+                MSuccessText.text = "ミッション成功！\nペットボトルポイントを" + reward + "獲得した！";
+                break;
+            case 4:
+                MSuccessText.text = "ミッション成功！\nプラスチックポイントを" + reward + "獲得した！";
+                break;
+            case 5:
+                MSuccessText.text = "ミッション成功！\n紙ポイントを" + reward + "獲得した！";
+                break;
+            default:
+                break;
+        }
     }
 
     //ミッション失敗処理
@@ -1592,11 +1614,13 @@ public class GameManager : MonoBehaviour
         int reward = 0;
 
         //獲得ポイントの計算
-        for(int i = 1; i < count; i++)
+        if(count > 0)
         {
-            reward += i * 5;
+            for (int i = 0; i < count; i++)
+            {
+                reward += i * 5;
+            }
         }
-
         reward += count * 5 / 2;
 
         //設定したマークにポイントを加算
@@ -1628,6 +1652,26 @@ public class GameManager : MonoBehaviour
 
         //ミッション失敗ウィンドウを表示
         MissionFailed.SetActive(true);
+        switch (mark)
+        {
+            case 1:
+                MSuccessText.text = "ミッション失敗…\nアルミ缶ポイントを" + reward + "獲得した。";
+                break;
+            case 2:
+                MSuccessText.text = "ミッション失敗…\nスチール缶ポイントを" + reward + "獲得した。";
+                break;
+            case 3:
+                MSuccessText.text = "ミッション失敗…\nペットボトルポイントを" + reward + "獲得した。";
+                break;
+            case 4:
+                MSuccessText.text = "ミッション失敗…\nプラスチックポイントを" + reward + "獲得した。";
+                break;
+            case 5:
+                MSuccessText.text = "ミッション失敗…\n紙ポイントを" + reward + "獲得した。";
+                break;
+            default:
+                break;
+        }
     }
 
 
