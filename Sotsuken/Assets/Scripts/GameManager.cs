@@ -629,7 +629,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] Image buildImage3;
     [SerializeField] Image buildImage4;
     [SerializeField] Image buildImage5;
-    //リサイクル場、娯楽施設の画像
+    //空き地、リサイクル場、娯楽施設の画像
+    [SerializeField] Sprite blankImage;
     [SerializeField] Sprite recycleImage;
     [SerializeField] Sprite amusementImage;
 
@@ -643,22 +644,22 @@ public class GameManager : MonoBehaviour
                 switch (i)
                 {
                     case 0:
-                        buildImage0.sprite = null;
+                        buildImage0.sprite = blankImage;
                         break;
                     case 1:
-                        buildImage1.sprite = null;
+                        buildImage1.sprite = blankImage;
                         break;
                     case 2:
-                        buildImage2.sprite = null;
+                        buildImage2.sprite = blankImage;
                         break;
                     case 3:
-                        buildImage3.sprite = null;
+                        buildImage3.sprite = blankImage;
                         break;
                     case 4:
-                        buildImage4.sprite = null;
+                        buildImage4.sprite = blankImage;
                         break;
                     case 5:
-                        buildImage5.sprite = null;
+                        buildImage5.sprite = blankImage;
                         break;
                     default:
                         break;
