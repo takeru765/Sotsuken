@@ -26,11 +26,11 @@ public class SaveData
     public int todayPaper;
 
     //図鑑用フラグ
-    public bool alumiBook;
-    public bool stealBook;
-    public bool petBook;
-    public bool plaBook;
-    public bool paperBook;
+    public int alumiBook;
+    public int stealBook;
+    public int petBook;
+    public int plaBook;
+    public int paperBook;
 
     //建築物、LV
     public int[] place = new int[6];
