@@ -162,7 +162,7 @@ public class GameManager : MonoBehaviour
         wr.Close();
 
         //初期化したセーブデータを読み込み
-        Load1(filePath);
+        save = Load1(filePath);
         Load2();
     }
 
@@ -1457,10 +1457,12 @@ public class GameManager : MonoBehaviour
                 count = todayPaper;
                 break;
             default:
+                Debug.Log("markError");
                 break;
         }
+        Debug.Log("flag" + successMission + "count" + count + ",todayAlumi" + todayAlumi);
 
-        if(setMission == true && count >= goal && successMission == false)
+        if (setMission == true && count >= goal && successMission == false)
         {
             //ここにミッション成功時の処理を入れる
             SuccessMission();
