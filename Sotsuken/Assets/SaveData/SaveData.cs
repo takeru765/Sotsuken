@@ -6,9 +6,9 @@ using UnityEngine;
 public class SaveData
 {
     //日付
-    public int year;
-    public int month;
-    public int day;
+    public int year = 10000;
+    public int month = 10000;
+    public int day = 10000;
 
     //各ポイント
     public int alumiPoint;
@@ -38,7 +38,7 @@ public class SaveData
 
     //ミッション関連
     public int goal;
-    public int mark;
+    public int mark = 1;
     public int markRec1;
     public int markRec2;
     public bool setMission;
