@@ -247,32 +247,32 @@ public class GameManager : MonoBehaviour
     //各ポイント表示の変更
     void AlumiViewerChange(int i)
     {
-        alumiViewer.text = "アルミ　" + string.Format(" {0:G}", i) + "pt";
+        alumiViewer.text = string.Format(" {0:G}", i) + "pt";
     }
 
     void StealViewerChange(int i)
     {
-        stealViewer.text = "スチール　" + string.Format(" {0:G}", i) + "pt";
+        stealViewer.text = string.Format(" {0:G}", i) + "pt";
     }
 
     void PetViewerChange(int i)
     {
-        petViewer.text = "ペットボトル　" + string.Format(" {0:G}", i) + "pt";
+        petViewer.text = string.Format(" {0:G}", i) + "pt";
     }
 
     void PlaViewerChange(int i)
     {
-        plaViewer.text = "プラスチック　" + string.Format(" {0:G}", i) + "pt";
+        plaViewer.text = string.Format(" {0:G}", i) + "pt";
     }
 
     void PaperViewerChange(int i)
     {
-        paperViewer.text = "かみ　" + string.Format(" {0:G}", i) + "pt";
+        paperViewer.text = string.Format(" {0:G}", i) + "pt";
     }
 
     void AllViewerChange(int i)
     {
-        allViewer.text = "ごうけい　" + string.Format(" {0:G}", i) + "pt";
+        allViewer.text = "ごうけい　" + string.Format(" {0:G}", i) +"/1000" + "pt";
     }
 
     //全ポイント表示を一括変更
@@ -447,6 +447,9 @@ public class GameManager : MonoBehaviour
             open = true;
             audioSource.PlayOneShot(openWindow); //効果音再生
         }
+
+        //選択中のマークを強調
+        SetFrame();
 
         //UI上の目標の表示を変更する
         if (goal < 10)
@@ -1471,6 +1474,13 @@ public class GameManager : MonoBehaviour
     int setMonth = 10000; //ミッション確定月
     int setDay = 10000; //ミッション確定日
 
+    [SerializeField] Image alumiBotton;
+    [SerializeField] Image stealBotton;
+    [SerializeField] Image petBotton;
+    [SerializeField] Image plaBotton;
+    [SerializeField] Image paperBotton;
+    [SerializeField] Sprite selectFrame; //選択中のマークを強調
+
     [SerializeField] GameObject MissionSuccess; //ミッション成功ウィンドウ
     [SerializeField] TextMeshProUGUI MSuccessText; //ミッション成功テキスト
     [SerializeField] GameObject MissionFailed; //ミッション失敗ウィンドウ
@@ -1482,9 +1492,37 @@ public class GameManager : MonoBehaviour
         if(!setMission)
         {
             mark = m;
-        }
 
-        Debug.Log("mark = " + mark);
+            SetFrame();
+        } 
+    }
+
+    //ミッションで選択中のマークを強調
+    void SetFrame()
+    {
+        alumiBotton.sprite = null;
+        stealBotton.sprite = null;
+        petBotton.sprite = null;
+        plaBotton.sprite = null;
+        paperBotton.sprite = null;
+        switch (mark)
+        {
+            case 1:
+                alumiBotton.sprite = selectFrame;
+                break;
+            case 2:
+                stealBotton.sprite = selectFrame;
+                break;
+            case 3:
+                petBotton.sprite = selectFrame;
+                break;
+            case 4:
+                plaBotton.sprite = selectFrame;
+                break;
+            case 5:
+                paperBotton.sprite = selectFrame;
+                break;
+        }
     }
 
     //ミッションの目標数を増減する
