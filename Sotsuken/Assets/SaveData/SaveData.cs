@@ -32,6 +32,9 @@ public class SaveData
     public int plaBook;
     public int paperBook;
 
+    //チュートリアル進行度
+    public int opSequece;
+
     //建築物、LV
     public int[] place = new int[6];
     public int[] lv = new int[6];
