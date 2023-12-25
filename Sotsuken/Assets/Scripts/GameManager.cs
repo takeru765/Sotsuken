@@ -37,6 +37,11 @@ public class GameManager : MonoBehaviour
 
             //イベントボーナスをリセット
             eventBonus = 1.0f;
+
+            //イベント内容をランダムで決定
+            eventID = UnityEngine.Random.Range(0, 6); //Randomは、上限の値は含まないことに注意
+
+            OpenEvent();
         }
     }
 
@@ -72,6 +77,8 @@ public class GameManager : MonoBehaviour
         save.plaBook = plaBook;
         save.paperBook = paperBook;
 
+        save.opSequece = opSequence;
+
         save.place = place;
         save.lv = lv;
 
@@ -85,6 +92,7 @@ public class GameManager : MonoBehaviour
         save.setMonth = setMonth;
         save.setDay = setDay;
 
+        save.eventID = eventID;
         save.answered = answered;
 
         //データ自体の保存処理
@@ -131,6 +139,8 @@ public class GameManager : MonoBehaviour
         plaBook = save.plaBook;
         paperBook = save.paperBook;
 
+        opSequence = save.opSequece;
+
         place = save.place;
         lv = save.lv;
 
@@ -144,6 +154,7 @@ public class GameManager : MonoBehaviour
         setMonth = save.setMonth;
         setDay = save.setDay;
 
+        eventID = save.eventID;
         answered = save.answered;
 
         //各種UIに反映
@@ -216,6 +227,11 @@ public class GameManager : MonoBehaviour
     {
         if(canBook == true && open == false)
         {
+            if(opSequence == 53)
+            {
+                opSequence = 60;
+            }
+            Save(save);
             isFadeOut = true;
         }
     }
@@ -290,12 +306,12 @@ public class GameManager : MonoBehaviour
         {
             if (lv[i] == 0)
             {
-                if(opSequence == 11) //チュートリアル用の条件。左上の土地だけを選択できるようにする。
+                if(opSequence == 40) //チュートリアル用の条件。左上の土地だけを選択できるようにする。
                 {
                     if(i == 0)
                     {
                         OpenBuild0(i);
-                        opSequence = 12;
+                        opSequence = 41;
                     }
                 }
                 else //チュートリアル外
@@ -469,9 +485,9 @@ public class GameManager : MonoBehaviour
             audioSource.PlayOneShot(openWindow); //効果音再生
         }
 
-        if(opSequence == 3) //チュートリアル進行管理
+        if(opSequence == 10) //チュートリアル進行管理
         {
-            opSequence = 4;
+            opSequence = 11;
         }
     }
 
@@ -501,7 +517,7 @@ public class GameManager : MonoBehaviour
         {
             //イベント情報を取得
             Event tmpEvent = ScriptableObject.CreateInstance("Event") as Event;
-            tmpEvent = eventDataBase.eventList[3]; //[]内の番号のイベント情報を取得
+            tmpEvent = eventDataBase.eventList[eventID]; //[]内の番号のイベント情報を取得
 
             if(tmpEvent.isQuiz == false) //ボーナス系イベントの場合
             {
@@ -582,13 +598,15 @@ public class GameManager : MonoBehaviour
 
     public void CloseEvent2()
     {
-        if (canEvent == true)
-        {
-            EventWindow2.SetActive(false);
-            open = false;
+        EventWindow2.SetActive(false);
+        open = false;
 
-            audioSource.PlayOneShot(closeWindow); //効果音再生
+        if(opSequence == 52)
+        {
+            opSequence = 53;
         }
+
+        audioSource.PlayOneShot(closeWindow); //効果音再生
 
         //ミッションの成功・失敗を判定
         CheckMission();
@@ -741,7 +759,7 @@ public class GameManager : MonoBehaviour
     }
 
     //建設決定ボタン
-    public void DecideBuild() //消費ポイント修正中
+    public void DecideBuild()
     {
         if(selectedBuilding != 0) //建てるものを選択している
         {
@@ -896,15 +914,16 @@ public class GameManager : MonoBehaviour
                         break;
                 }
 
-                if (opSequence == 12) //チュートリアル管理用
+                if (opSequence == 41) //チュートリアル管理用
                 {
-                    opSequence = 13;
+                    opSequence = 42;
                     canBuild = true;
                 }
 
 
                 audioSource.PlayOneShot(enter); //効果音再生
                 PointViewerChange();
+                Save(save);
                 CloseBuild0(false);
             }
             
@@ -985,10 +1004,13 @@ public class GameManager : MonoBehaviour
         }
 
         PointViewerChange();
+        Save(save);
         //以下3行は動作確認用です。要らなくなったら消してください。
+        /*
         Debug.Log(lv[0] + "," + lv[1] + "," + lv[2]);
         CalcBuildBonus();
         Debug.Log(inputRate + "," + (int)(5 * (inputRate + 0.01f)));
+        */
     }
 
     //建築によるボーナス
@@ -1338,12 +1360,14 @@ public class GameManager : MonoBehaviour
         audioSource.PlayOneShot(inputEnter); //効果音再生
 
         //チュートリアル進行
-        if (opSequence == 4 && allPoint > 0)
+        if (opSequence == 11 && allPoint > 0)
         {
             canInput = true;
-            opSequence = 5;
+            opSequence = 12;
             CloseInput(false);
         }
+
+        Save(save);
     }
 
     //イベント関連
@@ -1354,6 +1378,7 @@ public class GameManager : MonoBehaviour
     }
 
     float eventBonus = 1.0f; //イベントによるボーナス倍率。
+    int eventID = 0; //当日のイベントID
 
     //対象マーク
     bool alumiBonus = false;
@@ -1384,7 +1409,7 @@ public class GameManager : MonoBehaviour
     //クイズイベント解答処理
     public void CheckAnswer(int i)
     {
-        if (i == correctAnswer && answered == false)
+        if (i == correctAnswer && answered == false && canEvent == true)
         {
             //建築ボーナスを計算
             for (int j = 0; j < 6; j++)
@@ -1420,6 +1445,14 @@ public class GameManager : MonoBehaviour
 
             //正解済みフラグをON
             answered = true;
+
+            //audioSource.PlayOneShot(); //正解音を流す
+            Save(save);
+            CloseEvent2();
+        }
+        else if(answered == false && canEvent == true)
+        {
+            //audioSource.PlayOneShot(); //不正解音を流す
         }
     }
 
@@ -1499,6 +1532,8 @@ public class GameManager : MonoBehaviour
         setYear = time.Year;
         setMonth = time.Month;
         setDay = time.Day;
+
+        Save(save);
     }
 
     //ミッション達成判定
@@ -1606,6 +1641,8 @@ public class GameManager : MonoBehaviour
             default:
                 break;
         }
+
+        Save(save);
     }
 
     //ミッション失敗処理
@@ -1672,6 +1709,8 @@ public class GameManager : MonoBehaviour
             default:
                 break;
         }
+
+        Save(save);
     }
 
 
@@ -1695,41 +1734,54 @@ public class GameManager : MonoBehaviour
                 break;
             case 2:
                 audioSource.PlayOneShot(openWindow); //効果音再生
-                opSequence = 3;
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                audioSource.PlayOneShot(openWindow); //効果音再生
-                opSequence = 6;
-                break;
-            case 6:
-                audioSource.PlayOneShot(openWindow); //効果音再生
-                opSequence = 7;
-                break;
-            case 7:
-                opSequence = 8;
-                break;
-            case 8:
-                break;
-            case 9:
-                audioSource.PlayOneShot(openWindow); //効果音再生
+                Save(save);
                 opSequence = 10;
                 break;
             case 10:
-                audioSource.PlayOneShot(openWindow); //効果音再生
-                opSequence = 11;
                 break;
             case 11:
+                break;
+            case 12:
+                audioSource.PlayOneShot(openWindow); //効果音再生
+                Save(save);
+                opSequence = 31; //後で、移動先を図鑑チュートリアルに変更
+                break;
+            case 31:
+                audioSource.PlayOneShot(openWindow); //効果音再生
+                opSequence = 32;
+                break;
+            case 32:
+                opSequence = 33;
+                break;
+            case 33:
+                break;
+            case 34:
+                audioSource.PlayOneShot(openWindow); //効果音再生
+                opSequence = 35;
+                break;
+            case 35:
+                audioSource.PlayOneShot(openWindow); //効果音再生
+                Save(save);
+                opSequence = 40;
+                break;
+            case 41:
+                break;
+            case 42:
+                Save(save);
+                opSequence = 50;
+                break;
+            case 50:
+                opSequence = 51;
+                break;
+            case 51:
+                opSequence = 52;
                 break;
             default:
                 break;
         }
     }
 
-    void ControlOP() //オープニング・チュートリアルの進行管理
+    void ControlOP() //オープニング・チュートリアルの進行管理。追加しやすさ見やすさのために、パートごとに10の位を変更する形にしてます。
     {
         switch(opSequence)
         {
@@ -1748,7 +1800,7 @@ public class GameManager : MonoBehaviour
 
                 SetOPWindow0("秘書「まずは、あなたの身の回りにある、\n「リサイクルマーク」のついたゴミを探してみてください。」");
                 break;
-            case 3: //マーク入力チュートリアル
+            case 10: //マーク入力チュートリアル
                 canAll(false);
                 canInput = true; //入力ボタンだけ使用を許可
                 opWindow0.SetActive(false);
@@ -1756,31 +1808,33 @@ public class GameManager : MonoBehaviour
                 SetTutorial(250f, -350f, 0.5f, "リサイクルマークを\n見つけたら、\nここをクリックしよう！！");
                 PutArrow(350f, -550f);
                 break;
-            case 4:
+            case 11:
                 canAll(false);
 
                 SetTutorial(-100f, 750f, 0.7f, "見つけたマークの個数を入力して、\n「けってい」ボタンを押そう。");
                 PutArrow(-100f, 510f);
                 break;
-            case 5:
+            case 12:
                 canAll(false);
 
                 SetTutorial(0f, 200f, 1f, "マークを入力すると、\nリサイクルポイントを獲得できるよ。");
                 PutArrow(0f, 550f, 135f);
                 break;
-            case 6:
+            case 20: //図鑑パートのチュートリアルを想定
+                break;
+            case 31: //建築パートの前振り
                 canAll(false);
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
 
                 SetOPWindow0("秘書「おめでとうございます！！」\n秘書「さっそくリサイクルできたようですね！」");
                 break;
-            case 7:
+            case 32:
                 canAll(false);
 
                 SetOPWindow0("秘書「実は私もリサイクルできるゴミを\n見つけてきました。」\n秘書「その分のポイントも差し上げますね。」");
                 break;
-            case 8:
+            case 33:
                 canAll(false);
 
                 alumiPoint += 15;
@@ -1791,32 +1845,98 @@ public class GameManager : MonoBehaviour
                 allPoint += 75;
                 PointViewerChange(); //ポイント表示UIに反映
                 audioSource.PlayOneShot(inputEnter); //効果音再生
-                opSequence = 9;
+                opSequence = 34;
                 break;
-            case 9:
+            case 34:
                 canAll(false);
 
                 SetOPWindow0("各ポイントを15ずつ獲得した！");
 
                 break;
-            case 10:
+            case 35:
                 canAll(false);
 
                 SetOPWindow0("秘書「次は、獲得したポイントを使って、\n町を発展させてみましょう！」");
                 break;
-            case 11:
+            case 40: //建築パートのチュートリアル
                 canAll(false);
                 canBuild = true;
                 opWindow0.SetActive(false);
 
-                SetTutorial(-200f, 0f, 0.5f, "土地をタップすると、建築画面に進むよ。");
-                PutArrow(-200f, 180f, 90f);
+                if(lv[0] == 0) //(デバッグ用)既に建築済みの場合はチュートリアルを終了する。
+                {
+                    SetTutorial(-200f, 0f, 0.5f, "土地をタップすると、建築画面に進むよ。");
+                    PutArrow(-200f, 180f, 90f);
+                }
+                else
+                {
+                    opSequence = 42;
+                }
                 break;
-            case 12:
+            case 41:
                 canAll(false);
 
                 SetTutorial(-100f, 750f, 0.7f, "「リサイクル場」か「娯楽施設」を\n建てられるよ。\n好きな方を選んで、\n「けってい」ボタンを押そう！");
                 PutArrow(-100f, 510f);
+                break;
+            case 42:
+                canAll(false);
+                tutorialWindow.SetActive(false);
+                arrow.SetActive(false);
+
+                SetOPWindow0("秘書「うまく建物を作れましたね！\n建物を作ると、より多くのポイントを獲得できるようになります。」");
+                break;
+            case 50: //イベント
+                canAll(false);
+
+                SetOPWindow0("秘書「他にも、この町でゴミが出ることもあります。」");
+                break;
+            case 51:
+                canAll(false);
+                canEvent = true;
+                opWindow0.SetActive(false);
+
+                if(alumiBook > 0) //入力済みのマークに応じて、イベント内容を決定
+                {
+                    eventID = 1;
+                }
+                else if(stealBook > 0)
+                {
+                    eventID = 2;
+                }
+                else if(petBook > 0)
+                {
+                    eventID = 3;
+                }
+                else if(plaBook > 0)
+                {
+                    eventID = 4;
+                }
+                else if(paperBook > 0)
+                {
+                    eventID = 5;
+                }
+                OpenEvent();
+
+                SetTutorial(0f, 700f, 0.5f, "このように、ゴミにあったリサイクル方法を答える、\nクイズイベントが発生することがあります。");
+                PutArrow(0f, 500f, -45f);
+                break;
+            case 52:
+                canAll(false);
+
+                SetTutorial(200f, 700f, 0.5f, "答えが分からないときは、\nリサイクル図鑑を見てみよう！");
+                PutArrow(400f, 500f, 0f);
+                break;
+            case 53:
+                canAll(false);
+                canBook = true;
+
+                SetTutorial(-150f, -500f, 0.5f, "答えが分からないときは、\nリサイクル図鑑を見てみよう！");
+                PutArrow(-300f, -700f, -90f);
+                break;
+            case 60: //イベント→図鑑のチュートリアルを想定
+                break;
+            case 70: //イベントパート、回答編
                 break;
             default:
                 //ウィンドウ等を非表示に
