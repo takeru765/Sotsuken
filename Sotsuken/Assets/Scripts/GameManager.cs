@@ -290,12 +290,12 @@ public class GameManager : MonoBehaviour
         {
             if (lv[i] == 0)
             {
-                if(opSequence == 11) //チュートリアル用の条件。左上の土地だけを選択できるようにする。
+                if(opSequence == 40) //チュートリアル用の条件。左上の土地だけを選択できるようにする。
                 {
                     if(i == 0)
                     {
                         OpenBuild0(i);
-                        opSequence = 12;
+                        opSequence = 41;
                     }
                 }
                 else //チュートリアル外
@@ -469,9 +469,9 @@ public class GameManager : MonoBehaviour
             audioSource.PlayOneShot(openWindow); //効果音再生
         }
 
-        if(opSequence == 3) //チュートリアル進行管理
+        if(opSequence == 10) //チュートリアル進行管理
         {
-            opSequence = 4;
+            opSequence = 11;
         }
     }
 
@@ -896,9 +896,9 @@ public class GameManager : MonoBehaviour
                         break;
                 }
 
-                if (opSequence == 12) //チュートリアル管理用
+                if (opSequence == 41) //チュートリアル管理用
                 {
-                    opSequence = 13;
+                    opSequence = 42;
                     canBuild = true;
                 }
 
@@ -1338,10 +1338,10 @@ public class GameManager : MonoBehaviour
         audioSource.PlayOneShot(inputEnter); //効果音再生
 
         //チュートリアル進行
-        if (opSequence == 4 && allPoint > 0)
+        if (opSequence == 11 && allPoint > 0)
         {
             canInput = true;
-            opSequence = 5;
+            opSequence = 12;
             CloseInput(false);
         }
     }
@@ -1695,41 +1695,41 @@ public class GameManager : MonoBehaviour
                 break;
             case 2:
                 audioSource.PlayOneShot(openWindow); //効果音再生
-                opSequence = 3;
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                audioSource.PlayOneShot(openWindow); //効果音再生
-                opSequence = 6;
-                break;
-            case 6:
-                audioSource.PlayOneShot(openWindow); //効果音再生
-                opSequence = 7;
-                break;
-            case 7:
-                opSequence = 8;
-                break;
-            case 8:
-                break;
-            case 9:
-                audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 10;
                 break;
             case 10:
-                audioSource.PlayOneShot(openWindow); //効果音再生
-                opSequence = 11;
                 break;
             case 11:
+                break;
+            case 12:
+                audioSource.PlayOneShot(openWindow); //効果音再生
+                opSequence = 31; //後で、移動先を図鑑チュートリアルに変更
+                break;
+            case 31:
+                audioSource.PlayOneShot(openWindow); //効果音再生
+                opSequence = 32;
+                break;
+            case 32:
+                opSequence = 33;
+                break;
+            case 33:
+                break;
+            case 34:
+                audioSource.PlayOneShot(openWindow); //効果音再生
+                opSequence = 35;
+                break;
+            case 35:
+                audioSource.PlayOneShot(openWindow); //効果音再生
+                opSequence = 40;
+                break;
+            case 41:
                 break;
             default:
                 break;
         }
     }
 
-    void ControlOP() //オープニング・チュートリアルの進行管理
+    void ControlOP() //オープニング・チュートリアルの進行管理。追加しやすさ見やすさのために、パートごとに10の位を変更する形にしてます。
     {
         switch(opSequence)
         {
@@ -1748,7 +1748,7 @@ public class GameManager : MonoBehaviour
 
                 SetOPWindow0("秘書「まずは、あなたの身の回りにある、\n「リサイクルマーク」のついたゴミを探してみてください。」");
                 break;
-            case 3: //マーク入力チュートリアル
+            case 10: //マーク入力チュートリアル
                 canAll(false);
                 canInput = true; //入力ボタンだけ使用を許可
                 opWindow0.SetActive(false);
@@ -1756,31 +1756,33 @@ public class GameManager : MonoBehaviour
                 SetTutorial(250f, -350f, 0.5f, "リサイクルマークを\n見つけたら、\nここをクリックしよう！！");
                 PutArrow(350f, -550f);
                 break;
-            case 4:
+            case 11:
                 canAll(false);
 
                 SetTutorial(-100f, 750f, 0.7f, "見つけたマークの個数を入力して、\n「けってい」ボタンを押そう。");
                 PutArrow(-100f, 510f);
                 break;
-            case 5:
+            case 12:
                 canAll(false);
 
                 SetTutorial(0f, 200f, 1f, "マークを入力すると、\nリサイクルポイントを獲得できるよ。");
                 PutArrow(0f, 550f, 135f);
                 break;
-            case 6:
+            case 20: //図鑑パートのチュートリアルを想定
+                break;
+            case 31: //建築パートの前振り
                 canAll(false);
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
 
                 SetOPWindow0("秘書「おめでとうございます！！」\n秘書「さっそくリサイクルできたようですね！」");
                 break;
-            case 7:
+            case 32:
                 canAll(false);
 
                 SetOPWindow0("秘書「実は私もリサイクルできるゴミを\n見つけてきました。」\n秘書「その分のポイントも差し上げますね。」");
                 break;
-            case 8:
+            case 33:
                 canAll(false);
 
                 alumiPoint += 15;
@@ -1791,28 +1793,35 @@ public class GameManager : MonoBehaviour
                 allPoint += 75;
                 PointViewerChange(); //ポイント表示UIに反映
                 audioSource.PlayOneShot(inputEnter); //効果音再生
-                opSequence = 9;
+                opSequence = 34;
                 break;
-            case 9:
+            case 34:
                 canAll(false);
 
                 SetOPWindow0("各ポイントを15ずつ獲得した！");
 
                 break;
-            case 10:
+            case 35:
                 canAll(false);
 
                 SetOPWindow0("秘書「次は、獲得したポイントを使って、\n町を発展させてみましょう！」");
                 break;
-            case 11:
+            case 40: //建築パートのチュートリアル
                 canAll(false);
                 canBuild = true;
                 opWindow0.SetActive(false);
 
-                SetTutorial(-200f, 0f, 0.5f, "土地をタップすると、建築画面に進むよ。");
-                PutArrow(-200f, 180f, 90f);
+                if(lv[0] == 0) //(デバッグ用)既に建築済みの場合はチュートリアルを終了する。
+                {
+                    SetTutorial(-200f, 0f, 0.5f, "土地をタップすると、建築画面に進むよ。");
+                    PutArrow(-200f, 180f, 90f);
+                }
+                else
+                {
+                    opSequence = 99;
+                }
                 break;
-            case 12:
+            case 41:
                 canAll(false);
 
                 SetTutorial(-100f, 750f, 0.7f, "「リサイクル場」か「娯楽施設」を\n建てられるよ。\n好きな方を選んで、\n「けってい」ボタンを押そう！");
