@@ -11171,6 +11171,7 @@ MonoBehaviour:
     plaPoint: 0
     paperPoint: 0
     allPoint: 0
+    cleanLV: 0
     todayAlumi: 0
     todaySteal: 0
     todayPet: 0
@@ -11182,6 +11183,7 @@ MonoBehaviour:
     plaBook: 0
     paperBook: 0
     opSequece: 0
+    tutorialMission: 0
     place: 000000000000000000000000000000000000000000000000
     lv: 000000000000000000000000000000000000000000000000
     goal: 0

@@ -17,6 +17,7 @@ public class SaveData
     public int plaPoint;
     public int paperPoint;
     public int allPoint;
+    public int cleanLV;
 
     //当日のマーク数
     public int todayAlumi;
@@ -32,8 +33,9 @@ public class SaveData
     public int plaBook;
     public int paperBook;
 
-    //チュートリアル進行度
-    public int opSequece;
+    //チュートリアル関連
+    public int opSequece; //チュートリアル進行度
+    public bool tutorialMission = false; //ミッションのチュートリアル済フラグ
 
     //建築物、LV
     public int[] place = new int[6];

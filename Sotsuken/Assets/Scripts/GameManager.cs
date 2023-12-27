@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
         save.plaPoint = plaPoint;
         save.paperPoint = paperPoint;
         save.allPoint = allPoint;
+        save.cleanLV = cleanLV;
 
         save.todayAlumi = todayAlumi;
         save.todaySteal = todaySteal;
@@ -78,6 +79,7 @@ public class GameManager : MonoBehaviour
         save.paperBook = paperBook;
 
         save.opSequece = opSequence;
+        save.tutorialMission = tutorialMission;
 
         save.place = place;
         save.lv = lv;
@@ -126,6 +128,7 @@ public class GameManager : MonoBehaviour
         plaPoint = save.plaPoint;
         paperPoint = save.paperPoint;
         allPoint = save.allPoint;
+        cleanLV = save.cleanLV;
 
         todayAlumi = save.todayAlumi;
         todaySteal = save.todaySteal;
@@ -140,6 +143,7 @@ public class GameManager : MonoBehaviour
         paperBook = save.paperBook;
 
         opSequence = save.opSequece;
+        tutorialMission = save.tutorialMission;
 
         place = save.place;
         lv = save.lv;
@@ -272,7 +276,7 @@ public class GameManager : MonoBehaviour
 
     void AllViewerChange(int i)
     {
-        allViewer.text = "ごうけい　" + string.Format(" {0:G}", i) +"/1000" + "pt";
+        allViewer.text = "ごうけい　" + string.Format(" {0:G}", i) +"/" + borderPoint[cleanLV] + "pt";
     }
 
     //全ポイント表示を一括変更
@@ -446,6 +450,11 @@ public class GameManager : MonoBehaviour
             MissionWindow.SetActive(true);
             open = true;
             audioSource.PlayOneShot(openWindow); //効果音再生
+
+            if(tutorialMission == false) //ミッションのチュートリアルがまだなら、チュートリアルを実施
+            {
+                opSequence = 80;
+            }
         }
 
         //選択中のマークを強調
@@ -625,6 +634,8 @@ public class GameManager : MonoBehaviour
     int plaPoint = 0; //プラスチック
     int paperPoint = 0; //紙製容器包装
     int allPoint = 0; //累計ポイント
+    int cleanLV = 0; //美化レベル(累計ポイントが一定ごとに上昇)
+    int[] borderPoint = {150, 100000};
 
     //当日獲得したポイント(ミッション用)
     int todayAlumi = 0; //アルミ缶
@@ -1494,6 +1505,11 @@ public class GameManager : MonoBehaviour
             mark = m;
 
             SetFrame();
+
+            if(opSequence == 81)
+            {
+                opSequence = 82;
+            }
         } 
     }
 
@@ -1555,6 +1571,10 @@ public class GameManager : MonoBehaviour
         }
 
         audioSource.PlayOneShot(valueChange); //効果音再生
+        if(opSequence == 82)
+        {
+            opSequence = 83;
+        }
     }
 
     //ミッション確定
@@ -1570,6 +1590,12 @@ public class GameManager : MonoBehaviour
         setYear = time.Year;
         setMonth = time.Month;
         setDay = time.Day;
+
+        if(opSequence == 83)
+        {
+            tutorialMission = true;
+            opSequence = 999;
+        }
 
         Save(save);
     }
@@ -1633,18 +1659,22 @@ public class GameManager : MonoBehaviour
         switch(mark)
         {
             case 1:
+                reward *= 3;
                 alumiPoint += reward;
                 break;
             case 2:
+                reward *= 3;
                 stealPoint += reward;
                 break;
             case 3:
+                reward *= 3;
                 petPoint += reward;
                 break;
             case 4:
                 plaPoint += reward;
                 break;
             case 5:
+                reward *= 3;
                 paperPoint += reward;
                 break;
         }
@@ -1758,6 +1788,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI opText;
     int opSequence = 0; //オープニング・チュートリアルの進行度
 
+    bool tutorialMission = false;
+
     void ClickCheck() //クリック時に呼び出す。オープニングの進捗に応じて、画面クリックで進行するかを管理。制作中
     {
         switch(opSequence)
@@ -1813,6 +1845,14 @@ public class GameManager : MonoBehaviour
                 break;
             case 51:
                 opSequence = 52;
+                break;
+            case 80:
+                opSequence = 81;
+                break;
+            case 90:
+                cleanLV = 1;
+                AllViewerChange(allPoint);
+                opSequence = 999;
                 break;
             default:
                 break;
@@ -1976,11 +2016,49 @@ public class GameManager : MonoBehaviour
                 break;
             case 70: //イベントパート、回答編
                 break;
+            case 80: //ミッションパート
+                canAll(false);
+                tutorialWindow.SetActive(false);
+                arrow.SetActive(false);
+
+                SetOPWindow0("「ミッション」では、その日のマーク集めの\n目標を決めることができるよ。\n\n目標を達成すれば、追加でポイントゲット！！");
+                break;
+            case 81:
+                canAll(false);
+                opWindow0.SetActive(false);
+
+                SetTutorial(0f, 650f, 0.5f, "どのマークを集めるか選んで……");
+                PutArrow(0f, 450f, 0f);
+                break;
+            case 82:
+                canAll(false);
+
+                SetTutorial(0f, 400f, 0.5f, "目標の個数を決めてね。\n(目標が多いほど、クリア報酬も多くなるよ！)");
+                PutArrow(0f, 200f, 0f);
+                break;
+            case 83:
+                canAll(false);
+
+                SetTutorial(0f, 200f, 0.5f, "最後に「けってい」を押してね。");
+                PutArrow(-100f, 000f, 0f);
+                break;
+            case 90: //累計ポイントイベント
+                canAll(false);
+
+                SetOPWindow0("美化レベルがアップ！！！\n\n少しずつ、リサイクルが広まってきてるようです。\nこれからもこの調子で頑張りましょう！！");
+                break;
             default:
                 //ウィンドウ等を非表示に
                 opWindow0.SetActive(false);
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
+
+                if(cleanLV == 0 && allPoint >= borderPoint[0])
+                {
+                    audioSource.PlayOneShot(openWindow); //効果音再生
+
+                    opSequence = 90;
+                }
 
                 canAll(true);
                 break;
