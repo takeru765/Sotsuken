@@ -36,6 +36,7 @@ public class SaveData
     //チュートリアル関連
     public int opSequece; //チュートリアル進行度
     public bool tutorialMission = false; //ミッションのチュートリアル済フラグ
+    public bool tutorialEvent = false; //ミッションのチュートリアル済フラグ
 
     //建築物、LV
     public int[] place = new int[6];
@@ -53,6 +54,6 @@ public class SaveData
     public int setDay;
 
     //イベント関連
-    public int eventID;
+    public int eventID = 1;
     public bool answered;
 }

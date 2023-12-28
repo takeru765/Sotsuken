@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
             eventBonus = 1.0f;
 
             //イベント内容をランダムで決定
-            eventID = UnityEngine.Random.Range(0, 6); //Randomは、上限の値は含まないことに注意
+            eventID = UnityEngine.Random.Range(1, 6); //Randomは、上限の値は含まないことに注意
 
             OpenEvent();
         }
@@ -80,6 +80,7 @@ public class GameManager : MonoBehaviour
 
         save.opSequece = opSequence;
         save.tutorialMission = tutorialMission;
+        save.tutorialEvent = tutorialEvent;
 
         save.place = place;
         save.lv = lv;
@@ -144,6 +145,7 @@ public class GameManager : MonoBehaviour
 
         opSequence = save.opSequece;
         tutorialMission = save.tutorialMission;
+        tutorialEvent = save.tutorialEvent;
 
         place = save.place;
         lv = save.lv;
@@ -231,9 +233,9 @@ public class GameManager : MonoBehaviour
     {
         if(canBook == true && open == false)
         {
-            if(opSequence == 53)
+            if(opSequence == 14)
             {
-                opSequence = 60;
+                opSequence = 20;
             }
             Save(save);
             isFadeOut = true;
@@ -527,6 +529,11 @@ public class GameManager : MonoBehaviour
     {
         if(open == false && canEvent == true)
         {
+            if(tutorialEvent ==false)
+            {
+                opSequence = 51;
+            }
+
             //イベント情報を取得
             Event tmpEvent = ScriptableObject.CreateInstance("Event") as Event;
             tmpEvent = eventDataBase.eventList[eventID]; //[]内の番号のイベント情報を取得
@@ -1789,6 +1796,7 @@ public class GameManager : MonoBehaviour
     int opSequence = 0; //オープニング・チュートリアルの進行度
 
     bool tutorialMission = false;
+    bool tutorialEvent = false;
 
     void ClickCheck() //クリック時に呼び出す。オープニングの進捗に応じて、画面クリックで進行するかを管理。制作中
     {
@@ -1814,7 +1822,11 @@ public class GameManager : MonoBehaviour
             case 12:
                 audioSource.PlayOneShot(openWindow); //効果音再生
                 Save(save);
-                opSequence = 31; //後で、移動先を図鑑チュートリアルに変更
+                opSequence = 13; //後で、移動先を図鑑チュートリアルに変更
+                break;
+            case 13:
+                audioSource.PlayOneShot(openWindow); //効果音再生
+                opSequence = 14;
                 break;
             case 31:
                 audioSource.PlayOneShot(openWindow); //効果音再生
@@ -1845,6 +1857,11 @@ public class GameManager : MonoBehaviour
                 break;
             case 51:
                 opSequence = 52;
+                break;
+            case 52:
+                tutorialEvent = true;
+                Save(save);
+                opSequence = 999;
                 break;
             case 80:
                 opSequence = 81;
@@ -1897,6 +1914,21 @@ public class GameManager : MonoBehaviour
 
                 SetTutorial(0f, 200f, 1f, "マークを入力すると、\nリサイクルポイントを獲得できるよ。");
                 PutArrow(0f, 550f, 135f);
+                break;
+            case 13:
+                canAll(false);
+                tutorialWindow.SetActive(false);
+                arrow.SetActive(false);
+
+                SetOPWindow0("見つけたマークは、リサイクル図鑑に登録されるよ！");
+                break;
+            case 14:
+                canAll(false);
+                canBook = true;
+                opWindow0.SetActive(false);
+
+                SetTutorial(-150f, -500f, 0.5f, "図鑑を見てみよう！");
+                PutArrow(-300f, -700f, -90f);
                 break;
             case 20: //図鑑パートのチュートリアルを想定
                 break;
@@ -1974,7 +2006,7 @@ public class GameManager : MonoBehaviour
                 canEvent = true;
                 opWindow0.SetActive(false);
 
-                if(alumiBook > 0) //入力済みのマークに応じて、イベント内容を決定
+                /*if(alumiBook > 0) //入力済みのマークに応じて、イベント内容を決定
                 {
                     eventID = 1;
                 }
@@ -1994,16 +2026,16 @@ public class GameManager : MonoBehaviour
                 {
                     eventID = 5;
                 }
-                OpenEvent();
+                OpenEvent();*/
 
-                SetTutorial(0f, 700f, 0.5f, "このように、ゴミにあったリサイクル方法を答える、\nクイズイベントが発生することがあります。");
+                SetTutorial(0f, 700f, 0.5f, "イベントでは、ゴミにあったリサイクル方法を答える、\nクイズイベントが発生するよ。");
                 PutArrow(0f, 500f, -45f);
                 break;
             case 52:
                 canAll(false);
 
-                SetTutorial(200f, 700f, 0.5f, "答えが分からないときは、\nリサイクル図鑑を見てみよう！");
-                PutArrow(400f, 500f, 0f);
+                SetTutorial(0f, 700f, 0.5f, "正解するとリサイクルポイントを獲得できるよ。\n答えが分からないときは、\nリサイクル図鑑を見てみよう！");
+                //PutArrow(400f, 500f, 0f);
                 break;
             case 53:
                 canAll(false);
