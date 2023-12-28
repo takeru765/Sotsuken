@@ -1601,6 +1601,7 @@ public class GameManager : MonoBehaviour
         if(opSequence == 83)
         {
             tutorialMission = true;
+            missionAppeal.SetActive(false);
             opSequence = 999;
         }
 
@@ -1796,7 +1797,9 @@ public class GameManager : MonoBehaviour
     int opSequence = 0; //オープニング・チュートリアルの進行度
 
     bool tutorialMission = false;
+    [SerializeField] GameObject missionAppeal;
     bool tutorialEvent = false;
+    [SerializeField] GameObject eventAppeal;
 
     void ClickCheck() //クリック時に呼び出す。オープニングの進捗に応じて、画面クリックで進行するかを管理。制作中
     {
@@ -1860,6 +1863,7 @@ public class GameManager : MonoBehaviour
                 break;
             case 52:
                 tutorialEvent = true;
+                eventAppeal.SetActive(false);
                 Save(save);
                 opSequence = 999;
                 break;
@@ -2180,6 +2184,15 @@ public class GameManager : MonoBehaviour
         save = Load1(filePath);
         //saveの内容を各変数に反映
         Load2();
+
+        if(tutorialEvent == true)
+        {
+            eventAppeal.SetActive(false);
+        }
+        if(tutorialMission == true)
+        {
+            missionAppeal.SetActive(false);
+        }
     }
 
     // Start is called before the first frame update
