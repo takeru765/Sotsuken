@@ -2089,7 +2089,7 @@ public class GameManager : MonoBehaviour
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
 
-                if(cleanLV == 0 && allPoint >= borderPoint[0])
+                if(cleanLV == 0 && allPoint >= borderPoint[0] && open == false)
                 {
                     audioSource.PlayOneShot(openWindow); //Œø‰Ê‰¹Ä¶
 
