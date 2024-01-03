@@ -135,13 +135,16 @@ public class Tutorial_Script : MonoBehaviour
     //オープニング、チュートリアルの進行管理
     [SerializeField] GameObject opWindow0; //文章のみのOP用ウィンドウ
     [SerializeField] TextMeshProUGUI opText;
-    int opSequence = 20; //オープニング・チュートリアルの進行度・図鑑パートのデバッグ用に20からスタート
+
+    [SerializeField] GameObject Button_Active; //文章のみのOP用ウィンドウ
+
+    int opSequence = 20; //オープニング・チュートリアルの進行度(本スクリプトは図鑑パートのデバッグ用に20からスタート)
 
     void ClickCheck() //クリック時に呼び出す。オープニングの進捗に応じて、画面クリックで進行するかを管理。制作中
     {
-       /* switch (opSequence)
+        switch (opSequence)
         {
-            case 0:
+            /*case 0:
                 audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 1;
                 break;
@@ -162,8 +165,26 @@ public class Tutorial_Script : MonoBehaviour
                 audioSource.PlayOneShot(openWindow); //効果音再生
                 Save(save);
                 opSequence = 31; //後で、移動先を図鑑チュートリアルに変更
+                break;*/
+            case 20:
+                opSequence = 21;
                 break;
-            case 31:
+            case 21:
+                opSequence = 22;
+                break;
+            case 22:
+                opSequence = 23;
+                break;
+            case 23:
+                opSequence = 24;
+                break;
+            case 24:
+                opSequence = 25;
+                break;
+            case 25:
+                opSequence = 26;
+                break;
+            /*case 31:
                 audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 32;
                 break;
@@ -194,8 +215,8 @@ public class Tutorial_Script : MonoBehaviour
                 opSequence = 52;
                 break;
             default:
-                break;
-        }*/
+                break;*/
+        }
     }
 
     void ControlOP() //オープニング・チュートリアルの進行管理。追加しやすさ見やすさのために、パートごとに10の位を変更する形にしてます。
@@ -240,8 +261,31 @@ public class Tutorial_Script : MonoBehaviour
                 break;*/
 
             case 20: //図鑑パートのチュートリアルを想定//ここば図鑑パートで
-                SetOPWindow0("プレイありがとうございます。\n\nあなたはこのリサイクルシティの市長です。\n\n現実で出たゴミを「リサイクル」しながら、\nこの町を発展させていくのが\nこのゲームの目的です。");
-                Debug.Log("起動済み");
+                SetOPWindow0("ここはずかんパートです\n\nいままであつめたリサイクルマークを\n\nみてべんきょうすることができます");
+                //Debug.Log("起動済み");
+                break;
+
+            case 21:
+                SetOPWindow0("もしリサイクルマークのいみをわすれてしまったら、\n\nいつでもこのずかんをひらいて\n\nがんばっておぼえましょう");
+                break;
+            case 22:
+                SetOPWindow0("ためしに、アルミかんのずかんをひらいてみましょう");
+                break;
+            case 23:
+                opWindow0.SetActive(false);
+                SetTutorial(80f, 260f, 1.0f, "アルミかんのマークをクリックすると、ずかんがひらきます\n\n");
+                PutArrow(-300f, 400f, -180f);
+                break;
+
+            case 24:
+                //図鑑の穴埋め作業について説明
+                SetTutorial(22f, -198f, 1.0f, "ずかんのうえはマークのなまえと、\n\nマークにつかわれるゴミのしゅるいがかかれています");
+                break;
+            case 25:
+                SetTutorial(16f, 604f, 1.0f, "したにはずかんのないようがバラバラになったパズルがあります\n\nあてはめてずかんをかんせいさせてちしきをつけましょう");
+                break;
+            case 26:
+                SetOPWindow0("いじょうでずかんぱーとのせつめいをおわります");
                 break;
 
             /*case 31: //建築パートの前振り
@@ -419,7 +463,7 @@ public class Tutorial_Script : MonoBehaviour
 
     private void Awake()
     {
-        /*//パスを取得(Windowsの場合、「C:\Users\(ユーザー名)\AppData\LocalLow\DefaultCompany\Sotsuken」に保存される)
+       //パスを取得(Windowsの場合、「C:\Users\(ユーザー名)\AppData\LocalLow\DefaultCompany\Sotsuken」に保存される)
         filePath = Application.persistentDataPath + "/" + fileName;
 
         //ファイルが無い場合はファイルを作成
@@ -431,7 +475,7 @@ public class Tutorial_Script : MonoBehaviour
         //ファイルを読み込んでsaveに格納
         save = Load1(filePath);
         //saveの内容を各変数に反映
-        Load2();*/
+        Load2();
     }
 
     // Start is called before the first frame update
