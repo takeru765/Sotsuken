@@ -43,7 +43,7 @@ public class SaveData
     public int[] lv = new int[6];
 
     //ミッション関連
-    public int goal;
+    public int goal = 1;
     public int mark = 1;
     public int markRec1;
     public int markRec2;
