@@ -186,6 +186,8 @@ public class GameManager : MonoBehaviour
         Load2();
     }
 
+    //------------------------------------------------------------------------
+
     //フェードイン・アウト処理
     [SerializeField] GameObject fadeObject;
     [SerializeField] Image fadeImage;
@@ -242,6 +244,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //-------------------------------------------------------------------------
+
     //UI(ポイント表示)関連
     [SerializeField] TextMeshProUGUI alumiViewer;
     [SerializeField] TextMeshProUGUI stealViewer;
@@ -291,6 +295,8 @@ public class GameManager : MonoBehaviour
         PaperViewerChange(paperPoint);
         AllViewerChange(allPoint);
     }
+
+    //-------------------------------------------------------------------------
 
     //UI(ウィンドウ)関連
     [SerializeField] GameObject BuildWindow0; //初回建設用ウィンドウ
@@ -633,6 +639,7 @@ public class GameManager : MonoBehaviour
         Save(save); //オートセーブ
     }
 
+    //-------------------------------------------------------------------------
 
     //各種ポイント
     int alumiPoint = 0; //アルミ缶
@@ -658,6 +665,8 @@ public class GameManager : MonoBehaviour
     int plaBook = 0;
     int paperBook = 0;
 
+    //-------------------------------------------------------------------------
+
     //SE素材
     AudioSource audioSource;
     [SerializeField] AudioClip openWindow;
@@ -665,6 +674,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] AudioClip valueChange;
     [SerializeField] AudioClip inputEnter;
     [SerializeField] AudioClip enter;
+    [SerializeField] AudioClip cleanLvUp;
+
+    //-------------------------------------------------------------------------
 
     //選択中の建築場所
     int selectedPlace = -1; //0～5が対応。-1は初期値。
@@ -1059,6 +1071,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //-------------------------------------------------------------------------
 
     //リサイクルマーク入力関連
     int tmpAlumi = 0; //入力途中の一時保存用
@@ -1391,6 +1404,8 @@ public class GameManager : MonoBehaviour
         Save(save);
     }
 
+    //-------------------------------------------------------------------------
+
     //イベント関連
     [SerializeField] EventDataBase eventDataBase; //イベントデータベースの管理
     public void AddEventData(Event i)
@@ -1477,7 +1492,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
+    //-------------------------------------------------------------------------
 
     //ミッション関連
     int goal = 1; //設定した目標
@@ -1789,7 +1804,7 @@ public class GameManager : MonoBehaviour
         Save(save);
     }
 
-
+    //-------------------------------------------------------------------------
 
     //オープニング、チュートリアルの進行管理
     [SerializeField] GameObject opWindow0; //文章のみのOP用ウィンドウ
@@ -2091,7 +2106,7 @@ public class GameManager : MonoBehaviour
 
                 if(cleanLV == 0 && allPoint >= borderPoint[0] && open == false)
                 {
-                    audioSource.PlayOneShot(openWindow); //効果音再生
+                    audioSource.PlayOneShot(cleanLvUp); //効果音再生
 
                     opSequence = 90;
                 }
@@ -2167,6 +2182,8 @@ public class GameManager : MonoBehaviour
     {
         SetArrow(-50f, -650f);
     }
+
+    //-------------------------------------------------------------------------
 
     //現状では、起動時のセーブデータ読み込みにのみ使用
     private void Awake()

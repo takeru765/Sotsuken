@@ -11296,6 +11296,7 @@ MonoBehaviour:
   valueChange: {fileID: 8300000, guid: 9bac884b2ddadc643a49a6aaa4585547, type: 3}
   inputEnter: {fileID: 8300000, guid: 63418f073b605ed47b03105a2046e31b, type: 3}
   enter: {fileID: 8300000, guid: 4920db294ae570242b57d463ff09b58b, type: 3}
+  cleanLvUp: {fileID: 8300000, guid: f702736b5d744d948a744877f0371067, type: 3}
   buildImage0: {fileID: 256333585}
   buildImage1: {fileID: 648817773}
   buildImage2: {fileID: 659452964}
