@@ -4953,9 +4953,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 726946240}
-        m_TargetAssemblyTypeName: CloseSelf, Assembly-CSharp
-        m_MethodName: CloseItself
+      - m_Target: {fileID: 1378342782}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: CloseMissionResult
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9407,9 +9407,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1276110953}
-        m_TargetAssemblyTypeName: CloseSelf, Assembly-CSharp
-        m_MethodName: CloseItself
+      - m_Target: {fileID: 1378342782}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: CloseMissionResult
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11297,6 +11297,7 @@ MonoBehaviour:
   inputEnter: {fileID: 8300000, guid: 63418f073b605ed47b03105a2046e31b, type: 3}
   enter: {fileID: 8300000, guid: 4920db294ae570242b57d463ff09b58b, type: 3}
   cleanLvUp: {fileID: 8300000, guid: f702736b5d744d948a744877f0371067, type: 3}
+  missionSuccess: {fileID: 8300000, guid: e58d307957f5f3d44a0abf3c53825e2a, type: 3}
   buildImage0: {fileID: 256333585}
   buildImage1: {fileID: 648817773}
   buildImage2: {fileID: 659452964}
