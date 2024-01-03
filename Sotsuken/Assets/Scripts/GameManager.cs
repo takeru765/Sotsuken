@@ -675,6 +675,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] AudioClip inputEnter;
     [SerializeField] AudioClip enter;
     [SerializeField] AudioClip cleanLvUp;
+    [SerializeField] AudioClip missionSuccess;
 
     //-------------------------------------------------------------------------
 
@@ -1670,6 +1671,7 @@ public class GameManager : MonoBehaviour
     //ミッション成功処理
     void SuccessMission()
     {
+        open = true;
         int reward = 0;
 
         //獲得ポイントを計算
@@ -1733,12 +1735,14 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
+        audioSource.PlayOneShot(missionSuccess);
         Save(save);
     }
 
     //ミッション失敗処理
     void FailedMission()
     {
+        open = true;
         int reward = 0;
 
         //獲得ポイントの計算
@@ -1801,7 +1805,15 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
+        audioSource.PlayOneShot(openWindow);
         Save(save);
+    }
+
+    public void CloseMissionResult()
+    {
+        MissionSuccess.SetActive(false);
+        MissionFailed.SetActive(false);
+        open = false;
     }
 
     //-------------------------------------------------------------------------
@@ -1889,6 +1901,7 @@ public class GameManager : MonoBehaviour
                 cleanLV = 1;
                 AllViewerChange(allPoint);
                 opSequence = 999;
+                Save(save);
                 break;
             default:
                 break;
