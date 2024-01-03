@@ -132,6 +132,49 @@ public class Tutorial_Script : MonoBehaviour
          CheckBuildImage();*/
     }
 
+    //フェードイン・アウト関連
+    float alfa = 1f; //画像の不透明度に使用
+    [SerializeField] Image fade; //フェードイン・アウト用の黒画像
+    bool isFadeIn = true; //フェードイン中
+    bool isFadeOut = false; //フェードアウト中
+
+    void FadeIn(float speed = 0.75f) //フェードイン処理。フェード速度も指定可能
+    {
+        alfa -= speed * Time.deltaTime; //時間経過に応じて不透明度を低下
+        fade.color = new Color(0, 0, 0, alfa); //不透明度を反映
+
+        if (alfa < 0)
+        {
+            alfa = 0;
+            isFadeIn = false;
+
+            fade.raycastTarget = false; //フェード画像のクリック判定を無効化(下にあるボタンをクリックさせるため)
+        }
+    }
+
+    void FadeOut(float speed = 0.75f)  //フェードアウト処理。フェード速度も指定可能
+    {
+        fade.raycastTarget = true; //フェード画像のクリック判定を有効化(各種ボタンをクリックできないようにする)
+
+        alfa += speed * Time.deltaTime; //時間経過に応じて不透明度を増加
+        fade.color = new Color(0, 0, 0, alfa); //不透明度を反映
+
+        if (alfa >= 1)
+        {
+            alfa = 1;
+            isFadeOut = false;
+
+            SceneManager.LoadScene("Oka_test");
+        }
+    }
+
+    public void StartFadeOut() //フェードアウト開始
+    {
+        opSequence = 31;
+        Save(save);
+        isFadeOut = true;
+    }
+
     //オープニング、チュートリアルの進行管理
     [SerializeField] GameObject opWindow0; //文章のみのOP用ウィンドウ
     [SerializeField] TextMeshProUGUI opText;
@@ -487,14 +530,25 @@ public class Tutorial_Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if (Input.GetMouseButtonDown(0))
+        //フェードイン・アウトフラグがonの時、フェード処理を行う
+        if (isFadeIn == true)
         {
-            ClickCheck();
-
+            FadeIn();
         }
-        ControlOP();
-        
+        else if (isFadeOut == true)
+        {
+            FadeOut();
+        }
+
+        if(isFadeIn == false) //フェードイン中はクリックでチュートリアルを進行させない
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                ClickCheck();
+
+            }
+            ControlOP();
+        }
     }
 
 }

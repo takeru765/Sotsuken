@@ -1880,10 +1880,7 @@ public class GameManager : MonoBehaviour
                 break;
             case 42:
                 Save(save);
-                opSequence = 50;
-                break;
-            case 50:
-                opSequence = 51;
+                opSequence = 999;
                 break;
             case 51:
                 opSequence = 52;

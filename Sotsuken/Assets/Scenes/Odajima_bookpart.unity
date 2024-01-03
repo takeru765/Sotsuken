@@ -2116,8 +2116,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1434137533}
-        m_TargetAssemblyTypeName: FadeInOut, Assembly-CSharp
+      - m_Target: {fileID: 415498358}
+        m_TargetAssemblyTypeName: Tutorial_Script, Assembly-CSharp
         m_MethodName: StartFadeOut
         m_Mode: 1
         m_Arguments:
@@ -3862,6 +3862,7 @@ MonoBehaviour:
     paperBook: 0
     opSequece: 0
     tutorialMission: 0
+    tutorialEvent: 0
     place: 000000000000000000000000000000000000000000000000
     lv: 000000000000000000000000000000000000000000000000
     goal: 0
@@ -3875,6 +3876,7 @@ MonoBehaviour:
     setDay: 0
     eventID: 0
     answered: 0
+  fade: {fileID: 1434137534}
   opWindow0: {fileID: 1504103813}
   opText: {fileID: 1868959833}
   Button_Active: {fileID: 707955569}
@@ -10057,7 +10059,6 @@ GameObject:
   - component: {fileID: 1434137532}
   - component: {fileID: 1434137535}
   - component: {fileID: 1434137534}
-  - component: {fileID: 1434137533}
   m_Layer: 5
   m_Name: FadeInOut
   m_TagString: Untagged
@@ -10084,18 +10085,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1434137533
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1434137531}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a48dfc726158db247812e7cefa75123a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1434137534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12415,6 +12404,7 @@ MonoBehaviour:
     paperBook: 0
     opSequece: 0
     tutorialMission: 0
+    tutorialEvent: 0
     place: 000000000000000000000000000000000000000000000000
     lv: 000000000000000000000000000000000000000000000000
     goal: 0
