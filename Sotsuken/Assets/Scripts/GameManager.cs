@@ -16,7 +16,11 @@ public class GameManager : MonoBehaviour
     int day = 0;
     int month = 0;
     int year = 0;
-    void CheckDate()
+
+    //プレイ日数
+    int playLong = 0;
+
+    void CheckDate() //日付変更チェック&処理
     {
         if(time.Year > year || time.Month > month || time.Day > day)
         {
@@ -34,6 +38,14 @@ public class GameManager : MonoBehaviour
             year = time.Year;
             month = time.Month;
             day = time.Day;
+
+            //プレイ日数を加算
+            playLong += 1;
+
+            if(playLong >= 1) //一定期間プレイすると、アンケート回答を促す
+            {
+                OpenEnqueteWindow();
+            }
 
             //イベントボーナスをリセット
             eventBonus = 1.0f;
@@ -57,6 +69,8 @@ public class GameManager : MonoBehaviour
         save.year = year;
         save.month = month;
         save.day = day;
+
+        save.playLong = playLong;
 
         save.alumiPoint = alumiPoint;
         save.stealPoint = stealPoint;
@@ -122,6 +136,8 @@ public class GameManager : MonoBehaviour
         year = save.year;
         month = save.month;
         day = save.day;
+
+        playLong = save.playLong;
 
         alumiPoint = save.alumiPoint;
         stealPoint = save.stealPoint;
@@ -2194,6 +2210,24 @@ public class GameManager : MonoBehaviour
     }
 
     //-------------------------------------------------------------------------
+    //アンケート誘導ウィンドウ
+    [SerializeField] GameObject enqueteWindow;
+
+    //アンケートへの遷移
+    public void MoveEnquete()
+    {
+        Application.OpenURL("https://twitter.com/srowaway3"); //仮で自分のTwitterのURL置いてます。
+    }
+
+    void OpenEnqueteWindow()
+    {
+        enqueteWindow.SetActive(true);
+    }
+
+    public void CloseEnqueteWindow()
+    {
+        enqueteWindow.SetActive(false);
+    }
 
     //現状では、起動時のセーブデータ読み込みにのみ使用
     private void Awake()
@@ -2212,14 +2246,8 @@ public class GameManager : MonoBehaviour
         //saveの内容を各変数に反映
         Load2();
 
-        if(tutorialEvent == true)
-        {
-            eventAppeal.SetActive(false);
-        }
-        if(tutorialMission == true)
-        {
-            missionAppeal.SetActive(false);
-        }
+        //日を跨いだか確認
+        CheckDate();
     }
 
     // Start is called before the first frame update
@@ -2236,6 +2264,16 @@ public class GameManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
 
         Debug.Log(year + "/" + month + "/" + day);
+
+        //イベント・ミッションのチュートリアル未達の場合、それぞれに強調マークを表示
+        if (tutorialEvent == true)
+        {
+            eventAppeal.SetActive(false);
+        }
+        if (tutorialMission == true)
+        {
+            missionAppeal.SetActive(false);
+        }
     }
 
     // Update is called once per frame
