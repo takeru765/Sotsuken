@@ -9,6 +9,9 @@ using System.IO;
 
 public class GameManager : MonoBehaviour
 {
+    //初回起動フラグ
+    bool first = true;
+
     //現在日時を保存
     DateTime time;
 
@@ -53,7 +56,8 @@ public class GameManager : MonoBehaviour
             //イベント内容をランダムで決定
             eventID = UnityEngine.Random.Range(1, 6); //Randomは、上限の値は含まないことに注意
 
-            OpenEvent();
+            eventAppeal.SetActive(true);
+            missionAppeal.SetActive(true);
         }
     }
 
@@ -66,6 +70,8 @@ public class GameManager : MonoBehaviour
     void Save(SaveData data)
     {
         //saveへの情報書き込み
+        save.first = first;
+
         save.year = year;
         save.month = month;
         save.day = day;
@@ -133,6 +139,8 @@ public class GameManager : MonoBehaviour
     void Load2()
     {
         //各種数値の反映
+        first = save.first;
+
         year = save.year;
         month = save.month;
         day = save.day;
@@ -630,6 +638,9 @@ public class GameManager : MonoBehaviour
 
             audioSource.PlayOneShot(closeWindow); //効果音再生
         }
+
+        answered = true;
+        eventAppeal.SetActive(false);
 
         //ミッションの成功・失敗を判定
         CheckMission();
@@ -1498,8 +1509,9 @@ public class GameManager : MonoBehaviour
 
             //正解済みフラグをON
             answered = true;
+            eventAppeal.SetActive(false);
 
-            //audioSource.PlayOneShot(); //正解音を流す
+            audioSource.PlayOneShot(missionSuccess); //正解音を流す
             Save(save);
             CloseEvent2();
         }
@@ -1624,6 +1636,7 @@ public class GameManager : MonoBehaviour
             audioSource.PlayOneShot(enter); //効果音再生
         }
         setMission = true;
+        missionAppeal.SetActive(false);
 
         //今日の日付を保存
         setYear = time.Year;
@@ -1803,19 +1816,19 @@ public class GameManager : MonoBehaviour
         switch (mark)
         {
             case 1:
-                MSuccessText.text = "ミッション失敗…\nアルミ缶ポイントを" + reward + "獲得した。";
+                MFailedText.text = "ミッション失敗…\nアルミ缶ポイントを" + reward + "獲得した。";
                 break;
             case 2:
-                MSuccessText.text = "ミッション失敗…\nスチール缶ポイントを" + reward + "獲得した。";
+                MFailedText.text = "ミッション失敗…\nスチール缶ポイントを" + reward + "獲得した。";
                 break;
             case 3:
-                MSuccessText.text = "ミッション失敗…\nペットボトルポイントを" + reward + "獲得した。";
+                MFailedText.text = "ミッション失敗…\nペットボトルポイントを" + reward + "獲得した。";
                 break;
             case 4:
-                MSuccessText.text = "ミッション失敗…\nプラスチックポイントを" + reward + "獲得した。";
+                MFailedText.text = "ミッション失敗…\nプラスチックポイントを" + reward + "獲得した。";
                 break;
             case 5:
-                MSuccessText.text = "ミッション失敗…\n紙ポイントを" + reward + "獲得した。";
+                MFailedText.text = "ミッション失敗…\n紙ポイントを" + reward + "獲得した。";
                 break;
             default:
                 break;
@@ -2229,6 +2242,8 @@ public class GameManager : MonoBehaviour
         enqueteWindow.SetActive(false);
     }
 
+    //-------------------------------------------------------------------------
+
     //現状では、起動時のセーブデータ読み込みにのみ使用
     private void Awake()
     {
@@ -2245,20 +2260,22 @@ public class GameManager : MonoBehaviour
         save = Load1(filePath);
         //saveの内容を各変数に反映
         Load2();
-
-        //日を跨いだか確認
-        CheckDate();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        //日付を保存
+        //初回のみ日付を保存
         time = DateTime.Now;
+        if(first == true)
+        {
+            day = time.Day;
+            month = time.Month;
+            year = time.Year;
 
-        day = time.Day;
-        month = time.Month;
-        year = time.Year;
+            first = false;
+            Save(save);
+        }
 
         //AudioSourceを取得
         audioSource = GetComponent<AudioSource>();
@@ -2266,14 +2283,19 @@ public class GameManager : MonoBehaviour
         Debug.Log(year + "/" + month + "/" + day);
 
         //イベント・ミッションのチュートリアル未達の場合、それぞれに強調マークを表示
-        if (tutorialEvent == true)
+        if (answered == true)
         {
             eventAppeal.SetActive(false);
         }
-        if (tutorialMission == true)
+        if (setMission == true)
         {
             missionAppeal.SetActive(false);
         }
+
+        //日を跨いだか確認
+        CheckDate();
+        //ミッション判定
+        CheckMission();
     }
 
     // Update is called once per frame
