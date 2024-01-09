@@ -2229,7 +2229,7 @@ public class GameManager : MonoBehaviour
     //アンケートへの遷移
     public void MoveEnquete()
     {
-        Application.OpenURL("https://twitter.com/srowaway3"); //仮で自分のTwitterのURL置いてます。
+        Application.OpenURL("https://forms.office.com/r/MZPPPFMyAi"); //アンケートへのリンクに変更。要動作確認。
     }
 
     void OpenEnqueteWindow()
