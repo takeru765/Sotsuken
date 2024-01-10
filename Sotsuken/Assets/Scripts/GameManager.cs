@@ -677,6 +677,7 @@ public class GameManager : MonoBehaviour
     int allPoint = 0; //累計ポイント
     int cleanLV = 0; //美化レベル(累計ポイントが一定ごとに上昇)
     int[] borderPoint = {150, 100000};
+    [SerializeField] GameObject backImage_CleanLV1;
 
     //当日獲得したポイント(ミッション用)
     int todayAlumi = 0; //アルミ缶
@@ -1923,8 +1924,9 @@ public class GameManager : MonoBehaviour
             case 80:
                 opSequence = 81;
                 break;
-            case 90:
+            case 90: //累計ポイントイベント
                 cleanLV = 1;
+                backImage_CleanLV1.SetActive(true);
                 AllViewerChange(allPoint);
                 opSequence = 999;
                 Save(save);
@@ -2243,6 +2245,16 @@ public class GameManager : MonoBehaviour
     }
 
     //-------------------------------------------------------------------------
+    //(起動時用の)累計ポイントに応じた背景の変更
+    void SetBackImage()
+    {
+        if(cleanLV >= 1)
+        {
+            backImage_CleanLV1.SetActive(true);
+        }
+    }
+
+    //-------------------------------------------------------------------------
 
     //現状では、起動時のセーブデータ読み込みにのみ使用
     private void Awake()
@@ -2265,6 +2277,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //累計ポイントに応じて背景を変更
+        SetBackImage();
+
         //初回のみ日付を保存
         time = DateTime.Now;
         if(first == true)
@@ -2279,8 +2294,6 @@ public class GameManager : MonoBehaviour
 
         //AudioSourceを取得
         audioSource = GetComponent<AudioSource>();
-
-        Debug.Log(year + "/" + month + "/" + day);
 
         //イベント・ミッションのチュートリアル未達の場合、それぞれに強調マークを表示
         if (answered == true)
