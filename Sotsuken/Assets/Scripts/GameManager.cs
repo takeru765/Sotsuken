@@ -414,6 +414,10 @@ public class GameManager : MonoBehaviour
             {
                 build1Picture.sprite = amusementImage;
             }
+            else if(place[i] == 3)
+            {
+                build1Picture.sprite = monumentImage;
+            }
             //建設LVに合わせた説明文を表示
             switch(lv[i])
             {
@@ -426,6 +430,10 @@ public class GameManager : MonoBehaviour
                     {
                         buildIntro.text = "LV:1→2\nコスト:各30pt\nボーナス:+20%→+40%";
                     }
+                    else if(place[i] == 3)
+                    {
+                        buildIntro.text = "LV:1→2\nコスト:各30pt\n美化ポイント＋30";
+                    }
                     break;
                 case 2:
                     if (place[i] == 1)
@@ -436,6 +444,10 @@ public class GameManager : MonoBehaviour
                     {
                         buildIntro.text = "LV:2→3\nコスト:各45pt\nボーナス:+40%→+60%";
                     }
+                    else if (place[i] == 3)
+                    {
+                        buildIntro.text = "LV:2→3\nコスト:各45pt\n美化ポイント＋30";
+                    }
                     break;
                 case 3:
                     if (place[i] == 1)
@@ -445,6 +457,10 @@ public class GameManager : MonoBehaviour
                     else if (place[i] == 2)
                     {
                         buildIntro.text = "LV:3→4\nコスト:各60pt\nボーナス:+60%→+80%";
+                    }
+                    else if (place[i] == 3)
+                    {
+                        buildIntro.text = "LV:3→4\nコスト:各60pt\n美化ポイント＋30";
                     }
                     break;
                 case 4:
