@@ -727,6 +727,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Sprite blankImage;
     [SerializeField] Sprite recycleImage;
     [SerializeField] Sprite amusementImage;
+    [SerializeField] Sprite monumentImage;
 
     //建築ボタンへの画像の反映(起動時用を想定)
     void CheckBuildImage()
@@ -811,6 +812,32 @@ public class GameManager : MonoBehaviour
                         break;
                 }
             }
+            else if (place[i] == 3)
+            {
+                switch (i)
+                {
+                    case 0:
+                        buildImage0.sprite = monumentImage;
+                        break;
+                    case 1:
+                        buildImage1.sprite = monumentImage;
+                        break;
+                    case 2:
+                        buildImage2.sprite = monumentImage;
+                        break;
+                    case 3:
+                        buildImage3.sprite = monumentImage;
+                        break;
+                    case 4:
+                        buildImage4.sprite = monumentImage;
+                        break;
+                    case 5:
+                        buildImage5.sprite = monumentImage;
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 
@@ -830,13 +857,19 @@ public class GameManager : MonoBehaviour
             switch(selectedBuilding) //建築に必要なポイントがあるか確認
             {
                 case 1:
-                    if(alumiPoint >= 15 && stealPoint >= 15 && petPoint >= 15 && plaPoint >= 15 && paperPoint >= 15)
+                    if(alumiPoint >= 15 && petPoint >= 15 && plaPoint >= 15)
                     {
                         enoughBuildPoint = true;
                     }
                     break;
                 case 2:
-                    if (alumiPoint >= 15 && stealPoint >= 15 && petPoint >= 15 && plaPoint >= 15 && paperPoint >= 15)
+                    if (alumiPoint >= 15 && plaPoint >= 15 && paperPoint >= 15)
+                    {
+                        enoughBuildPoint = true;
+                    }
+                    break;
+                case 3:
+                    if(stealPoint >= 15 && petPoint >= 15 && plaPoint >= 15 && paperPoint >= 15)
                     {
                         enoughBuildPoint = true;
                     }
@@ -857,119 +890,143 @@ public class GameManager : MonoBehaviour
                         {
                             buildImage0.sprite = recycleImage;
                             alumiPoint -= 15;
-                            stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
-                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage0.sprite = amusementImage;
                             alumiPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
+                        }
+                        else if (selectedBuilding == 3)
+                        {
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
                             paperPoint -= 15;
+                            allPoint += 30;
                         }
                         break;
                     case 1:
                         if (selectedBuilding == 1)
                         {
-                            buildImage1.sprite = recycleImage;
+                            buildImage0.sprite = recycleImage;
                             alumiPoint -= 15;
-                            stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
-                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
-                            buildImage1.sprite = amusementImage;
+                            buildImage0.sprite = amusementImage;
                             alumiPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
+                        }
+                        else if (selectedBuilding == 3)
+                        {
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
                             paperPoint -= 15;
+                            allPoint += 30;
                         }
                         break;
                     case 2:
                         if (selectedBuilding == 1)
                         {
-                            buildImage2.sprite = recycleImage;
+                            buildImage0.sprite = recycleImage;
                             alumiPoint -= 15;
-                            stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
-                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
-                            buildImage2.sprite = amusementImage;
+                            buildImage0.sprite = amusementImage;
                             alumiPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
+                        }
+                        else if (selectedBuilding == 3)
+                        {
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
                             paperPoint -= 15;
+                            allPoint += 30;
                         }
                         break;
                     case 3:
                         if (selectedBuilding == 1)
                         {
-                            buildImage3.sprite = recycleImage;
+                            buildImage0.sprite = recycleImage;
                             alumiPoint -= 15;
-                            stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
-                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
-                            buildImage3.sprite = amusementImage;
+                            buildImage0.sprite = amusementImage;
                             alumiPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
+                        }
+                        else if (selectedBuilding == 3)
+                        {
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
                             paperPoint -= 15;
+                            allPoint += 30;
                         }
                         break;
                     case 4:
                         if (selectedBuilding == 1)
                         {
-                            buildImage4.sprite = recycleImage;
+                            buildImage0.sprite = recycleImage;
                             alumiPoint -= 15;
-                            stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
-                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
-                            buildImage4.sprite = amusementImage;
+                            buildImage0.sprite = amusementImage;
                             alumiPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
+                        }
+                        else if (selectedBuilding == 3)
+                        {
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
                             paperPoint -= 15;
+                            allPoint += 30;
                         }
                         break;
                     case 5:
                         if (selectedBuilding == 1)
                         {
-                            buildImage5.sprite = recycleImage;
+                            buildImage0.sprite = recycleImage;
                             alumiPoint -= 15;
-                            stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
-                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
-                            buildImage5.sprite = amusementImage;
+                            buildImage0.sprite = amusementImage;
                             alumiPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
+                        }
+                        else if (selectedBuilding == 3)
+                        {
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
                             paperPoint -= 15;
+                            allPoint += 30;
                         }
                         break;
                     default:
@@ -998,65 +1055,83 @@ public class GameManager : MonoBehaviour
         switch(lv[selectedPlace])
         {
             case 1:
-                if (place[selectedPlace] == 1 && alumiPoint >= 30 && stealPoint >= 30 && petPoint >= 30 && plaPoint >= 30 && paperPoint >= 30)
+                if (place[selectedPlace] == 1 && alumiPoint >= 30 && petPoint >= 30 && plaPoint >= 30)
                 {
                     lv[selectedPlace] += 1;
                     alumiPoint -= 30;
-                    stealPoint -= 30;
                     petPoint -= 30;
+                    plaPoint -= 30;
+                }
+                else if (place[selectedPlace] == 2 && alumiPoint >= 30 && plaPoint >= 30 && paperPoint >= 30)
+                {
+                    lv[selectedPlace] += 1;
+                    alumiPoint -= 30;
                     plaPoint -= 30;
                     paperPoint -= 30;
                 }
-                else if (place[selectedPlace] == 2 && alumiPoint >= 30 && stealPoint >= 30 && petPoint >= 30 && plaPoint >= 30 && paperPoint >= 30)
+                else if(place[selectedPlace] == 3 && stealPoint >= 30 && petPoint >= 30 && plaPoint >= 30 && paperPoint >= 30)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 30;
                     stealPoint -= 30;
                     petPoint -= 30;
                     plaPoint -= 30;
                     paperPoint -= 30;
+
+                    allPoint += 30;
                 }
                 CloseBuild1();
                 break;
             case 2:
-                if (place[selectedPlace] == 1 && alumiPoint >= 45 && stealPoint >= 45 && petPoint >= 45 && plaPoint >= 45 && paperPoint >= 45)
+                if (place[selectedPlace] == 1 && alumiPoint >= 45 && petPoint >= 45 && plaPoint >= 45)
                 {
                     lv[selectedPlace] += 1;
                     alumiPoint -= 45;
-                    stealPoint -= 45;
                     petPoint -= 45;
+                    plaPoint -= 45;
+                }
+                else if (place[selectedPlace] == 2 && alumiPoint >= 45 && plaPoint >= 45 && paperPoint >= 45)
+                {
+                    lv[selectedPlace] += 1;
+                    alumiPoint -= 45;
                     plaPoint -= 45;
                     paperPoint -= 45;
                 }
-                else if (place[selectedPlace] == 2 && alumiPoint >= 45 && stealPoint >= 45 && petPoint >= 45 && plaPoint >= 45 && paperPoint >= 45)
+                else if (place[selectedPlace] == 3 && stealPoint >= 45 && petPoint >= 45 && plaPoint >= 45 && paperPoint >= 45)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 45;
                     stealPoint -= 45;
                     petPoint -= 45;
                     plaPoint -= 45;
                     paperPoint -= 45;
+
+                    allPoint += 30;
                 }
                 CloseBuild1();
                 break;
             case 3:
-                if (place[selectedPlace] == 1 && alumiPoint >= 60 && stealPoint >= 60 && petPoint >= 60 && plaPoint >= 60 && paperPoint >= 60)
+                if (place[selectedPlace] == 1 && alumiPoint >= 60 && petPoint >= 60 && plaPoint >= 60)
                 {
                     lv[selectedPlace] += 1;
                     alumiPoint -= 60;
-                    stealPoint -= 60;
                     petPoint -= 60;
+                    plaPoint -= 60;
+                }
+                else if (place[selectedPlace] == 2 && alumiPoint >= 60 && plaPoint >= 60 && paperPoint >= 60)
+                {
+                    lv[selectedPlace] += 1;
+                    alumiPoint -= 60;
                     plaPoint -= 60;
                     paperPoint -= 60;
                 }
-                else if (place[selectedPlace] == 2 && alumiPoint >= 60 && stealPoint >= 60 && petPoint >= 60 && plaPoint >= 60 && paperPoint >= 60)
+                else if (place[selectedPlace] == 3 && stealPoint >= 60 && petPoint >= 60 && plaPoint >= 60 && paperPoint >= 60)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 60;
                     stealPoint -= 60;
                     petPoint -= 60;
                     plaPoint -= 60;
                     paperPoint -= 60;
+
+                    allPoint += 30;
                 }
                 CloseBuild1();
                 break;
