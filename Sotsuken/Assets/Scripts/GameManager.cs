@@ -672,11 +672,6 @@ public class GameManager : MonoBehaviour
         EventWindow2.SetActive(false);
         open = false;
 
-        if(opSequence == 52)
-        {
-            opSequence = 53;
-        }
-
         audioSource.PlayOneShot(closeWindow); //効果音再生
 
         //ミッションの成功・失敗を判定
@@ -921,6 +916,7 @@ public class GameManager : MonoBehaviour
                         }
                         else if (selectedBuilding == 3)
                         {
+                            buildImage0.sprite = monumentImage;
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
@@ -931,20 +927,21 @@ public class GameManager : MonoBehaviour
                     case 1:
                         if (selectedBuilding == 1)
                         {
-                            buildImage0.sprite = recycleImage;
+                            buildImage1.sprite = recycleImage;
                             alumiPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
-                            buildImage0.sprite = amusementImage;
+                            buildImage1.sprite = amusementImage;
                             alumiPoint -= 15;
                             plaPoint -= 15;
                             paperPoint -= 15;
                         }
                         else if (selectedBuilding == 3)
                         {
+                            buildImage1.sprite = monumentImage;
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
@@ -955,20 +952,21 @@ public class GameManager : MonoBehaviour
                     case 2:
                         if (selectedBuilding == 1)
                         {
-                            buildImage0.sprite = recycleImage;
+                            buildImage2.sprite = recycleImage;
                             alumiPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
-                            buildImage0.sprite = amusementImage;
+                            buildImage2.sprite = amusementImage;
                             alumiPoint -= 15;
                             plaPoint -= 15;
                             paperPoint -= 15;
                         }
                         else if (selectedBuilding == 3)
                         {
+                            buildImage2.sprite = monumentImage;
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
@@ -979,20 +977,21 @@ public class GameManager : MonoBehaviour
                     case 3:
                         if (selectedBuilding == 1)
                         {
-                            buildImage0.sprite = recycleImage;
+                            buildImage3.sprite = recycleImage;
                             alumiPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
-                            buildImage0.sprite = amusementImage;
+                            buildImage3.sprite = amusementImage;
                             alumiPoint -= 15;
                             plaPoint -= 15;
                             paperPoint -= 15;
                         }
                         else if (selectedBuilding == 3)
                         {
+                            buildImage3.sprite = monumentImage;
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
@@ -1003,20 +1002,21 @@ public class GameManager : MonoBehaviour
                     case 4:
                         if (selectedBuilding == 1)
                         {
-                            buildImage0.sprite = recycleImage;
+                            buildImage4.sprite = recycleImage;
                             alumiPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
-                            buildImage0.sprite = amusementImage;
+                            buildImage4.sprite = amusementImage;
                             alumiPoint -= 15;
                             plaPoint -= 15;
                             paperPoint -= 15;
                         }
                         else if (selectedBuilding == 3)
                         {
+                            buildImage4.sprite = monumentImage;
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
@@ -1027,20 +1027,21 @@ public class GameManager : MonoBehaviour
                     case 5:
                         if (selectedBuilding == 1)
                         {
-                            buildImage0.sprite = recycleImage;
+                            buildImage5.sprite = recycleImage;
                             alumiPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
-                            buildImage0.sprite = amusementImage;
+                            buildImage5.sprite = amusementImage;
                             alumiPoint -= 15;
                             plaPoint -= 15;
                             paperPoint -= 15;
                         }
                         else if (selectedBuilding == 3)
                         {
+                            buildImage5.sprite = monumentImage;
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
@@ -1473,11 +1474,11 @@ public class GameManager : MonoBehaviour
 
         if (plaBonus == true)//プラスチック
         {
-            tmpPla = (int)(tmpPla * 5 * inputRate * eventRate);
+            tmpPla = (int)(tmpPla * 15 * inputRate * eventRate);
         }
         else
         {
-            tmpPla = (int)(tmpPla * 5 * inputRate);
+            tmpPla = (int)(tmpPla * 15 * inputRate);
         }
 
         if (paperBonus == true)//紙
@@ -2011,7 +2012,6 @@ public class GameManager : MonoBehaviour
                 break;
             case 52:
                 tutorialEvent = true;
-                eventAppeal.SetActive(false);
                 Save(save);
                 opSequence = 999;
                 break;
@@ -2364,7 +2364,25 @@ public class GameManager : MonoBehaviour
         if(playLong / 2 == 0) //プレイ日数が偶数の時のみAIをON。
         {
             //↓ここにアルゴリズムを
-            appealAmusement.SetActive(true);
+            if(alumiPoint >= 15 && petPoint >= 15 && plaPoint >= 15) //リサイクル施設の素材アリ
+            {
+                appealFactory.SetActive(true);
+            }
+            else if(answered == true) //本日のイベント達成済み
+            {
+                if(stealPoint >= 15 && petPoint >= 15 && plaPoint >= 15 && paperPoint >= 15) //モニュメントの素材アリ
+                {
+                    appealMonument.SetActive(true);
+                }
+            }
+            else //本日のイベント未達成
+            {
+                if(alumiPoint >= 15 && plaPoint >= 15 && paperPoint >= 15) //娯楽施設の素材アリ
+                {
+                    appealAmusement.SetActive(true);
+                }
+            }
+            
             //↑ここにアルゴリズムを
         }
     }
