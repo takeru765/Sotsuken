@@ -181,6 +181,10 @@ public class Tutorial_Script : MonoBehaviour
 
     [SerializeField] GameObject Button_Active; //文章のみのOP用ウィンドウ
 
+    [SerializeField] GameObject Tutorial_book;//チュートリアルで開くアルミ図鑑
+    [SerializeField] GameObject Tutorial_trophy;//チュートリアルで開く称号ページ
+    [SerializeField] GameObject Tutorial_button;
+
     int opSequence = 20; //オープニング・チュートリアルの進行度(本スクリプトは図鑑パートのデバッグ用に20からスタート)
 
     void ClickCheck() //クリック時に呼び出す。オープニングの進捗に応じて、画面クリックで進行するかを管理。制作中
@@ -227,38 +231,48 @@ public class Tutorial_Script : MonoBehaviour
             case 25:
                 opSequence = 26;
                 break;
-            /*case 31:
-                audioSource.PlayOneShot(openWindow); //効果音再生
-                opSequence = 32;
+
+            case 26:
+                opSequence = 27;
                 break;
-            case 32:
-                opSequence = 33;
+            case 27:
+                opSequence = 28;
                 break;
-            case 33:
+            case 28:
+                opSequence = 29;
                 break;
-            case 34:
-                audioSource.PlayOneShot(openWindow); //効果音再生
-                opSequence = 35;
-                break;
-            case 35:
-                audioSource.PlayOneShot(openWindow); //効果音再生
-                Save(save);
-                opSequence = 40;
-                break;
-            case 41:
-                break;
-            case 42:
-                Save(save);
-                opSequence = 50;
-                break;
-            case 50:
-                opSequence = 51;
-                break;
-            case 51:
-                opSequence = 52;
-                break;
-            default:
-                break;*/
+                /*case 31:
+                    audioSource.PlayOneShot(openWindow); //効果音再生
+                    opSequence = 32;
+                    break;
+                case 32:
+                    opSequence = 33;
+                    break;
+                case 33:
+                    break;
+                case 34:
+                    audioSource.PlayOneShot(openWindow); //効果音再生
+                    opSequence = 35;
+                    break;
+                case 35:
+                    audioSource.PlayOneShot(openWindow); //効果音再生
+                    Save(save);
+                    opSequence = 40;
+                    break;
+                case 41:
+                    break;
+                case 42:
+                    Save(save);
+                    opSequence = 50;
+                    break;
+                case 50:
+                    opSequence = 51;
+                    break;
+                case 51:
+                    opSequence = 52;
+                    break;
+                default:
+                    break;*/
         }
     }
 
@@ -304,157 +318,172 @@ public class Tutorial_Script : MonoBehaviour
                 break;*/
 
             case 20: //図鑑パートのチュートリアルを想定//ここば図鑑パートで
-                SetOPWindow0("ここはずかんパートです\n\nいままであつめたリサイクルマークを\n\nみてべんきょうすることができます");
+                SetOPWindow0("ここはずかんパートです\n\nいままであつめたリサイクルマークをみて\n\nべんきょうすることができます");
                 //Debug.Log("起動済み");
                 break;
 
             case 21:
-                SetOPWindow0("もしリサイクルマークのいみをわすれてしまったら、\n\nいつでもこのずかんをひらいて\n\nがんばっておぼえましょう");
+                SetOPWindow0("このずかんでリサイクルをおぼえて\n\nまちをきれいにしよう！");
                 break;
             case 22:
-                SetOPWindow0("ためしに、アルミかんのずかんをひらいてみましょう");
+                SetOPWindow0("ずかんのつかいかたをせつめいします\n\nためしに、アルミかんのページを\n\nひらいてみてみましょう");
                 break;
             case 23:
-                opWindow0.SetActive(false);
-                SetTutorial(80f, 260f, 1.0f, "アルミかんのマークをクリックすると、ずかんがひらきます\n\n");
-                PutArrow(-300f, 400f, -180f);
+                
+                Tutorial_button.SetActive(true);
+                SetOPWindow0( "アルミかんのマークをクリックすると\n\nずかんがひらきます");
+                PutArrow(-95f, 482f, -180f);
                 break;
 
             case 24:
-                //図鑑の穴埋め作業について説明
-                SetTutorial(22f, -198f, 1.0f, "ずかんのうえはマークのなまえと、\n\nマークにつかわれるゴミのしゅるいがかかれています");
+                arrow.SetActive(false);
+                opWindow0.SetActive(false);
+                Tutorial_button.SetActive(false);
+                Tutorial_book.SetActive(true);
+                SetTutorial(0f, -400f, 1.0f, "ずかんのうえはマークのなまえと、\n\nマークにつかわれるゴミの\n\nしゅるいについてかかれています");
                 break;
+          
             case 25:
-                SetTutorial(16f, 604f, 1.0f, "したにはずかんのないようがバラバラになったパズルがあります\n\nあてはめてずかんをかんせいさせてちしきをつけましょう");
+                Tutorial_book.SetActive(false);
+                tutorialWindow.SetActive(false);
+                PutArrow(143f, -564f, -360f);
+                SetOPWindow0("また、決められたリサイクルマークを\n\nあつめると、しょうごうをゲットできます\n\nこのボタンでしょうごうがひらかれます");
                 break;
             case 26:
-                SetOPWindow0("いじょうでずかんぱーとのせつめいをおわります");
-                break;
-
-            /*case 31: //建築パートの前振り
-                canAll(false);
-                tutorialWindow.SetActive(false);
+                Tutorial_trophy.SetActive(true);
                 arrow.SetActive(false);
-
-                SetOPWindow0("秘書「おめでとうございます！！」\n秘書「さっそくリサイクルできたようですね！」");
+                SetOPWindow0("しょうごうをあつめて、\n\nリサイクルマークはかせになろう！");
                 break;
-            case 32:
-                canAll(false);
-
-                SetOPWindow0("秘書「実は私もリサイクルできるゴミを\n見つけてきました。」\n秘書「その分のポイントも差し上げますね。」");
+            case 27:
+                Tutorial_trophy.SetActive(false);
+                PutArrow(-160f, -693f, -448f);
+                SetOPWindow0("ずかんパートのせつめいをおわります\n\nこのボタンをおして\n\nはってんパートにもどってください");
                 break;
-            case 33:
-                canAll(false);
 
-                alumiPoint += 15;
-                stealPoint += 15;
-                petPoint += 15;
-                plaPoint += 15;
-                paperPoint += 15;
-                allPoint += 75;
-                PointViewerChange(); //ポイント表示UIに反映
-                audioSource.PlayOneShot(inputEnter); //効果音再生
-                opSequence = 34;
-                break;
-            case 34:
-                canAll(false);
+                /*case 31: //建築パートの前振り
+                    canAll(false);
+                    tutorialWindow.SetActive(false);
+                    arrow.SetActive(false);
 
-                SetOPWindow0("各ポイントを15ずつ獲得した！");
+                    SetOPWindow0("秘書「おめでとうございます！！」\n秘書「さっそくリサイクルできたようですね！」");
+                    break;
+                case 32:
+                    canAll(false);
 
-                break;
-            case 35:
-                canAll(false);
+                    SetOPWindow0("秘書「実は私もリサイクルできるゴミを\n見つけてきました。」\n秘書「その分のポイントも差し上げますね。」");
+                    break;
+                case 33:
+                    canAll(false);
 
-                SetOPWindow0("秘書「次は、獲得したポイントを使って、\n町を発展させてみましょう！」");
-                break;
-            case 40: //建築パートのチュートリアル
-                canAll(false);
-                canBuild = true;
-                opWindow0.SetActive(false);
+                    alumiPoint += 15;
+                    stealPoint += 15;
+                    petPoint += 15;
+                    plaPoint += 15;
+                    paperPoint += 15;
+                    allPoint += 75;
+                    PointViewerChange(); //ポイント表示UIに反映
+                    audioSource.PlayOneShot(inputEnter); //効果音再生
+                    opSequence = 34;
+                    break;
+                case 34:
+                    canAll(false);
 
-                if (lv[0] == 0) //(デバッグ用)既に建築済みの場合はチュートリアルを終了する。
-                {
-                    SetTutorial(-200f, 0f, 0.5f, "土地をタップすると、建築画面に進むよ。");
-                    PutArrow(-200f, 180f, 90f);
-                }
-                else
-                {
-                    opSequence = 42;
-                }
-                break;
-            case 41:
-                canAll(false);
+                    SetOPWindow0("各ポイントを15ずつ獲得した！");
 
-                SetTutorial(-100f, 750f, 0.7f, "「リサイクル場」か「娯楽施設」を\n建てられるよ。\n好きな方を選んで、\n「けってい」ボタンを押そう！");
-                PutArrow(-100f, 510f);
-                break;
-            case 42:
-                canAll(false);
-                tutorialWindow.SetActive(false);
-                arrow.SetActive(false);
+                    break;
+                case 35:
+                    canAll(false);
 
-                SetOPWindow0("秘書「うまく建物を作れましたね！\n建物を作ると、より多くのポイントを獲得できるようになります。」");
-                break;
-            case 50: //イベント
-                canAll(false);
+                    SetOPWindow0("秘書「次は、獲得したポイントを使って、\n町を発展させてみましょう！」");
+                    break;
+                case 40: //建築パートのチュートリアル
+                    canAll(false);
+                    canBuild = true;
+                    opWindow0.SetActive(false);
 
-                SetOPWindow0("秘書「他にも、この町でゴミが出ることもあります。」");
-                break;
-            case 51:
-                canAll(false);
-                canEvent = true;
-                opWindow0.SetActive(false);
+                    if (lv[0] == 0) //(デバッグ用)既に建築済みの場合はチュートリアルを終了する。
+                    {
+                        SetTutorial(-200f, 0f, 0.5f, "土地をタップすると、建築画面に進むよ。");
+                        PutArrow(-200f, 180f, 90f);
+                    }
+                    else
+                    {
+                        opSequence = 42;
+                    }
+                    break;
+                case 41:
+                    canAll(false);
 
-                if (alumiBook > 0) //入力済みのマークに応じて、イベント内容を決定
-                {
-                    eventID = 1;
-                }
-                else if (stealBook > 0)
-                {
-                    eventID = 2;
-                }
-                else if (petBook > 0)
-                {
-                    eventID = 3;
-                }
-                else if (plaBook > 0)
-                {
-                    eventID = 4;
-                }
-                else if (paperBook > 0)
-                {
-                    eventID = 5;
-                }
-                OpenEvent();
+                    SetTutorial(-100f, 750f, 0.7f, "「リサイクル場」か「娯楽施設」を\n建てられるよ。\n好きな方を選んで、\n「けってい」ボタンを押そう！");
+                    PutArrow(-100f, 510f);
+                    break;
+                case 42:
+                    canAll(false);
+                    tutorialWindow.SetActive(false);
+                    arrow.SetActive(false);
 
-                SetTutorial(0f, 700f, 0.5f, "このように、ゴミにあったリサイクル方法を答える、\nクイズイベントが発生することがあります。");
-                PutArrow(0f, 500f, -45f);
-                break;
-            case 52:
-                canAll(false);
+                    SetOPWindow0("秘書「うまく建物を作れましたね！\n建物を作ると、より多くのポイントを獲得できるようになります。」");
+                    break;
+                case 50: //イベント
+                    canAll(false);
 
-                SetTutorial(200f, 700f, 0.5f, "答えが分からないときは、\nリサイクル図鑑を見てみよう！");
-                PutArrow(400f, 500f, 0f);
-                break;
-            case 53:
-                canAll(false);
-                canBook = true;
+                    SetOPWindow0("秘書「他にも、この町でゴミが出ることもあります。」");
+                    break;
+                case 51:
+                    canAll(false);
+                    canEvent = true;
+                    opWindow0.SetActive(false);
 
-                SetTutorial(-150f, -500f, 0.5f, "答えが分からないときは、\nリサイクル図鑑を見てみよう！");
-                PutArrow(-300f, -700f, -90f);
-                break;
-            case 60: //イベント→図鑑のチュートリアルを想定
-                break;
-            case 70: //イベントパート、回答編
-                break;
-            default:
-                //ウィンドウ等を非表示に
-                opWindow0.SetActive(false);
-                tutorialWindow.SetActive(false);
-                arrow.SetActive(false);
+                    if (alumiBook > 0) //入力済みのマークに応じて、イベント内容を決定
+                    {
+                        eventID = 1;
+                    }
+                    else if (stealBook > 0)
+                    {
+                        eventID = 2;
+                    }
+                    else if (petBook > 0)
+                    {
+                        eventID = 3;
+                    }
+                    else if (plaBook > 0)
+                    {
+                        eventID = 4;
+                    }
+                    else if (paperBook > 0)
+                    {
+                        eventID = 5;
+                    }
+                    OpenEvent();
 
-                canAll(true);
-                break;*/
+                    SetTutorial(0f, 700f, 0.5f, "このように、ゴミにあったリサイクル方法を答える、\nクイズイベントが発生することがあります。");
+                    PutArrow(0f, 500f, -45f);
+                    break;
+                case 52:
+                    canAll(false);
+
+                    SetTutorial(200f, 700f, 0.5f, "答えが分からないときは、\nリサイクル図鑑を見てみよう！");
+                    PutArrow(400f, 500f, 0f);
+                    break;
+                case 53:
+                    canAll(false);
+                    canBook = true;
+
+                    SetTutorial(-150f, -500f, 0.5f, "答えが分からないときは、\nリサイクル図鑑を見てみよう！");
+                    PutArrow(-300f, -700f, -90f);
+                    break;
+                case 60: //イベント→図鑑のチュートリアルを想定
+                    break;
+                case 70: //イベントパート、回答編
+                    break;
+                default:
+                    //ウィンドウ等を非表示に
+                    opWindow0.SetActive(false);
+                    tutorialWindow.SetActive(false);
+                    arrow.SetActive(false);
+
+                    canAll(true);
+                    break;*/
         }
     }
 
