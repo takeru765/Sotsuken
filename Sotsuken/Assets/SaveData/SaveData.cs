@@ -5,10 +5,16 @@ using UnityEngine;
 [System.Serializable]
 public class SaveData
 {
+    //初回起動フラグ
+    public bool first = true;
+
     //日付
     public int year = 10000;
     public int month = 10000;
     public int day = 10000;
+
+    //プレイ日数
+    public int playLong = 0;
 
     //各ポイント
     public int alumiPoint;

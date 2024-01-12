@@ -9,6 +9,9 @@ using System.IO;
 
 public class GameManager : MonoBehaviour
 {
+    //初回起動フラグ
+    bool first = true;
+
     //現在日時を保存
     DateTime time;
 
@@ -16,7 +19,11 @@ public class GameManager : MonoBehaviour
     int day = 0;
     int month = 0;
     int year = 0;
-    void CheckDate()
+
+    //プレイ日数
+    int playLong = 0;
+
+    void CheckDate() //日付変更チェック&処理
     {
         if(time.Year > year || time.Month > month || time.Day > day)
         {
@@ -35,13 +42,22 @@ public class GameManager : MonoBehaviour
             month = time.Month;
             day = time.Day;
 
+            //プレイ日数を加算
+            playLong += 1;
+
+            if(playLong >= 1) //一定期間プレイすると、アンケート回答を促す
+            {
+                OpenEnqueteWindow();
+            }
+
             //イベントボーナスをリセット
             eventBonus = 1.0f;
 
             //イベント内容をランダムで決定
             eventID = UnityEngine.Random.Range(1, 6); //Randomは、上限の値は含まないことに注意
 
-            OpenEvent();
+            eventAppeal.SetActive(true);
+            missionAppeal.SetActive(true);
         }
     }
 
@@ -54,9 +70,13 @@ public class GameManager : MonoBehaviour
     void Save(SaveData data)
     {
         //saveへの情報書き込み
+        save.first = first;
+
         save.year = year;
         save.month = month;
         save.day = day;
+
+        save.playLong = playLong;
 
         save.alumiPoint = alumiPoint;
         save.stealPoint = stealPoint;
@@ -119,9 +139,13 @@ public class GameManager : MonoBehaviour
     void Load2()
     {
         //各種数値の反映
+        first = save.first;
+
         year = save.year;
         month = save.month;
         day = save.day;
+
+        playLong = save.playLong;
 
         alumiPoint = save.alumiPoint;
         stealPoint = save.stealPoint;
@@ -345,6 +369,9 @@ public class GameManager : MonoBehaviour
             BuildWindow0.SetActive(true);
             open = true;
 
+            //オススメの建築物を強調
+            BuildRecommendAI();
+
             audioSource.PlayOneShot(openWindow); //効果音再生
         }
     }
@@ -390,6 +417,10 @@ public class GameManager : MonoBehaviour
             {
                 build1Picture.sprite = amusementImage;
             }
+            else if(place[i] == 3)
+            {
+                build1Picture.sprite = monumentImage;
+            }
             //建設LVに合わせた説明文を表示
             switch(lv[i])
             {
@@ -402,6 +433,10 @@ public class GameManager : MonoBehaviour
                     {
                         buildIntro.text = "LV:1→2\nコスト:各30pt\nボーナス:+20%→+40%";
                     }
+                    else if(place[i] == 3)
+                    {
+                        buildIntro.text = "LV:1→2\nコスト:各30pt\n美化ポイント＋30";
+                    }
                     break;
                 case 2:
                     if (place[i] == 1)
@@ -412,6 +447,10 @@ public class GameManager : MonoBehaviour
                     {
                         buildIntro.text = "LV:2→3\nコスト:各45pt\nボーナス:+40%→+60%";
                     }
+                    else if (place[i] == 3)
+                    {
+                        buildIntro.text = "LV:2→3\nコスト:各45pt\n美化ポイント＋30";
+                    }
                     break;
                 case 3:
                     if (place[i] == 1)
@@ -421,6 +460,10 @@ public class GameManager : MonoBehaviour
                     else if (place[i] == 2)
                     {
                         buildIntro.text = "LV:3→4\nコスト:各60pt\nボーナス:+60%→+80%";
+                    }
+                    else if (place[i] == 3)
+                    {
+                        buildIntro.text = "LV:3→4\nコスト:各60pt\n美化ポイント＋30";
                     }
                     break;
                 case 4:
@@ -615,6 +658,9 @@ public class GameManager : MonoBehaviour
             audioSource.PlayOneShot(closeWindow); //効果音再生
         }
 
+        answered = true;
+        eventAppeal.SetActive(false);
+
         //ミッションの成功・失敗を判定
         CheckMission();
         CheckDate();
@@ -625,11 +671,6 @@ public class GameManager : MonoBehaviour
     {
         EventWindow2.SetActive(false);
         open = false;
-
-        if(opSequence == 52)
-        {
-            opSequence = 53;
-        }
 
         audioSource.PlayOneShot(closeWindow); //効果音再生
 
@@ -650,6 +691,7 @@ public class GameManager : MonoBehaviour
     int allPoint = 0; //累計ポイント
     int cleanLV = 0; //美化レベル(累計ポイントが一定ごとに上昇)
     int[] borderPoint = {150, 100000};
+    [SerializeField] GameObject backImage_CleanLV1;
 
     //当日獲得したポイント(ミッション用)
     int todayAlumi = 0; //アルミ缶
@@ -676,6 +718,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] AudioClip enter;
     [SerializeField] AudioClip cleanLvUp;
     [SerializeField] AudioClip missionSuccess;
+    [SerializeField] AudioClip quizMistake;
 
     //-------------------------------------------------------------------------
 
@@ -699,6 +742,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Sprite blankImage;
     [SerializeField] Sprite recycleImage;
     [SerializeField] Sprite amusementImage;
+    [SerializeField] Sprite monumentImage;
 
     //建築ボタンへの画像の反映(起動時用を想定)
     void CheckBuildImage()
@@ -783,6 +827,32 @@ public class GameManager : MonoBehaviour
                         break;
                 }
             }
+            else if (place[i] == 3)
+            {
+                switch (i)
+                {
+                    case 0:
+                        buildImage0.sprite = monumentImage;
+                        break;
+                    case 1:
+                        buildImage1.sprite = monumentImage;
+                        break;
+                    case 2:
+                        buildImage2.sprite = monumentImage;
+                        break;
+                    case 3:
+                        buildImage3.sprite = monumentImage;
+                        break;
+                    case 4:
+                        buildImage4.sprite = monumentImage;
+                        break;
+                    case 5:
+                        buildImage5.sprite = monumentImage;
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 
@@ -802,13 +872,19 @@ public class GameManager : MonoBehaviour
             switch(selectedBuilding) //建築に必要なポイントがあるか確認
             {
                 case 1:
-                    if(alumiPoint >= 15 && stealPoint >= 15 && petPoint >= 15 && plaPoint >= 15 && paperPoint >= 15)
+                    if(alumiPoint >= 15 && petPoint >= 15 && plaPoint >= 15)
                     {
                         enoughBuildPoint = true;
                     }
                     break;
                 case 2:
-                    if (alumiPoint >= 15 && stealPoint >= 15 && petPoint >= 15 && plaPoint >= 15 && paperPoint >= 15)
+                    if (alumiPoint >= 15 && plaPoint >= 15 && paperPoint >= 15)
+                    {
+                        enoughBuildPoint = true;
+                    }
+                    break;
+                case 3:
+                    if(stealPoint >= 15 && petPoint >= 15 && plaPoint >= 15 && paperPoint >= 15)
                     {
                         enoughBuildPoint = true;
                     }
@@ -829,19 +905,24 @@ public class GameManager : MonoBehaviour
                         {
                             buildImage0.sprite = recycleImage;
                             alumiPoint -= 15;
-                            stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
-                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage0.sprite = amusementImage;
                             alumiPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
+                        }
+                        else if (selectedBuilding == 3)
+                        {
+                            buildImage0.sprite = monumentImage;
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
                             paperPoint -= 15;
+                            allPoint += 30;
                         }
                         break;
                     case 1:
@@ -849,19 +930,24 @@ public class GameManager : MonoBehaviour
                         {
                             buildImage1.sprite = recycleImage;
                             alumiPoint -= 15;
-                            stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
-                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage1.sprite = amusementImage;
                             alumiPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
+                        }
+                        else if (selectedBuilding == 3)
+                        {
+                            buildImage1.sprite = monumentImage;
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
                             paperPoint -= 15;
+                            allPoint += 30;
                         }
                         break;
                     case 2:
@@ -869,19 +955,24 @@ public class GameManager : MonoBehaviour
                         {
                             buildImage2.sprite = recycleImage;
                             alumiPoint -= 15;
-                            stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
-                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage2.sprite = amusementImage;
                             alumiPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
+                        }
+                        else if (selectedBuilding == 3)
+                        {
+                            buildImage2.sprite = monumentImage;
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
                             paperPoint -= 15;
+                            allPoint += 30;
                         }
                         break;
                     case 3:
@@ -889,19 +980,24 @@ public class GameManager : MonoBehaviour
                         {
                             buildImage3.sprite = recycleImage;
                             alumiPoint -= 15;
-                            stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
-                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage3.sprite = amusementImage;
                             alumiPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
+                        }
+                        else if (selectedBuilding == 3)
+                        {
+                            buildImage3.sprite = monumentImage;
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
                             paperPoint -= 15;
+                            allPoint += 30;
                         }
                         break;
                     case 4:
@@ -909,19 +1005,24 @@ public class GameManager : MonoBehaviour
                         {
                             buildImage4.sprite = recycleImage;
                             alumiPoint -= 15;
-                            stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
-                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage4.sprite = amusementImage;
                             alumiPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
+                        }
+                        else if (selectedBuilding == 3)
+                        {
+                            buildImage4.sprite = monumentImage;
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
                             paperPoint -= 15;
+                            allPoint += 30;
                         }
                         break;
                     case 5:
@@ -929,19 +1030,24 @@ public class GameManager : MonoBehaviour
                         {
                             buildImage5.sprite = recycleImage;
                             alumiPoint -= 15;
-                            stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
-                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage5.sprite = amusementImage;
                             alumiPoint -= 15;
+                            plaPoint -= 15;
+                            paperPoint -= 15;
+                        }
+                        else if (selectedBuilding == 3)
+                        {
+                            buildImage5.sprite = monumentImage;
                             stealPoint -= 15;
                             petPoint -= 15;
                             plaPoint -= 15;
                             paperPoint -= 15;
+                            allPoint += 30;
                         }
                         break;
                     default:
@@ -970,65 +1076,83 @@ public class GameManager : MonoBehaviour
         switch(lv[selectedPlace])
         {
             case 1:
-                if (place[selectedPlace] == 1 && alumiPoint >= 30 && stealPoint >= 30 && petPoint >= 30 && plaPoint >= 30 && paperPoint >= 30)
+                if (place[selectedPlace] == 1 && alumiPoint >= 30 && petPoint >= 30 && plaPoint >= 30)
                 {
                     lv[selectedPlace] += 1;
                     alumiPoint -= 30;
-                    stealPoint -= 30;
                     petPoint -= 30;
+                    plaPoint -= 30;
+                }
+                else if (place[selectedPlace] == 2 && alumiPoint >= 30 && plaPoint >= 30 && paperPoint >= 30)
+                {
+                    lv[selectedPlace] += 1;
+                    alumiPoint -= 30;
                     plaPoint -= 30;
                     paperPoint -= 30;
                 }
-                else if (place[selectedPlace] == 2 && alumiPoint >= 30 && stealPoint >= 30 && petPoint >= 30 && plaPoint >= 30 && paperPoint >= 30)
+                else if(place[selectedPlace] == 3 && stealPoint >= 30 && petPoint >= 30 && plaPoint >= 30 && paperPoint >= 30)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 30;
                     stealPoint -= 30;
                     petPoint -= 30;
                     plaPoint -= 30;
                     paperPoint -= 30;
+
+                    allPoint += 30;
                 }
                 CloseBuild1();
                 break;
             case 2:
-                if (place[selectedPlace] == 1 && alumiPoint >= 45 && stealPoint >= 45 && petPoint >= 45 && plaPoint >= 45 && paperPoint >= 45)
+                if (place[selectedPlace] == 1 && alumiPoint >= 45 && petPoint >= 45 && plaPoint >= 45)
                 {
                     lv[selectedPlace] += 1;
                     alumiPoint -= 45;
-                    stealPoint -= 45;
                     petPoint -= 45;
+                    plaPoint -= 45;
+                }
+                else if (place[selectedPlace] == 2 && alumiPoint >= 45 && plaPoint >= 45 && paperPoint >= 45)
+                {
+                    lv[selectedPlace] += 1;
+                    alumiPoint -= 45;
                     plaPoint -= 45;
                     paperPoint -= 45;
                 }
-                else if (place[selectedPlace] == 2 && alumiPoint >= 45 && stealPoint >= 45 && petPoint >= 45 && plaPoint >= 45 && paperPoint >= 45)
+                else if (place[selectedPlace] == 3 && stealPoint >= 45 && petPoint >= 45 && plaPoint >= 45 && paperPoint >= 45)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 45;
                     stealPoint -= 45;
                     petPoint -= 45;
                     plaPoint -= 45;
                     paperPoint -= 45;
+
+                    allPoint += 30;
                 }
                 CloseBuild1();
                 break;
             case 3:
-                if (place[selectedPlace] == 1 && alumiPoint >= 60 && stealPoint >= 60 && petPoint >= 60 && plaPoint >= 60 && paperPoint >= 60)
+                if (place[selectedPlace] == 1 && alumiPoint >= 60 && petPoint >= 60 && plaPoint >= 60)
                 {
                     lv[selectedPlace] += 1;
                     alumiPoint -= 60;
-                    stealPoint -= 60;
                     petPoint -= 60;
+                    plaPoint -= 60;
+                }
+                else if (place[selectedPlace] == 2 && alumiPoint >= 60 && plaPoint >= 60 && paperPoint >= 60)
+                {
+                    lv[selectedPlace] += 1;
+                    alumiPoint -= 60;
                     plaPoint -= 60;
                     paperPoint -= 60;
                 }
-                else if (place[selectedPlace] == 2 && alumiPoint >= 60 && stealPoint >= 60 && petPoint >= 60 && plaPoint >= 60 && paperPoint >= 60)
+                else if (place[selectedPlace] == 3 && stealPoint >= 60 && petPoint >= 60 && plaPoint >= 60 && paperPoint >= 60)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 60;
                     stealPoint -= 60;
                     petPoint -= 60;
                     plaPoint -= 60;
                     paperPoint -= 60;
+
+                    allPoint += 30;
                 }
                 CloseBuild1();
                 break;
@@ -1351,11 +1475,11 @@ public class GameManager : MonoBehaviour
 
         if (plaBonus == true)//プラスチック
         {
-            tmpPla = (int)(tmpPla * 5 * inputRate * eventRate);
+            tmpPla = (int)(tmpPla * 15 * inputRate * eventRate);
         }
         else
         {
-            tmpPla = (int)(tmpPla * 5 * inputRate);
+            tmpPla = (int)(tmpPla * 15 * inputRate);
         }
 
         if (paperBonus == true)//紙
@@ -1482,14 +1606,15 @@ public class GameManager : MonoBehaviour
 
             //正解済みフラグをON
             answered = true;
+            eventAppeal.SetActive(false);
 
-            //audioSource.PlayOneShot(); //正解音を流す
+            audioSource.PlayOneShot(missionSuccess); //正解音を流す
             Save(save);
             CloseEvent2();
         }
         else if(answered == false && canEvent == true)
         {
-            //audioSource.PlayOneShot(); //不正解音を流す
+            audioSource.PlayOneShot(quizMistake); //不正解音を流す
         }
     }
 
@@ -1608,6 +1733,7 @@ public class GameManager : MonoBehaviour
             audioSource.PlayOneShot(enter); //効果音再生
         }
         setMission = true;
+        missionAppeal.SetActive(false);
 
         //今日の日付を保存
         setYear = time.Year;
@@ -1787,19 +1913,19 @@ public class GameManager : MonoBehaviour
         switch (mark)
         {
             case 1:
-                MSuccessText.text = "ミッション失敗…\nアルミ缶ポイントを" + reward + "獲得した。";
+                MFailedText.text = "ミッション失敗…\nアルミ缶ポイントを" + reward + "獲得した。";
                 break;
             case 2:
-                MSuccessText.text = "ミッション失敗…\nスチール缶ポイントを" + reward + "獲得した。";
+                MFailedText.text = "ミッション失敗…\nスチール缶ポイントを" + reward + "獲得した。";
                 break;
             case 3:
-                MSuccessText.text = "ミッション失敗…\nペットボトルポイントを" + reward + "獲得した。";
+                MFailedText.text = "ミッション失敗…\nペットボトルポイントを" + reward + "獲得した。";
                 break;
             case 4:
-                MSuccessText.text = "ミッション失敗…\nプラスチックポイントを" + reward + "獲得した。";
+                MFailedText.text = "ミッション失敗…\nプラスチックポイントを" + reward + "獲得した。";
                 break;
             case 5:
-                MSuccessText.text = "ミッション失敗…\n紙ポイントを" + reward + "獲得した。";
+                MFailedText.text = "ミッション失敗…\n紙ポイントを" + reward + "獲得した。";
                 break;
             default:
                 break;
@@ -1887,15 +2013,15 @@ public class GameManager : MonoBehaviour
                 break;
             case 52:
                 tutorialEvent = true;
-                eventAppeal.SetActive(false);
                 Save(save);
                 opSequence = 999;
                 break;
             case 80:
                 opSequence = 81;
                 break;
-            case 90:
+            case 90: //累計ポイントイベント
                 cleanLV = 1;
+                backImage_CleanLV1.SetActive(true);
                 AllViewerChange(allPoint);
                 opSequence = 999;
                 Save(save);
@@ -1910,22 +2036,22 @@ public class GameManager : MonoBehaviour
         switch(opSequence)
         {
             case 0: //オープニング
-                canAll(false); //全ボタンの開閉を禁止
+                CanAll(false); //全ボタンの開閉を禁止
 
                 SetOPWindow0("プレイありがとうございます。\n\nあなたはこのリサイクルシティの市長です。\n\n現実で出たゴミを「リサイクル」しながら、\nこの町を発展させていくのが\nこのゲームの目的です。");
                 break;
             case 1:
-                canAll(false);
+                CanAll(false);
 
                 SetOPWindow0("秘書「市長、就任おめでとうございます！」\n秘書「ゴミを資源として再利用する「リサイクル」。リサイクルを通じて、この町をキレイにしていきましょう！」");
                 break;
             case 2:
-                canAll(false);
+                CanAll(false);
 
                 SetOPWindow0("秘書「まずは、あなたの身の回りにある、\n「リサイクルマーク」のついたゴミを探してみてください。」");
                 break;
             case 10: //マーク入力チュートリアル
-                canAll(false);
+                CanAll(false);
                 canInput = true; //入力ボタンだけ使用を許可
                 opWindow0.SetActive(false);
 
@@ -1933,26 +2059,26 @@ public class GameManager : MonoBehaviour
                 PutArrow(350f, -550f);
                 break;
             case 11:
-                canAll(false);
+                CanAll(false);
 
                 SetTutorial(-100f, 750f, 0.7f, "見つけたマークの個数を入力して、\n「けってい」ボタンを押そう。");
                 PutArrow(-100f, 510f);
                 break;
             case 12:
-                canAll(false);
+                CanAll(false);
 
                 SetTutorial(0f, 200f, 1f, "マークを入力すると、\nリサイクルポイントを獲得できるよ。");
                 PutArrow(0f, 550f, 135f);
                 break;
             case 13:
-                canAll(false);
+                CanAll(false);
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
 
                 SetOPWindow0("見つけたマークは、リサイクル図鑑に登録されるよ！");
                 break;
             case 14:
-                canAll(false);
+                CanAll(false);
                 canBook = true;
                 opWindow0.SetActive(false);
 
@@ -1962,19 +2088,19 @@ public class GameManager : MonoBehaviour
             case 20: //図鑑パートのチュートリアルを想定
                 break;
             case 31: //建築パートの前振り
-                canAll(false);
+                CanAll(false);
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
 
                 SetOPWindow0("秘書「おめでとうございます！！」\n秘書「さっそくリサイクルできたようですね！」");
                 break;
             case 32:
-                canAll(false);
+                CanAll(false);
 
                 SetOPWindow0("秘書「実は私もリサイクルできるゴミを\n見つけてきました。」\n秘書「その分のポイントも差し上げますね。」");
                 break;
             case 33:
-                canAll(false);
+                CanAll(false);
 
                 alumiPoint += 15;
                 stealPoint += 15;
@@ -1987,18 +2113,18 @@ public class GameManager : MonoBehaviour
                 opSequence = 34;
                 break;
             case 34:
-                canAll(false);
+                CanAll(false);
 
                 SetOPWindow0("各ポイントを15ずつ獲得した！");
 
                 break;
             case 35:
-                canAll(false);
+                CanAll(false);
 
                 SetOPWindow0("秘書「次は、獲得したポイントを使って、\n町を発展させてみましょう！」");
                 break;
             case 40: //建築パートのチュートリアル
-                canAll(false);
+                CanAll(false);
                 canBuild = true;
                 opWindow0.SetActive(false);
 
@@ -2013,25 +2139,25 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case 41:
-                canAll(false);
+                CanAll(false);
 
                 SetTutorial(-100f, 750f, 0.7f, "「リサイクル場」か「娯楽施設」を\n建てられるよ。\n好きな方を選んで、\n「けってい」ボタンを押そう！");
                 PutArrow(-100f, 510f);
                 break;
             case 42:
-                canAll(false);
+                CanAll(false);
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
 
                 SetOPWindow0("秘書「うまく建物を作れましたね！\n建物を作ると、より多くのポイントを獲得できるようになります。」");
                 break;
             case 50: //イベント
-                canAll(false);
+                CanAll(false);
 
                 SetOPWindow0("秘書「他にも、この町でゴミが出ることもあります。」");
                 break;
             case 51:
-                canAll(false);
+                CanAll(false);
                 canEvent = true;
                 opWindow0.SetActive(false);
 
@@ -2061,13 +2187,13 @@ public class GameManager : MonoBehaviour
                 PutArrow(0f, 500f, -45f);
                 break;
             case 52:
-                canAll(false);
+                CanAll(false);
 
                 SetTutorial(0f, 700f, 0.5f, "正解するとリサイクルポイントを獲得できるよ。\n答えが分からないときは、\nリサイクル図鑑を見てみよう！");
                 //PutArrow(400f, 500f, 0f);
                 break;
             case 53:
-                canAll(false);
+                CanAll(false);
                 canBook = true;
 
                 SetTutorial(-150f, -500f, 0.5f, "答えが分からないときは、\nリサイクル図鑑を見てみよう！");
@@ -2078,33 +2204,33 @@ public class GameManager : MonoBehaviour
             case 70: //イベントパート、回答編
                 break;
             case 80: //ミッションパート
-                canAll(false);
+                CanAll(false);
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
 
                 SetOPWindow0("「ミッション」では、その日のマーク集めの\n目標を決めることができるよ。\n\n目標を達成すれば、追加でポイントゲット！！");
                 break;
             case 81:
-                canAll(false);
+                CanAll(false);
                 opWindow0.SetActive(false);
 
                 SetTutorial(0f, 650f, 0.5f, "どのマークを集めるか選んで……");
                 PutArrow(0f, 450f, 0f);
                 break;
             case 82:
-                canAll(false);
+                CanAll(false);
 
                 SetTutorial(0f, 400f, 0.5f, "目標の個数を決めてね。\n(目標が多いほど、クリア報酬も多くなるよ！)");
                 PutArrow(0f, 200f, 0f);
                 break;
             case 83:
-                canAll(false);
+                CanAll(false);
 
                 SetTutorial(0f, 200f, 0.5f, "最後に「けってい」を押してね。");
                 PutArrow(-100f, 000f, 0f);
                 break;
             case 90: //累計ポイントイベント
-                canAll(false);
+                CanAll(false);
 
                 SetOPWindow0("美化レベルがアップ！！！\n\n少しずつ、リサイクルが広まってきてるようです。\nこれからもこの調子で頑張りましょう！！");
                 break;
@@ -2121,7 +2247,7 @@ public class GameManager : MonoBehaviour
                     opSequence = 90;
                 }
 
-                canAll(true);
+                CanAll(true);
                 break;
         }
     }
@@ -2149,7 +2275,7 @@ public class GameManager : MonoBehaviour
     bool canEvent = true;
     bool canBook = true;
 
-    void canAll(bool i) //↑のフラグを一括変更
+    void CanAll(bool i) //↑のフラグを一括変更
     {
         canInput = i;
         canBuild = i;
@@ -2194,6 +2320,75 @@ public class GameManager : MonoBehaviour
     }
 
     //-------------------------------------------------------------------------
+    //アンケート誘導ウィンドウ
+    [SerializeField] GameObject enqueteWindow;
+
+    //アンケートへの遷移
+    public void MoveEnquete()
+    {
+        Application.OpenURL("https://forms.office.com/r/MZPPPFMyAi"); //アンケートへのリンクに変更。要動作確認。
+    }
+
+    void OpenEnqueteWindow()
+    {
+        enqueteWindow.SetActive(true);
+    }
+
+    public void CloseEnqueteWindow()
+    {
+        enqueteWindow.SetActive(false);
+    }
+
+    //-------------------------------------------------------------------------
+    //(起動時用の)累計ポイントに応じた背景の変更
+    void SetBackImage()
+    {
+        if(cleanLV >= 1)
+        {
+            backImage_CleanLV1.SetActive(true);
+        }
+    }
+
+    //-------------------------------------------------------------------------
+    //建築オススメAI関連
+    [SerializeField] GameObject appealFactory;
+    [SerializeField] GameObject appealAmusement;
+    [SerializeField] GameObject appealMonument;
+
+    void BuildRecommendAI()
+    {
+        //オススメマークの初期化(非表示)
+        appealFactory.SetActive(false);
+        appealAmusement.SetActive(false);
+        appealMonument.SetActive(false);
+
+        if(playLong / 2 == 0) //プレイ日数が偶数の時のみAIをON。
+        {
+            //↓ここにアルゴリズムを
+            if(alumiPoint >= 15 && petPoint >= 15 && plaPoint >= 15) //リサイクル施設の素材アリ
+            {
+                appealFactory.SetActive(true);
+            }
+            else if(answered == true) //本日のイベント達成済み
+            {
+                if(stealPoint >= 15 && petPoint >= 15 && plaPoint >= 15 && paperPoint >= 15) //モニュメントの素材アリ
+                {
+                    appealMonument.SetActive(true);
+                }
+            }
+            else //本日のイベント未達成
+            {
+                if(alumiPoint >= 15 && plaPoint >= 15 && paperPoint >= 15) //娯楽施設の素材アリ
+                {
+                    appealAmusement.SetActive(true);
+                }
+            }
+            
+            //↑ここにアルゴリズムを
+        }
+    }
+
+    //-------------------------------------------------------------------------
 
     //現状では、起動時のセーブデータ読み込みにのみ使用
     private void Awake()
@@ -2211,31 +2406,43 @@ public class GameManager : MonoBehaviour
         save = Load1(filePath);
         //saveの内容を各変数に反映
         Load2();
-
-        if(tutorialEvent == true)
-        {
-            eventAppeal.SetActive(false);
-        }
-        if(tutorialMission == true)
-        {
-            missionAppeal.SetActive(false);
-        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        //日付を保存
-        time = DateTime.Now;
+        //累計ポイントに応じて背景を変更
+        SetBackImage();
 
-        day = time.Day;
-        month = time.Month;
-        year = time.Year;
+        //初回のみ日付を保存
+        time = DateTime.Now;
+        if(first == true)
+        {
+            day = time.Day;
+            month = time.Month;
+            year = time.Year;
+
+            first = false;
+            Save(save);
+        }
 
         //AudioSourceを取得
         audioSource = GetComponent<AudioSource>();
 
-        Debug.Log(year + "/" + month + "/" + day);
+        //イベント・ミッションのチュートリアル未達の場合、それぞれに強調マークを表示
+        if (answered == true)
+        {
+            eventAppeal.SetActive(false);
+        }
+        if (setMission == true)
+        {
+            missionAppeal.SetActive(false);
+        }
+
+        //日を跨いだか確認
+        CheckDate();
+        //ミッション判定
+        CheckMission();
     }
 
     // Update is called once per frame
