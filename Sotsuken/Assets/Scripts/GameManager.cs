@@ -718,6 +718,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] AudioClip enter;
     [SerializeField] AudioClip cleanLvUp;
     [SerializeField] AudioClip missionSuccess;
+    [SerializeField] AudioClip quizMistake;
 
     //-------------------------------------------------------------------------
 
@@ -1613,7 +1614,7 @@ public class GameManager : MonoBehaviour
         }
         else if(answered == false && canEvent == true)
         {
-            //audioSource.PlayOneShot(); //•s³‰ğ‰¹‚ğ—¬‚·
+            audioSource.PlayOneShot(quizMistake); //•s³‰ğ‰¹‚ğ—¬‚·
         }
     }
 
