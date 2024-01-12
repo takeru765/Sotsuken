@@ -369,6 +369,9 @@ public class GameManager : MonoBehaviour
             BuildWindow0.SetActive(true);
             open = true;
 
+            //オススメの建築物を強調
+            BuildRecommendAI();
+
             audioSource.PlayOneShot(openWindow); //効果音再生
         }
     }
@@ -2032,22 +2035,22 @@ public class GameManager : MonoBehaviour
         switch(opSequence)
         {
             case 0: //オープニング
-                canAll(false); //全ボタンの開閉を禁止
+                CanAll(false); //全ボタンの開閉を禁止
 
                 SetOPWindow0("プレイありがとうございます。\n\nあなたはこのリサイクルシティの市長です。\n\n現実で出たゴミを「リサイクル」しながら、\nこの町を発展させていくのが\nこのゲームの目的です。");
                 break;
             case 1:
-                canAll(false);
+                CanAll(false);
 
                 SetOPWindow0("秘書「市長、就任おめでとうございます！」\n秘書「ゴミを資源として再利用する「リサイクル」。リサイクルを通じて、この町をキレイにしていきましょう！」");
                 break;
             case 2:
-                canAll(false);
+                CanAll(false);
 
                 SetOPWindow0("秘書「まずは、あなたの身の回りにある、\n「リサイクルマーク」のついたゴミを探してみてください。」");
                 break;
             case 10: //マーク入力チュートリアル
-                canAll(false);
+                CanAll(false);
                 canInput = true; //入力ボタンだけ使用を許可
                 opWindow0.SetActive(false);
 
@@ -2055,26 +2058,26 @@ public class GameManager : MonoBehaviour
                 PutArrow(350f, -550f);
                 break;
             case 11:
-                canAll(false);
+                CanAll(false);
 
                 SetTutorial(-100f, 750f, 0.7f, "見つけたマークの個数を入力して、\n「けってい」ボタンを押そう。");
                 PutArrow(-100f, 510f);
                 break;
             case 12:
-                canAll(false);
+                CanAll(false);
 
                 SetTutorial(0f, 200f, 1f, "マークを入力すると、\nリサイクルポイントを獲得できるよ。");
                 PutArrow(0f, 550f, 135f);
                 break;
             case 13:
-                canAll(false);
+                CanAll(false);
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
 
                 SetOPWindow0("見つけたマークは、リサイクル図鑑に登録されるよ！");
                 break;
             case 14:
-                canAll(false);
+                CanAll(false);
                 canBook = true;
                 opWindow0.SetActive(false);
 
@@ -2084,19 +2087,19 @@ public class GameManager : MonoBehaviour
             case 20: //図鑑パートのチュートリアルを想定
                 break;
             case 31: //建築パートの前振り
-                canAll(false);
+                CanAll(false);
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
 
                 SetOPWindow0("秘書「おめでとうございます！！」\n秘書「さっそくリサイクルできたようですね！」");
                 break;
             case 32:
-                canAll(false);
+                CanAll(false);
 
                 SetOPWindow0("秘書「実は私もリサイクルできるゴミを\n見つけてきました。」\n秘書「その分のポイントも差し上げますね。」");
                 break;
             case 33:
-                canAll(false);
+                CanAll(false);
 
                 alumiPoint += 15;
                 stealPoint += 15;
@@ -2109,18 +2112,18 @@ public class GameManager : MonoBehaviour
                 opSequence = 34;
                 break;
             case 34:
-                canAll(false);
+                CanAll(false);
 
                 SetOPWindow0("各ポイントを15ずつ獲得した！");
 
                 break;
             case 35:
-                canAll(false);
+                CanAll(false);
 
                 SetOPWindow0("秘書「次は、獲得したポイントを使って、\n町を発展させてみましょう！」");
                 break;
             case 40: //建築パートのチュートリアル
-                canAll(false);
+                CanAll(false);
                 canBuild = true;
                 opWindow0.SetActive(false);
 
@@ -2135,25 +2138,25 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case 41:
-                canAll(false);
+                CanAll(false);
 
                 SetTutorial(-100f, 750f, 0.7f, "「リサイクル場」か「娯楽施設」を\n建てられるよ。\n好きな方を選んで、\n「けってい」ボタンを押そう！");
                 PutArrow(-100f, 510f);
                 break;
             case 42:
-                canAll(false);
+                CanAll(false);
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
 
                 SetOPWindow0("秘書「うまく建物を作れましたね！\n建物を作ると、より多くのポイントを獲得できるようになります。」");
                 break;
             case 50: //イベント
-                canAll(false);
+                CanAll(false);
 
                 SetOPWindow0("秘書「他にも、この町でゴミが出ることもあります。」");
                 break;
             case 51:
-                canAll(false);
+                CanAll(false);
                 canEvent = true;
                 opWindow0.SetActive(false);
 
@@ -2183,13 +2186,13 @@ public class GameManager : MonoBehaviour
                 PutArrow(0f, 500f, -45f);
                 break;
             case 52:
-                canAll(false);
+                CanAll(false);
 
                 SetTutorial(0f, 700f, 0.5f, "正解するとリサイクルポイントを獲得できるよ。\n答えが分からないときは、\nリサイクル図鑑を見てみよう！");
                 //PutArrow(400f, 500f, 0f);
                 break;
             case 53:
-                canAll(false);
+                CanAll(false);
                 canBook = true;
 
                 SetTutorial(-150f, -500f, 0.5f, "答えが分からないときは、\nリサイクル図鑑を見てみよう！");
@@ -2200,33 +2203,33 @@ public class GameManager : MonoBehaviour
             case 70: //イベントパート、回答編
                 break;
             case 80: //ミッションパート
-                canAll(false);
+                CanAll(false);
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
 
                 SetOPWindow0("「ミッション」では、その日のマーク集めの\n目標を決めることができるよ。\n\n目標を達成すれば、追加でポイントゲット！！");
                 break;
             case 81:
-                canAll(false);
+                CanAll(false);
                 opWindow0.SetActive(false);
 
                 SetTutorial(0f, 650f, 0.5f, "どのマークを集めるか選んで……");
                 PutArrow(0f, 450f, 0f);
                 break;
             case 82:
-                canAll(false);
+                CanAll(false);
 
                 SetTutorial(0f, 400f, 0.5f, "目標の個数を決めてね。\n(目標が多いほど、クリア報酬も多くなるよ！)");
                 PutArrow(0f, 200f, 0f);
                 break;
             case 83:
-                canAll(false);
+                CanAll(false);
 
                 SetTutorial(0f, 200f, 0.5f, "最後に「けってい」を押してね。");
                 PutArrow(-100f, 000f, 0f);
                 break;
             case 90: //累計ポイントイベント
-                canAll(false);
+                CanAll(false);
 
                 SetOPWindow0("美化レベルがアップ！！！\n\n少しずつ、リサイクルが広まってきてるようです。\nこれからもこの調子で頑張りましょう！！");
                 break;
@@ -2243,7 +2246,7 @@ public class GameManager : MonoBehaviour
                     opSequence = 90;
                 }
 
-                canAll(true);
+                CanAll(true);
                 break;
         }
     }
@@ -2271,7 +2274,7 @@ public class GameManager : MonoBehaviour
     bool canEvent = true;
     bool canBook = true;
 
-    void canAll(bool i) //↑のフラグを一括変更
+    void CanAll(bool i) //↑のフラグを一括変更
     {
         canInput = i;
         canBuild = i;
@@ -2342,6 +2345,27 @@ public class GameManager : MonoBehaviour
         if(cleanLV >= 1)
         {
             backImage_CleanLV1.SetActive(true);
+        }
+    }
+
+    //-------------------------------------------------------------------------
+    //建築オススメAI関連
+    [SerializeField] GameObject appealFactory;
+    [SerializeField] GameObject appealAmusement;
+    [SerializeField] GameObject appealMonument;
+
+    void BuildRecommendAI()
+    {
+        //オススメマークの初期化(非表示)
+        appealFactory.SetActive(false);
+        appealAmusement.SetActive(false);
+        appealMonument.SetActive(false);
+
+        if(playLong / 2 == 0) //プレイ日数が偶数の時のみAIをON。
+        {
+            //↓ここにアルゴリズムを
+            appealAmusement.SetActive(true);
+            //↑ここにアルゴリズムを
         }
     }
 
