@@ -29,7 +29,7 @@ public class Paper_Button : MonoBehaviour
         //Btrash = TrashPoint.trash;
         Btrash_paper = TrashPoint.paper;//引用した数値を入れる変数
 
-        if (Btrash_paper == 5)//仮の数値。登録したごみが１個以上になった場合に、図鑑の項目が出現するようになる。
+        if (Btrash_paper >= 1)//仮の数値。登録したごみが１個以上になった場合に、図鑑の項目が出現するようになる。
         {
             Button btn = GetComponent<Button>();//インスペクターのボタンオブジェクトで指定したボタンの解放、このままではほかのオブジェクトも同時に処理してしまうので、もっと細かい指定が必要。
             btn.interactable = true;
