@@ -4,13 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-
-public class Trophy_Flag : MonoBehaviour
+public class Trophy_2 : MonoBehaviour
 {
-    public GameObject CanTrophy_Button;
+    public GameObject PlaTrophy_Button;
     public Counter_test TrashPoint;
 
-    public int Trophy_ID;
     public Sprite trashSprite;
     private Image image;
     public int Btrash_alumi;//引用した数値を入れる変数
@@ -33,17 +31,20 @@ public class Trophy_Flag : MonoBehaviour
     {
         Btrash_alumi = TrashPoint.alumi;
         Btrash_steal = TrashPoint.steal;
+        Btrash_pet = TrashPoint.pet;
+        Btrash_pla = TrashPoint.pla;
+        Btrash_paper = TrashPoint.paper;
 
-        if ((Btrash_alumi ==2)&&(Btrash_steal==2))//アルミとスチールが登録されたならば...
+        if ( (Btrash_pet >= 1) && (Btrash_pla >= 1))//アルミとスチールが登録されたならば...
         {
-            Button btn = GameObject.Find("CanTrophy_Button").GetComponent<Button>();
+            Button btn = GameObject.Find("PlaTrophy_Button").GetComponent<Button>();
             btn.interactable = true;
             //CanTrophy_Button.SetActive(true);
 
             image.sprite = trashSprite;//画像を変える→IF文で差し込め！
 
-            Debug.Log("trophy起動");
+            //Debug.Log("trophy起動");
         }
-        
+
     }
 }
