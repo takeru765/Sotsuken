@@ -50,11 +50,12 @@ public class GameManager : MonoBehaviour
                 OpenEnqueteWindow();
             }
 
-            //イベントボーナスをリセット
+            //イベント関連をリセット
+            answered = false;
             eventBonus = 1.0f;
 
             //イベント内容をランダムで決定
-            eventID = UnityEngine.Random.Range(1, 6); //Randomは、上限の値は含まないことに注意
+            eventID = UnityEngine.Random.Range(1, 5); //Randomは、上限の値は含まないことに注意
 
             eventAppeal.SetActive(true);
             missionAppeal.SetActive(true);
@@ -1163,12 +1164,6 @@ public class GameManager : MonoBehaviour
 
         PointViewerChange();
         Save(save);
-        //以下3行は動作確認用です。要らなくなったら消してください。
-        /*
-        Debug.Log(lv[0] + "," + lv[1] + "," + lv[2]);
-        CalcBuildBonus();
-        Debug.Log(inputRate + "," + (int)(5 * (inputRate + 0.01f)));
-        */
     }
 
     //建築によるボーナス
@@ -1771,10 +1766,8 @@ public class GameManager : MonoBehaviour
                 count = todayPaper;
                 break;
             default:
-                Debug.Log("markError");
                 break;
         }
-        Debug.Log("flag" + successMission + "count" + count + ",todayAlumi" + todayAlumi);
 
         if (setMission == true && count >= goal && successMission == false)
         {
@@ -2037,6 +2030,8 @@ public class GameManager : MonoBehaviour
         {
             case 0: //オープニング
                 CanAll(false); //全ボタンの開閉を禁止
+                tutorialWindow.SetActive(false);
+                arrow.SetActive(false);
 
                 SetOPWindow0("プレイありがとうございます。\n\nあなたはこのリサイクルシティの市長です。\n\n現実で出たゴミを「リサイクル」しながら、\nこの町を発展させていくのが\nこのゲームの目的です。");
                 break;
@@ -2429,7 +2424,7 @@ public class GameManager : MonoBehaviour
         //AudioSourceを取得
         audioSource = GetComponent<AudioSource>();
 
-        //イベント・ミッションのチュートリアル未達の場合、それぞれに強調マークを表示
+        //当日のイベント・ミッションが未達の場合、それぞれに強調マークを表示
         if (answered == true)
         {
             eventAppeal.SetActive(false);
@@ -2437,6 +2432,12 @@ public class GameManager : MonoBehaviour
         if (setMission == true)
         {
             missionAppeal.SetActive(false);
+        }
+
+        //図鑑パート中に中断していた場合、図鑑パートへの誘導に戻る。
+        if (opSequence >= 20 && opSequence <= 30)
+        {
+            opSequence = 13;
         }
 
         //日を跨いだか確認

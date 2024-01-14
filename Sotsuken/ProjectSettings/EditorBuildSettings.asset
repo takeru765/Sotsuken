@@ -18,4 +18,5 @@ EditorBuildSettings:
     path: Assets/Scenes/Odajima_bookpart.unity
     guid: e7f31a40f6f506b43bc38b2b9d833bb4
   m_configObjects:
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 7400d36be58336043aa4ef4af75ffb64, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 22ffb1657446213499f3b348c4d7da92, type: 2}
