@@ -50,11 +50,12 @@ public class GameManager : MonoBehaviour
                 OpenEnqueteWindow();
             }
 
-            //イベントボーナスをリセット
+            //イベント関連をリセット
+            answered = false;
             eventBonus = 1.0f;
 
             //イベント内容をランダムで決定
-            eventID = UnityEngine.Random.Range(1, 6); //Randomは、上限の値は含まないことに注意
+            eventID = UnityEngine.Random.Range(1, 5); //Randomは、上限の値は含まないことに注意
 
             eventAppeal.SetActive(true);
             missionAppeal.SetActive(true);
@@ -728,7 +729,7 @@ public class GameManager : MonoBehaviour
     int selectedBuilding = 0; //BuildWindow0で使用。1がリサイクル場、2が娯楽施設
 
     //建築フラグ等
-    int[] place = {0, 0, 0, 0, 0, 0}; //建築場所1～6の建物。1がリサイクル場、2が娯楽施設
+    int[] place = {0, 0, 0, 0, 0, 0}; //建築場所1～6の建物。1がリサイクル場、2が娯楽施設、3がモニュメント
     int[] lv = {0, 0, 0, 0, 0, 0}; //建築場所1～6のレベル
 
     //各建築場所の画像
@@ -875,18 +876,45 @@ public class GameManager : MonoBehaviour
                     if(alumiPoint >= 15 && petPoint >= 15 && plaPoint >= 15)
                     {
                         enoughBuildPoint = true;
+
+                        if (factoryBackImage1.activeSelf == true) //建設物に応じた背景追加
+                        {
+                            factoryBackImage2.SetActive(true);
+                        }
+                        else
+                        {
+                            factoryBackImage1.SetActive(true);
+                        }
                     }
                     break;
                 case 2:
                     if (alumiPoint >= 15 && plaPoint >= 15 && paperPoint >= 15)
                     {
                         enoughBuildPoint = true;
+
+                        if (amusementBackImage1.activeSelf == true) //建設物に応じた背景追加
+                        {
+                            amusementBackImage2.SetActive(true);
+                        }
+                        else
+                        {
+                            amusementBackImage1.SetActive(true);
+                        }
                     }
                     break;
                 case 3:
                     if(stealPoint >= 15 && petPoint >= 15 && plaPoint >= 15 && paperPoint >= 15)
                     {
                         enoughBuildPoint = true;
+
+                        if (monumentBackImage1.activeSelf == true) //建設物に応じた背景追加
+                        {
+                            monumentBackImage2.SetActive(true);
+                        }
+                        else
+                        {
+                            monumentBackImage1.SetActive(true);
+                        }
                     }
                     break;
                 default:
@@ -1163,12 +1191,6 @@ public class GameManager : MonoBehaviour
 
         PointViewerChange();
         Save(save);
-        //以下3行は動作確認用です。要らなくなったら消してください。
-        /*
-        Debug.Log(lv[0] + "," + lv[1] + "," + lv[2]);
-        CalcBuildBonus();
-        Debug.Log(inputRate + "," + (int)(5 * (inputRate + 0.01f)));
-        */
     }
 
     //建築によるボーナス
@@ -1771,10 +1793,8 @@ public class GameManager : MonoBehaviour
                 count = todayPaper;
                 break;
             default:
-                Debug.Log("markError");
                 break;
         }
-        Debug.Log("flag" + successMission + "count" + count + ",todayAlumi" + todayAlumi);
 
         if (setMission == true && count >= goal && successMission == false)
         {
@@ -2037,6 +2057,8 @@ public class GameManager : MonoBehaviour
         {
             case 0: //オープニング
                 CanAll(false); //全ボタンの開閉を禁止
+                tutorialWindow.SetActive(false);
+                arrow.SetActive(false);
 
                 SetOPWindow0("プレイありがとうございます。\n\nあなたはこのリサイクルシティの市長です。\n\n現実で出たゴミを「リサイクル」しながら、\nこの町を発展させていくのが\nこのゲームの目的です。");
                 break;
@@ -2340,12 +2362,57 @@ public class GameManager : MonoBehaviour
     }
 
     //-------------------------------------------------------------------------
-    //(起動時用の)累計ポイントに応じた背景の変更
+    //建築物に応じた背景表示
+    [SerializeField] GameObject factoryBackImage1;
+    [SerializeField] GameObject factoryBackImage2;
+    [SerializeField] GameObject amusementBackImage1;
+    [SerializeField] GameObject amusementBackImage2;
+    [SerializeField] GameObject monumentBackImage1;
+    [SerializeField] GameObject monumentBackImage2;
+
+    //(起動時用の)累計ポイントや建築物に応じた背景の変更
     void SetBackImage()
     {
-        if(cleanLV >= 1)
+        if(cleanLV >= 1) //累積ポイントに応じた背景設定
         {
             backImage_CleanLV1.SetActive(true);
+        }
+
+        for(int i = 0; i < 6; i++) //建築物に応じた背景設定
+        {
+            if(place[i] == 1)
+            {
+                if(factoryBackImage1.activeSelf == true)
+                {
+                    factoryBackImage2.SetActive(true);
+                }
+                else
+                {
+                    factoryBackImage1.SetActive(true);
+                }
+            }
+            else if(place[i] == 2)
+            {
+                if (amusementBackImage1.activeSelf == true)
+                {
+                    amusementBackImage2.SetActive(true);
+                }
+                else
+                {
+                    amusementBackImage1.SetActive(true);
+                }
+            }
+            else if(place[i] == 3)
+            {
+                if (monumentBackImage1.activeSelf == true)
+                {
+                    monumentBackImage2.SetActive(true);
+                }
+                else
+                {
+                    monumentBackImage1.SetActive(true);
+                }
+            }
         }
     }
 
@@ -2429,7 +2496,7 @@ public class GameManager : MonoBehaviour
         //AudioSourceを取得
         audioSource = GetComponent<AudioSource>();
 
-        //イベント・ミッションのチュートリアル未達の場合、それぞれに強調マークを表示
+        //当日のイベント・ミッションが未達の場合、それぞれに強調マークを表示
         if (answered == true)
         {
             eventAppeal.SetActive(false);
@@ -2437,6 +2504,12 @@ public class GameManager : MonoBehaviour
         if (setMission == true)
         {
             missionAppeal.SetActive(false);
+        }
+
+        //図鑑パート中に中断していた場合、図鑑パートへの誘導に戻る。
+        if (opSequence >= 20 && opSequence <= 30)
+        {
+            opSequence = 13;
         }
 
         //日を跨いだか確認
