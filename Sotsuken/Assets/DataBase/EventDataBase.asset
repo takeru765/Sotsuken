@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: EventDataBase
   m_EditorClassIdentifier: 
   eventList:
-  - {fileID: 11400000, guid: e6a4d2034f428a3488d851e7e5b23d1a, type: 2}
   - {fileID: 11400000, guid: 847046815ad25c8489b3411419c525c2, type: 2}
   - {fileID: 11400000, guid: 0aa92eec57d7cc94ca90ef387e8631da, type: 2}
   - {fileID: 11400000, guid: f04a48d2e5d82ef4ba1e593b6d182438, type: 2}
