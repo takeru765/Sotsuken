@@ -170,12 +170,17 @@ public class Tutorial_Script : MonoBehaviour
 
     public void StartFadeOut() //フェードアウト開始
     {
-        opSequence = 31;
+        if (opSequence < 30)
+        {
+            opSequence = 31;
+        }
+        
         Save(save);
         isFadeOut = true;
     }
 
     //オープニング、チュートリアルの進行管理
+    AudioSource audioSource;
     [SerializeField] GameObject opWindow0; //文章のみのOP用ウィンドウ
     [SerializeField] TextMeshProUGUI opText;
 
@@ -184,11 +189,16 @@ public class Tutorial_Script : MonoBehaviour
     [SerializeField] GameObject Tutorial_book;//チュートリアルで開くアルミ図鑑
     [SerializeField] GameObject Tutorial_trophy;//チュートリアルで開く称号ページ
     [SerializeField] GameObject Tutorial_button;
+    
+    [SerializeField] AudioClip openWindow;
 
     int opSequence = 20; //オープニング・チュートリアルの進行度(本スクリプトは図鑑パートのデバッグ用に20からスタート)
 
+    
+
     void ClickCheck() //クリック時に呼び出す。オープニングの進捗に応じて、画面クリックで進行するかを管理。制作中
     {
+        
         switch (opSequence)
         {
             /*case 0:
@@ -214,28 +224,37 @@ public class Tutorial_Script : MonoBehaviour
                 opSequence = 31; //後で、移動先を図鑑チュートリアルに変更
                 break;*/
             case 20:
+                
+                audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 21;
                 break;
             case 21:
+                audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 22;
                 break;
             case 22:
+                audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 23;
                 break;
             case 23:
+                audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 24;
                 break;
             case 24:
+                audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 25;
                 break;
             case 25:
+                audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 26;
                 break;
 
             case 26:
+                audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 27;
                 break;
             case 27:
+               // audioSource.PlayOneShot(openWindow); //効果音再生
                 opSequence = 28;
                 break;
             case 28:
@@ -340,23 +359,23 @@ public class Tutorial_Script : MonoBehaviour
                 opWindow0.SetActive(false);
                 Tutorial_button.SetActive(false);
                 Tutorial_book.SetActive(true);
-                SetTutorial(0f, -400f, 1.0f, "ずかんのうえはマークのなまえと、\n\nマークにつかわれるゴミの\n\nしゅるいについてかかれています");
+                SetTutorial(0f, -400f, 1.0f, "ずかんにはマークのなまえや\n\nマークにつかわれるゴミのしゅるい\n\nぶんべつのしかたについてかかれています");
                 break;
           
             case 25:
                 Tutorial_book.SetActive(false);
                 tutorialWindow.SetActive(false);
-                PutArrow(143f, -564f, -360f);
+                PutArrow(57f, -610f, -360f);
                 SetOPWindow0("また、決められたリサイクルマークを\n\nあつめると、しょうごうをゲットできます\n\nこのボタンでしょうごうがひらかれます");
                 break;
             case 26:
-                Tutorial_trophy.SetActive(true);
+                //Tutorial_trophy.SetActive(true);
                 arrow.SetActive(false);
                 SetOPWindow0("しょうごうをあつめて、\n\nリサイクルマークはかせになろう！");
                 break;
             case 27:
                 Tutorial_trophy.SetActive(false);
-                PutArrow(-160f, -693f, -448f);
+                PutArrow(25f, -582f, -448f);
                 SetOPWindow0("ずかんパートのせつめいをおわります\n\nこのボタンをおして\n\nはってんパートにもどってください");
                 break;
 
@@ -553,7 +572,7 @@ public class Tutorial_Script : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
