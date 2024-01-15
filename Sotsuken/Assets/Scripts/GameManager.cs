@@ -428,43 +428,43 @@ public class GameManager : MonoBehaviour
                 case 1:
                     if(place[i] == 1)
                     {
-                        buildIntro.text = "LV:1→2\nコスト:各30pt\nボーナス:+20%→+40%";
+                        buildIntro.text = "LV:1→2\nアルミ:30pt、ペットボトル:30pt\nプラスチック:30pt\nボーナス:+20%→+40%";
                     }
                     else if(place[i] == 2)
                     {
-                        buildIntro.text = "LV:1→2\nコスト:各30pt\nボーナス:+20%→+40%";
+                        buildIntro.text = "LV:1→2\nアルミ:30pt、プラスチック:30pt\nかみ:30pt\nボーナス:+20%→+40%";
                     }
                     else if(place[i] == 3)
                     {
-                        buildIntro.text = "LV:1→2\nコスト:各30pt\n美化ポイント＋30";
+                        buildIntro.text = "LV:1→2\nスチール:30pt、ペットボトル:30pt\nプラスチック:30pt、かみ:30pt\n美化ポイント＋30";
                     }
                     break;
                 case 2:
                     if (place[i] == 1)
                     {
-                        buildIntro.text = "LV:2→3\nコスト:各45pt\nボーナス:+40%→+60%";
+                        buildIntro.text = "LV:2→3\nアルミ:45pt、ペットボトル:45pt\nプラスチック:45pt\nボーナス:+40%→+60%";
                     }
                     else if (place[i] == 2)
                     {
-                        buildIntro.text = "LV:2→3\nコスト:各45pt\nボーナス:+40%→+60%";
+                        buildIntro.text = "LV:2→3\nアルミ:45pt、プラスチック:45pt\nかみ:45pt\nボーナス:+40%→+60%";
                     }
                     else if (place[i] == 3)
                     {
-                        buildIntro.text = "LV:2→3\nコスト:各45pt\n美化ポイント＋30";
+                        buildIntro.text = "LV:2→3\nスチール:45pt、ペットボトル:45pt\nプラスチック:45pt、かみ:45pt\n美化ポイント＋30";
                     }
                     break;
                 case 3:
                     if (place[i] == 1)
                     {
-                        buildIntro.text = "LV:3→4\nコスト:各60pt\nボーナス:+60%→+80%";
+                        buildIntro.text = "LV:3→4\nアルミ:60pt、ペットボトル:60pt\nプラスチック:60pt\nボーナス:+60%→+80%";
                     }
                     else if (place[i] == 2)
                     {
-                        buildIntro.text = "LV:3→4\nコスト:各60pt\nボーナス:+60%→+80%";
+                        buildIntro.text = "LV:3→4\nアルミ:60pt、プラスチック:60pt\nかみ:60pt\nボーナス:+60%→+80%";
                     }
                     else if (place[i] == 3)
                     {
-                        buildIntro.text = "LV:3→4\nコスト:各60pt\n美化ポイント＋30";
+                        buildIntro.text = "LV:3→4\nスチール:60pt、ペットボトル:60pt\nプラスチック:60pt、かみ:60pt\n美化ポイント＋30";
                     }
                     break;
                 case 4:
@@ -1750,26 +1750,29 @@ public class GameManager : MonoBehaviour
     //ミッション確定
     public void SetMission()
     {
-        if(setMission == false)
+        if(opSequence < 80 || opSequence >= 83)
         {
-            audioSource.PlayOneShot(enter); //効果音再生
-        }
-        setMission = true;
-        missionAppeal.SetActive(false);
-
-        //今日の日付を保存
-        setYear = time.Year;
-        setMonth = time.Month;
-        setDay = time.Day;
-
-        if(opSequence == 83)
-        {
-            tutorialMission = true;
+            if (setMission == false)
+            {
+                audioSource.PlayOneShot(enter); //効果音再生
+            }
+            setMission = true;
             missionAppeal.SetActive(false);
-            opSequence = 999;
-        }
 
-        Save(save);
+            //今日の日付を保存
+            setYear = time.Year;
+            setMonth = time.Month;
+            setDay = time.Day;
+
+            if (opSequence == 83)
+            {
+                tutorialMission = true;
+                missionAppeal.SetActive(false);
+                opSequence = 999;
+            }
+
+            Save(save);
+        }
     }
 
     //ミッション達成判定
