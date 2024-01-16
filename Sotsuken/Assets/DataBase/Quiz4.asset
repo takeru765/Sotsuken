@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 5
   eventName: "\u7D19\u30AF\u30A4\u30BA"
-  isQuiz: 0
+  isQuiz: 1
   bonus: 20
   alumi: 0
   steal: 0
