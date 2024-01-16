@@ -450,43 +450,43 @@ public class GameManager : MonoBehaviour
                 case 1:
                     if(place[i] == 1)
                     {
-                        buildIntro.text = "LV:1→2\nアルミ:30pt、ペットボトル:30pt\nプラスチック:30pt\nボーナス:+20%→+40%";
+                        buildIntro.text = "LV:1→2\nアルミ:45pt、ペットボトル:45pt\nプラスチック:45pt、他:15pt\nボーナス:+20%→+40%";
                     }
                     else if(place[i] == 2)
                     {
-                        buildIntro.text = "LV:1→2\nアルミ:30pt、プラスチック:30pt\nかみ:30pt\nボーナス:+20%→+40%";
+                        buildIntro.text = "LV:1→2\nアルミ:45pt、プラスチック:45pt\nかみ:45pt、他:15pt\nボーナス:+20%→+40%";
                     }
                     else if(place[i] == 3)
                     {
-                        buildIntro.text = "LV:1→2\nスチール:30pt、ペットボトル:30pt\nプラスチック:30pt、かみ:30pt\n美化ポイント＋30";
+                        buildIntro.text = "LV:1→2\nスチール:45pt、ペットボトル:45pt\nプラスチック:45pt、かみ:45pt、他:15pt\n美化ポイント＋30";
                     }
                     break;
                 case 2:
                     if (place[i] == 1)
                     {
-                        buildIntro.text = "LV:2→3\nアルミ:45pt、ペットボトル:45pt\nプラスチック:45pt\nボーナス:+40%→+60%";
+                        buildIntro.text = "LV:2→3\nアルミ:60pt、ペットボトル:60pt\nプラスチック:60pt、他:15pt\nボーナス:+40%→+60%";
                     }
                     else if (place[i] == 2)
                     {
-                        buildIntro.text = "LV:2→3\nアルミ:45pt、プラスチック:45pt\nかみ:45pt\nボーナス:+40%→+60%";
+                        buildIntro.text = "LV:2→3\nアルミ:60pt、プラスチック:60pt\nかみ:60pt、他:15pt\nボーナス:+40%→+60%";
                     }
                     else if (place[i] == 3)
                     {
-                        buildIntro.text = "LV:2→3\nスチール:45pt、ペットボトル:45pt\nプラスチック:45pt、かみ:45pt\n美化ポイント＋30";
+                        buildIntro.text = "LV:2→3\nスチール:60pt、ペットボトル:60pt\nプラスチック:60pt、かみ:60pt、他:15pt\n美化ポイント＋30";
                     }
                     break;
                 case 3:
                     if (place[i] == 1)
                     {
-                        buildIntro.text = "LV:3→4\nアルミ:60pt、ペットボトル:60pt\nプラスチック:60pt\nボーナス:+60%→+80%";
+                        buildIntro.text = "LV:3→4\nアルミ:75pt、ペットボトル:75pt\nプラスチック:75pt、他:15pt\nボーナス:+60%→+80%";
                     }
                     else if (place[i] == 2)
                     {
-                        buildIntro.text = "LV:3→4\nアルミ:60pt、プラスチック:60pt\nかみ:60pt\nボーナス:+60%→+80%";
+                        buildIntro.text = "LV:3→4\nアルミ:75pt、プラスチック:75pt\nかみ:75pt、他:15pt\nボーナス:+60%→+80%";
                     }
                     else if (place[i] == 3)
                     {
-                        buildIntro.text = "LV:3→4\nスチール:60pt、ペットボトル:60pt\nプラスチック:60pt、かみ:60pt\n美化ポイント＋30";
+                        buildIntro.text = "LV:3→4\nスチール:75pt、ペットボトル:75pt\nプラスチック:75pt、かみ:75pt、他:15pt\n美化ポイント＋30";
                     }
                     break;
                 case 4:
@@ -920,7 +920,7 @@ public class GameManager : MonoBehaviour
             switch(selectedBuilding) //建築に必要なポイントがあるか確認
             {
                 case 1:
-                    if(alumiPoint >= 15 && petPoint >= 15 && plaPoint >= 15)
+                    if(alumiPoint >= 30 && stealPoint >= 15 && petPoint >= 30 && plaPoint >= 30 && paperPoint >= 15)
                     {
                         enoughBuildPoint = true;
 
@@ -935,7 +935,7 @@ public class GameManager : MonoBehaviour
                     }
                     break;
                 case 2:
-                    if (alumiPoint >= 15 && plaPoint >= 15 && paperPoint >= 15)
+                    if (alumiPoint >= 30 && stealPoint >= 15 && petPoint >= 15 && plaPoint >= 30 && paperPoint >= 30 && opSequence >= 999)
                     {
                         enoughBuildPoint = true;
 
@@ -950,7 +950,7 @@ public class GameManager : MonoBehaviour
                     }
                     break;
                 case 3:
-                    if(stealPoint >= 15 && petPoint >= 15 && plaPoint >= 15 && paperPoint >= 15)
+                    if(alumiPoint >= 15 && stealPoint >= 30 && petPoint >= 30 && plaPoint >= 30 && paperPoint >= 30 && opSequence >= 999)
                     {
                         enoughBuildPoint = true;
 
@@ -979,24 +979,29 @@ public class GameManager : MonoBehaviour
                         if (selectedBuilding == 1)
                         {
                             buildImage0.sprite = recycleImage;
-                            alumiPoint -= 15;
-                            petPoint -= 15;
-                            plaPoint -= 15;
+                            alumiPoint -= 30;
+                            stealPoint -= 15;
+                            petPoint -= 30;
+                            plaPoint -= 30;
+                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage0.sprite = amusementImage;
-                            alumiPoint -= 15;
-                            plaPoint -= 15;
-                            paperPoint -= 15;
+                            alumiPoint -= 30;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 30;
+                            paperPoint -= 30;
                         }
                         else if (selectedBuilding == 3)
                         {
                             buildImage0.sprite = monumentImage;
-                            stealPoint -= 15;
-                            petPoint -= 15;
-                            plaPoint -= 15;
-                            paperPoint -= 15;
+                            alumiPoint -= 15;
+                            stealPoint -= 30;
+                            petPoint -= 30;
+                            plaPoint -= 30;
+                            paperPoint -= 30;
                             allPoint += 30;
                         }
                         buildLvText0.text = "LV1";
@@ -1005,24 +1010,29 @@ public class GameManager : MonoBehaviour
                         if (selectedBuilding == 1)
                         {
                             buildImage1.sprite = recycleImage;
-                            alumiPoint -= 15;
-                            petPoint -= 15;
-                            plaPoint -= 15;
+                            alumiPoint -= 30;
+                            stealPoint -= 15;
+                            petPoint -= 30;
+                            plaPoint -= 30;
+                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage1.sprite = amusementImage;
-                            alumiPoint -= 15;
-                            plaPoint -= 15;
-                            paperPoint -= 15;
+                            alumiPoint -= 30;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 30;
+                            paperPoint -= 30;
                         }
                         else if (selectedBuilding == 3)
                         {
                             buildImage1.sprite = monumentImage;
-                            stealPoint -= 15;
-                            petPoint -= 15;
-                            plaPoint -= 15;
-                            paperPoint -= 15;
+                            alumiPoint -= 15;
+                            stealPoint -= 30;
+                            petPoint -= 30;
+                            plaPoint -= 30;
+                            paperPoint -= 30;
                             allPoint += 30;
                         }
                         buildLvText1.text = "LV1";
@@ -1031,24 +1041,29 @@ public class GameManager : MonoBehaviour
                         if (selectedBuilding == 1)
                         {
                             buildImage2.sprite = recycleImage;
-                            alumiPoint -= 15;
-                            petPoint -= 15;
-                            plaPoint -= 15;
+                            alumiPoint -= 30;
+                            stealPoint -= 15;
+                            petPoint -= 30;
+                            plaPoint -= 30;
+                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage2.sprite = amusementImage;
-                            alumiPoint -= 15;
-                            plaPoint -= 15;
-                            paperPoint -= 15;
+                            alumiPoint -= 30;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 30;
+                            paperPoint -= 30;
                         }
                         else if (selectedBuilding == 3)
                         {
                             buildImage2.sprite = monumentImage;
-                            stealPoint -= 15;
-                            petPoint -= 15;
-                            plaPoint -= 15;
-                            paperPoint -= 15;
+                            alumiPoint -= 15;
+                            stealPoint -= 30;
+                            petPoint -= 30;
+                            plaPoint -= 30;
+                            paperPoint -= 30;
                             allPoint += 30;
                         }
                         buildLvText2.text = "LV1";
@@ -1057,24 +1072,29 @@ public class GameManager : MonoBehaviour
                         if (selectedBuilding == 1)
                         {
                             buildImage3.sprite = recycleImage;
-                            alumiPoint -= 15;
-                            petPoint -= 15;
-                            plaPoint -= 15;
+                            alumiPoint -= 30;
+                            stealPoint -= 15;
+                            petPoint -= 30;
+                            plaPoint -= 30;
+                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage3.sprite = amusementImage;
-                            alumiPoint -= 15;
-                            plaPoint -= 15;
-                            paperPoint -= 15;
+                            alumiPoint -= 30;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 30;
+                            paperPoint -= 30;
                         }
                         else if (selectedBuilding == 3)
                         {
                             buildImage3.sprite = monumentImage;
-                            stealPoint -= 15;
-                            petPoint -= 15;
-                            plaPoint -= 15;
-                            paperPoint -= 15;
+                            alumiPoint -= 15;
+                            stealPoint -= 30;
+                            petPoint -= 30;
+                            plaPoint -= 30;
+                            paperPoint -= 30;
                             allPoint += 30;
                         }
                         buildLvText3.text = "LV1";
@@ -1083,24 +1103,29 @@ public class GameManager : MonoBehaviour
                         if (selectedBuilding == 1)
                         {
                             buildImage4.sprite = recycleImage;
-                            alumiPoint -= 15;
-                            petPoint -= 15;
-                            plaPoint -= 15;
+                            alumiPoint -= 30;
+                            stealPoint -= 15;
+                            petPoint -= 30;
+                            plaPoint -= 30;
+                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage4.sprite = amusementImage;
-                            alumiPoint -= 15;
-                            plaPoint -= 15;
-                            paperPoint -= 15;
+                            alumiPoint -= 30;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 30;
+                            paperPoint -= 30;
                         }
                         else if (selectedBuilding == 3)
                         {
                             buildImage4.sprite = monumentImage;
-                            stealPoint -= 15;
-                            petPoint -= 15;
-                            plaPoint -= 15;
-                            paperPoint -= 15;
+                            alumiPoint -= 15;
+                            stealPoint -= 30;
+                            petPoint -= 30;
+                            plaPoint -= 30;
+                            paperPoint -= 30;
                             allPoint += 30;
                         }
                         buildLvText4.text = "LV1";
@@ -1109,24 +1134,29 @@ public class GameManager : MonoBehaviour
                         if (selectedBuilding == 1)
                         {
                             buildImage5.sprite = recycleImage;
-                            alumiPoint -= 15;
-                            petPoint -= 15;
-                            plaPoint -= 15;
+                            alumiPoint -= 30;
+                            stealPoint -= 15;
+                            petPoint -= 30;
+                            plaPoint -= 30;
+                            paperPoint -= 15;
                         }
                         else if (selectedBuilding == 2)
                         {
                             buildImage5.sprite = amusementImage;
-                            alumiPoint -= 15;
-                            plaPoint -= 15;
-                            paperPoint -= 15;
+                            alumiPoint -= 30;
+                            stealPoint -= 15;
+                            petPoint -= 15;
+                            plaPoint -= 30;
+                            paperPoint -= 30;
                         }
                         else if (selectedBuilding == 3)
                         {
                             buildImage5.sprite = monumentImage;
-                            stealPoint -= 15;
-                            petPoint -= 15;
-                            plaPoint -= 15;
-                            paperPoint -= 15;
+                            alumiPoint -= 15;
+                            stealPoint -= 30;
+                            petPoint -= 30;
+                            plaPoint -= 30;
+                            paperPoint -= 30;
                             allPoint += 30;
                         }
                         buildLvText5.text = "LV1";
@@ -1135,9 +1165,9 @@ public class GameManager : MonoBehaviour
                         break;
                 }
 
-                if (opSequence == 41) //チュートリアル管理用
+                if (opSequence == 42) //チュートリアル管理用
                 {
-                    opSequence = 42;
+                    opSequence = 43;
                     canBuild = true;
                 }
 
@@ -1157,31 +1187,36 @@ public class GameManager : MonoBehaviour
         switch(lv[selectedPlace])
         {
             case 1:
-                if (place[selectedPlace] == 1 && alumiPoint >= 30 && petPoint >= 30 && plaPoint >= 30)
+                if (place[selectedPlace] == 1 && alumiPoint >= 45 && stealPoint >= 15 && petPoint >= 45 && plaPoint >= 45 && paperPoint >= 15)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 30;
-                    petPoint -= 30;
-                    plaPoint -= 30;
+                    alumiPoint -= 45;
+                    stealPoint -= 15;
+                    petPoint -= 45;
+                    plaPoint -= 45;
+                    paperPoint -= 15;
 
                     ChangeBuildLvText("LV2", selectedPlace);
                 }
-                else if (place[selectedPlace] == 2 && alumiPoint >= 30 && plaPoint >= 30 && paperPoint >= 30)
+                else if (place[selectedPlace] == 2 && alumiPoint >= 45 && stealPoint >=15 && petPoint >= 15  && plaPoint >= 45 && paperPoint >= 45)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 30;
-                    plaPoint -= 30;
-                    paperPoint -= 30;
+                    alumiPoint -= 45;
+                    stealPoint -= 15;
+                    paperPoint -= 15;
+                    plaPoint -= 45;
+                    paperPoint -= 45;
 
                     ChangeBuildLvText("LV2", selectedPlace);
                 }
-                else if(place[selectedPlace] == 3 && stealPoint >= 30 && petPoint >= 30 && plaPoint >= 30 && paperPoint >= 30)
+                else if(place[selectedPlace] == 3 && alumiPoint >= 15 && stealPoint >= 45 && petPoint >= 45 && plaPoint >= 45 && paperPoint >= 45)
                 {
                     lv[selectedPlace] += 1;
-                    stealPoint -= 30;
-                    petPoint -= 30;
-                    plaPoint -= 30;
-                    paperPoint -= 30;
+                    alumiPoint -= 15;
+                    stealPoint -= 45;
+                    petPoint -= 45;
+                    plaPoint -= 45;
+                    paperPoint -= 45;
 
                     allPoint += 30;
 
@@ -1190,31 +1225,36 @@ public class GameManager : MonoBehaviour
                 CloseBuild1();
                 break;
             case 2:
-                if (place[selectedPlace] == 1 && alumiPoint >= 45 && petPoint >= 45 && plaPoint >= 45)
+                if (place[selectedPlace] == 1 && alumiPoint >= 60 && stealPoint >= 15 && petPoint >= 60 && plaPoint >= 60 && paperPoint >= 15)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 45;
-                    petPoint -= 45;
-                    plaPoint -= 45;
+                    alumiPoint -= 60;
+                    stealPoint -= 15;
+                    petPoint -= 60;
+                    plaPoint -= 60;
+                    paperPoint -= 15;
 
                     ChangeBuildLvText("LV3", selectedPlace);
                 }
-                else if (place[selectedPlace] == 2 && alumiPoint >= 45 && plaPoint >= 45 && paperPoint >= 45)
+                else if (place[selectedPlace] == 2 && alumiPoint >= 60 && stealPoint >= 15 && petPoint >= 15 && plaPoint >= 60 && paperPoint >= 60)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 45;
-                    plaPoint -= 45;
-                    paperPoint -= 45;
+                    alumiPoint -= 60;
+                    stealPoint -= 15;
+                    paperPoint -= 15;
+                    plaPoint -= 60;
+                    paperPoint -= 60;
 
                     ChangeBuildLvText("LV3", selectedPlace);
                 }
-                else if (place[selectedPlace] == 3 && stealPoint >= 45 && petPoint >= 45 && plaPoint >= 45 && paperPoint >= 45)
+                else if (place[selectedPlace] == 3 && alumiPoint >= 15 && stealPoint >= 60 && petPoint >= 60 && plaPoint >= 60 && paperPoint >= 60)
                 {
                     lv[selectedPlace] += 1;
-                    stealPoint -= 45;
-                    petPoint -= 45;
-                    plaPoint -= 45;
-                    paperPoint -= 45;
+                    alumiPoint -= 15;
+                    stealPoint -= 60;
+                    petPoint -= 60;
+                    plaPoint -= 60;
+                    paperPoint -= 60;
 
                     allPoint += 30;
 
@@ -1223,31 +1263,36 @@ public class GameManager : MonoBehaviour
                 CloseBuild1();
                 break;
             case 3:
-                if (place[selectedPlace] == 1 && alumiPoint >= 60 && petPoint >= 60 && plaPoint >= 60)
+                if (place[selectedPlace] == 1 && alumiPoint >= 75 && stealPoint >= 15 && petPoint >= 75 && plaPoint >= 75 && paperPoint >= 15)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 60;
-                    petPoint -= 60;
-                    plaPoint -= 60;
+                    alumiPoint -= 75;
+                    stealPoint -= 15;
+                    petPoint -= 75;
+                    plaPoint -= 75;
+                    paperPoint -= 15;
 
                     ChangeBuildLvText("LV4", selectedPlace);
                 }
-                else if (place[selectedPlace] == 2 && alumiPoint >= 60 && plaPoint >= 60 && paperPoint >= 60)
+                else if (place[selectedPlace] == 2 && alumiPoint >= 75 && stealPoint >= 15 && petPoint >= 15 && plaPoint >= 75 && paperPoint >= 75)
                 {
                     lv[selectedPlace] += 1;
-                    alumiPoint -= 60;
-                    plaPoint -= 60;
-                    paperPoint -= 60;
+                    alumiPoint -= 75;
+                    stealPoint -= 15;
+                    paperPoint -= 15;
+                    plaPoint -= 75;
+                    paperPoint -= 75;
 
                     ChangeBuildLvText("LV4", selectedPlace);
                 }
-                else if (place[selectedPlace] == 3 && stealPoint >= 60 && petPoint >= 60 && plaPoint >= 60 && paperPoint >= 60)
+                else if (place[selectedPlace] == 3 && alumiPoint >= 15 && stealPoint >= 75 && petPoint >= 75 && plaPoint >= 75 && paperPoint >= 75)
                 {
                     lv[selectedPlace] += 1;
-                    stealPoint -= 60;
-                    petPoint -= 60;
-                    plaPoint -= 60;
-                    paperPoint -= 60;
+                    alumiPoint -= 15;
+                    stealPoint -= 75;
+                    petPoint -= 75;
+                    plaPoint -= 75;
+                    paperPoint -= 75;
 
                     allPoint += 30;
 
@@ -1345,6 +1390,11 @@ public class GameManager : MonoBehaviour
                 {
                     tmpAlumi = 99;
                 }
+                //チュートリアル中は上限1個
+                if(opSequence != 999 && tmpAlumi > 1)
+                {
+                    tmpAlumi = 1;
+                }
 
                 //テキスト同期
                 if (tmpAlumi < 10)
@@ -1363,6 +1413,11 @@ public class GameManager : MonoBehaviour
                 if (tmpSteal > 99)
                 {
                     tmpSteal = 99;
+                }
+                //チュートリアル中は上限1個
+                if (opSequence != 999 && tmpSteal > 1)
+                {
+                    tmpSteal = 1;
                 }
 
                 //テキスト同期
@@ -1383,6 +1438,11 @@ public class GameManager : MonoBehaviour
                 {
                     tmpPet = 99;
                 }
+                //チュートリアル中は上限1個
+                if (opSequence != 999 && tmpPet > 1)
+                {
+                    tmpPet = 1;
+                }
 
                 //テキスト同期
                 if (tmpPet < 10)
@@ -1402,6 +1462,11 @@ public class GameManager : MonoBehaviour
                 {
                     tmpPla = 99;
                 }
+                //チュートリアル中は上限1個
+                if (opSequence != 999 && tmpPla > 1)
+                {
+                    tmpPla = 1;
+                }
 
                 //テキスト同期
                 if (tmpPla < 10)
@@ -1420,6 +1485,11 @@ public class GameManager : MonoBehaviour
                 if (tmpPaper > 99)
                 {
                     tmpPaper = 99;
+                }
+                //チュートリアル中は上限1個
+                if (opSequence != 999 && tmpPaper > 1)
+                {
+                    tmpPaper = 1;
                 }
 
                 //テキスト同期
@@ -2131,8 +2201,14 @@ public class GameManager : MonoBehaviour
                 opSequence = 40;
                 break;
             case 41:
+                opSequence = 42;
                 break;
             case 42:
+                break;
+            case 43:
+                opSequence = 44;
+                break;
+            case 44:
                 Save(save);
                 opSequence = 999;
                 break;
@@ -2186,8 +2262,8 @@ public class GameManager : MonoBehaviour
                 canInput = true; //入力ボタンだけ使用を許可
                 opWindow0.SetActive(false);
 
-                SetTutorial(250f, -150f, 1.0f, "リサイクルマークを\nみつけたら、\nここをクリックしよう！！");
-                PutArrow(350f, -550f);
+                SetTutorial(80f, -270f, 1.0f, "リサイクルマークを\nみつけたら、\nここをクリックしよう！！");
+                PutArrow(300f, -550f);
                 break;
             case 11:
                 CanAll(false);
@@ -2198,7 +2274,7 @@ public class GameManager : MonoBehaviour
             case 12:
                 CanAll(false);
 
-                SetTutorial(0f, 200f, 1f, "マークを入力すると、\nリサイクルポイントをかくとくできるよ。");
+                SetTutorial(0f, 200f, 1f, "いま にゅうりょくしたマークにおうじて、\nリサイクルポイントをかくとくできるよ。");
                 PutArrow(0f, 550f, 135f);
                 break;
             case 13:
@@ -2213,7 +2289,7 @@ public class GameManager : MonoBehaviour
                 canBook = true;
                 opWindow0.SetActive(false);
 
-                SetTutorial(-150f, -500f, 1.0f, "ずかんをみてみよう！");
+                SetTutorial(-150f, -470f, 1.0f, "ずかんをみてみよう！");
                 PutArrow(-300f, -700f, -90f);
                 break;
             case 20: //図鑑パートのチュートリアルを想定
@@ -2228,17 +2304,16 @@ public class GameManager : MonoBehaviour
             case 32:
                 CanAll(false);
 
-                SetOPWindow0("ひしょ「じつはわたしもリサイクルできるゴミを\nみつけてきました。」\nひしょ「そのぶんのポイントもさしあげますね。」");
+                SetOPWindow0("ひしょ「わたしもリサイクルできるゴミを\nみつけてきました。」\nひしょ「そのぶんのポイントもさしあげますね。」");
                 break;
             case 33:
                 CanAll(false);
 
-                alumiPoint += 15;
-                stealPoint += 15;
-                petPoint += 15;
-                plaPoint += 15;
-                paperPoint += 15;
-                allPoint += 75;
+                alumiPoint = 30;
+                stealPoint = 15;
+                petPoint = 30;
+                plaPoint = 30;
+                paperPoint = 15;
                 PointViewerChange(); //ポイント表示UIに反映
                 audioSource.PlayOneShot(inputEnter); //効果音再生
                 opSequence = 34;
@@ -2246,7 +2321,7 @@ public class GameManager : MonoBehaviour
             case 34:
                 CanAll(false);
 
-                SetOPWindow0("かくポイントを15ずつかくとくした！");
+                SetOPWindow0("ポイントをかくとくした！");
 
                 break;
             case 35:
@@ -2261,8 +2336,8 @@ public class GameManager : MonoBehaviour
 
                 if(lv[0] == 0) //(デバッグ用)既に建築済みの場合はチュートリアルを終了する。
                 {
-                    SetTutorial(-200f, 0f, 1.0f, "とちをタップすると、けんちくがめんにすすむよ。");
-                    PutArrow(-200f, 180f, 90f);
+                    SetTutorial(-200f, -100f, 1.0f, "とちをタップすると、けんちくがめんにすすむよ。");
+                    PutArrow(-300f, 180f, 90f);
                 }
                 else
                 {
@@ -2272,15 +2347,24 @@ public class GameManager : MonoBehaviour
             case 41:
                 CanAll(false);
 
-                SetTutorial(-100f, 750f, 1.0f, "「リサイクルじょう」を\nたてられるよ。\nリサイクルじょうをえらんで、\n「けってい」ボタンをおそう！");
-                PutArrow(-100f, 510f);
+                SetTutorial(-100f, 700f, 1.0f, "けんちくがめんでは、たてものをたてられるよ。\nオススメのたてものにはアイコンがつくよ！");
+                PutArrow(-350f, 450f);
                 break;
             case 42:
+                CanAll(false);
+
+                SetTutorial(-100f, 700f, 1.0f, "リサイクルじょうをえらんで、\n「けってい」ボタンをおそう！");
+                PutArrow(-350f, 450f);
+                break;
+            case 43:
                 CanAll(false);
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
 
                 SetOPWindow0("ひしょ「うまくたてものを作れましたね！\nたてものをつくると、よりおおくのポイントをかくとくできるようになります。」");
+                break;
+            case 44:
+                SetOPWindow0("これで チュートリアルはおしまいです。\nリサイクルマークをあつめて、\nきみだけのまちを つくってみよう！");
                 break;
             case 50: //イベント
                 CanAll(false);
