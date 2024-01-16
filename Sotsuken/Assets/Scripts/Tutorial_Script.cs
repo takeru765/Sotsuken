@@ -337,7 +337,7 @@ public class Tutorial_Script : MonoBehaviour
                 break;*/
 
             case 20: //図鑑パートのチュートリアルを想定//ここば図鑑パートで
-                SetOPWindow0("ここはずかんパートです\n\nいままであつめたリサイクルマークをみて\n\nべんきょうすることができます");
+                SetOPWindow0("ここはずかんパートです\n\nあつめたゴミの しゅるい や すてかた を\n\nべんきょうすることができます");
                 //Debug.Log("起動済み");
                 break;
 
@@ -359,19 +359,19 @@ public class Tutorial_Script : MonoBehaviour
                 opWindow0.SetActive(false);
                 Tutorial_button.SetActive(false);
                 Tutorial_book.SetActive(true);
-                SetTutorial(0f, -400f, 1.0f, "ずかんにはマークのなまえや\n\nマークにつかわれるゴミのしゅるい\n\nぶんべつのしかたについてかかれています");
+                SetTutorial2(0f, -400f, 1.0f, "ずかんにはゴミのなまえやそのしゅるい\n\nぶんべつのしかたについてかかれています");
                 break;
           
             case 25:
                 Tutorial_book.SetActive(false);
-                tutorialWindow.SetActive(false);
+                tutorialWindow2.SetActive(false);
                 PutArrow(57f, -610f, -360f);
-                SetOPWindow0("また、決められたリサイクルマークを\n\nあつめると、しょうごうをゲットできます\n\nこのボタンでしょうごうがひらかれます");
+                SetOPWindow0("また、ゴミをあつめていくと\n\nバッジをゲットできるかも...\n\nこのボタンでバッジとヒントを\n\nかくにんできます");
                 break;
             case 26:
                 //Tutorial_trophy.SetActive(true);
                 arrow.SetActive(false);
-                SetOPWindow0("しょうごうをあつめて、\n\nリサイクルマークはかせになろう！");
+                SetOPWindow0("ゴミとバッジをたくさんあつめて、\n\nコンプリートをめざそう！");
                 break;
             case 27:
                 Tutorial_trophy.SetActive(false);
@@ -520,7 +520,9 @@ public class Tutorial_Script : MonoBehaviour
     int blinkTimes = 3; //点滅する回数
 
     [SerializeField] GameObject tutorialWindow;
+    [SerializeField] GameObject tutorialWindow2;
     [SerializeField] TextMeshProUGUI tutorialText;
+    [SerializeField] TextMeshProUGUI tutorialText2;
 
     void SetTutorial(float x, float y, float Scale, string text) //チュートリアルウィンドウの配置
     {
@@ -530,6 +532,15 @@ public class Tutorial_Script : MonoBehaviour
         tutorialText.text = text; //メッセージ変更
 
         tutorialWindow.SetActive(true);
+    }
+    void SetTutorial2(float x, float y, float Scale, string text) //チュートリアルウィンドウの配置
+    {
+        tutorialWindow.transform.localPosition = new Vector2(x, y); //ウィンドウの位置調整
+        tutorialWindow.transform.localScale = new Vector2(Scale, Scale);
+        //tutorialWindow.GetComponent<RectTransform>().sizeDelta = new Vector2(width, height); //ウィンドウのサイズ調整
+        tutorialText2.text = text; //メッセージ変更
+
+        tutorialWindow2.SetActive(true);
     }
 
     void PutArrow(float x, float y, float rotation = 0f) //点滅しない矢印の配置

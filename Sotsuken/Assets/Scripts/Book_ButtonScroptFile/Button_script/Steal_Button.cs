@@ -7,8 +7,8 @@ using UnityEngine.EventSystems;
 public class Steal_Button : MonoBehaviour
 {
     public Counter_test TrashPoint;//現在は仮のスクリプト。Gamemanegerから個別で登録した個数を引用する
-    public Sprite trashSprite;
-    private Image image;
+   // public Sprite trashSprite;
+   // private Image image;
 
     int Btrash_steal;//引用した数値を入れる変数
 
@@ -17,7 +17,7 @@ public class Steal_Button : MonoBehaviour
         Button btn = GetComponent<Button>();
         btn.interactable = false;//ボタン機能を無効にする
 
-        image = GetComponent<Image>();
+        //image = GetComponent<Image>();
 
     }
 
@@ -34,7 +34,7 @@ public class Steal_Button : MonoBehaviour
             Button btn = GetComponent<Button>();//インスペクターのボタンオブジェクトで指定したボタンの解放、このままではほかのオブジェクトも同時に処理してしまうので、もっと細かい指定が必要。
             btn.interactable = true;
 
-            image.sprite = trashSprite;//画像を変える
+            //image.sprite = trashSprite;//画像を変える
         }
 
     }
