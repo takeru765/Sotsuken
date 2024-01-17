@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class Trophy_2 : MonoBehaviour
+public class Trophy_2 : MonoBehaviour//プラとペットのバッジ
 {
     public GameObject PlaTrophy_Button;
     public Counter_test TrashPoint;
@@ -35,7 +35,7 @@ public class Trophy_2 : MonoBehaviour
         Btrash_pla = TrashPoint.pla;
         Btrash_paper = TrashPoint.paper;
 
-        if ( (Btrash_pet >= 1) && (Btrash_pla >= 1))//アルミとスチールが登録されたならば...
+        if ( (Btrash_pet >= 1) && (Btrash_pla >= 1))//ペットとプラ
         {
             Button btn = GameObject.Find("PlaTrophy_Button").GetComponent<Button>();
             btn.interactable = true;
