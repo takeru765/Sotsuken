@@ -713,7 +713,7 @@ public class GameManager : MonoBehaviour
     int paperPoint = 0; //紙製容器包装
     int allPoint = 0; //累計ポイント
     int cleanLV = 0; //美化レベル(累計ポイントが一定ごとに上昇)
-    int[] borderPoint = {150, 100000};
+    int[] borderPoint = {300, 100000};
     [SerializeField] GameObject backImage_CleanLV1;
 
     //当日獲得したポイント(ミッション用)
@@ -2419,8 +2419,8 @@ public class GameManager : MonoBehaviour
             case 83:
                 CanAll(false);
 
-                SetTutorial(0f, -200f, 1.0f, "最後に「けってい」を押してね。");
-                PutArrow(-100f, -100f, 90f);
+                SetTutorial(0f, -450f, 1.0f, "最後に「けってい」を押してね。");
+                PutArrow(-180f, -190f, 90f);
                 break;
             case 90: //累計ポイントイベント
                 CanAll(false);
