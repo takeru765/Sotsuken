@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
             //プレイ日数を加算
             playLong += 1;
 
-            if(playLong >= 1) //一定期間プレイすると、アンケート回答を促す
+            if(playLong >= 3) //一定期間プレイすると、アンケート回答を促す
             {
                 OpenEnqueteWindow();
             }
