@@ -170,13 +170,16 @@ public class Tutorial_Script : MonoBehaviour
 
     public void StartFadeOut() //フェードアウト開始
     {
-        if (opSequence < 30)
+        if (opSequence > 27)
         {
-            opSequence = 31;
+            if (opSequence < 30)
+            {
+                opSequence = 31;
+            }
+
+            Save(save);
+            isFadeOut = true;
         }
-        
-        Save(save);
-        isFadeOut = true;
     }
 
     //オープニング、チュートリアルの進行管理
@@ -191,6 +194,8 @@ public class Tutorial_Script : MonoBehaviour
     [SerializeField] GameObject Tutorial_button;
     
     [SerializeField] AudioClip openWindow;
+
+    [SerializeField]
 
     int opSequence = 20; //オープニング・チュートリアルの進行度(本スクリプトは図鑑パートのデバッグ用に20からスタート)
 
@@ -337,20 +342,20 @@ public class Tutorial_Script : MonoBehaviour
                 break;*/
 
             case 20: //図鑑パートのチュートリアルを想定//ここば図鑑パートで
-                SetOPWindow0("ここはずかんパートです\n\nあつめたゴミの しゅるい や すてかた を\n\nべんきょうすることができます");
+                SetOPWindow0("ここは図鑑パートです\n\nあつめたゴミの 種類 や 捨て方 を\n\n勉強することができます");
                 //Debug.Log("起動済み");
                 break;
 
             case 21:
-                SetOPWindow0("このずかんでリサイクルをおぼえて\n\nまちをきれいにしよう！");
+                SetOPWindow0("この図鑑でリサイクルを覚えて\n\n町をきれいにしよう！");
                 break;
             case 22:
-                SetOPWindow0("ずかんのつかいかたをせつめいします\n\nためしに、アルミかんのページを\n\nひらいてみてみましょう");
+                SetOPWindow0("図鑑の使い方を説明します\n\nためしに、アルミ缶のページを\n\n開いてみましょう");
                 break;
             case 23:
                 
                 Tutorial_button.SetActive(true);
-                SetOPWindow0( "アルミかんのマークをクリックすると\n\nずかんがひらきます");
+                SetOPWindow0( "アルミ缶のマークをクリックすると\n\n図鑑を開くことができます");
                 PutArrow(-95f, 482f, -180f);
                 break;
 
@@ -359,24 +364,24 @@ public class Tutorial_Script : MonoBehaviour
                 opWindow0.SetActive(false);
                 Tutorial_button.SetActive(false);
                 Tutorial_book.SetActive(true);
-                SetTutorial2(0f, -400f, 1.0f, "ずかんにはゴミのなまえやそのしゅるい\n\nぶんべつのしかたについてかかれています");
+                SetTutorial2(0f, -400f, 1.0f, "図鑑にはゴミの名前やその種類\n\n分別のしかたについて書かれています");
                 break;
           
             case 25:
                 Tutorial_book.SetActive(false);
                 tutorialWindow2.SetActive(false);
                 PutArrow(57f, -610f, -360f);
-                SetOPWindow0("また、ゴミをあつめていくと\n\nバッジをゲットできるかも...\n\nこのボタンでバッジとヒントを\n\nかくにんできます");
+                SetOPWindow0("また、ゴミを集めていくと\n\nバッジをゲットできるかも...\n\nこのボタンでバッジとヒントを\n\n確認できます");
                 break;
             case 26:
                 //Tutorial_trophy.SetActive(true);
                 arrow.SetActive(false);
-                SetOPWindow0("ゴミとバッジをたくさんあつめて、\n\nコンプリートをめざそう！");
+                SetOPWindow0("ゴミとバッジをたくさん集めて、\n\nコンプリートをめざそう！");
                 break;
             case 27:
                 Tutorial_trophy.SetActive(false);
                 PutArrow(25f, -582f, -448f);
-                SetOPWindow0("ずかんパートのせつめいをおわります\n\nこのボタンをおして\n\nはってんパートにもどってください");
+                SetOPWindow0("図鑑パートの説明を終わります\n\nこのボタンを押して\n\nはってんパートにもどってください");
                 break;
 
                 /*case 31: //建築パートの前振り

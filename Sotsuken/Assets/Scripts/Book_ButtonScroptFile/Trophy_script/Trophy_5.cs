@@ -35,7 +35,7 @@ public class Trophy_5 : MonoBehaviour
         Btrash_pla = TrashPoint.pla;
         Btrash_paper = TrashPoint.paper;
 
-        if ((Btrash_alumi >= 1) && (Btrash_steal >= 1) && (Btrash_pet >= 1) && (Btrash_pla >= 1) && (Btrash_paper >= 1))//アルミとスチールが登録されたならば...
+        if ((Btrash_alumi >= 20) && (Btrash_steal >= 20) && (Btrash_pet >= 20) && (Btrash_pla >= 20) && (Btrash_paper >= 20))//アルミとスチールが登録されたならば...
         {
             Button btn = GameObject.Find("AllgatTrophy_Button").GetComponent<Button>();
             btn.interactable = true;
