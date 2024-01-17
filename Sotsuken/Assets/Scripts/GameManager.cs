@@ -692,15 +692,18 @@ public class GameManager : MonoBehaviour
 
     public void CloseEvent2()
     {
-        EventWindow2.SetActive(false);
-        open = false;
+        if(canEvent == true)
+        {
+            EventWindow2.SetActive(false);
+            open = false;
 
-        audioSource.PlayOneShot(closeWindow); //効果音再生
+            audioSource.PlayOneShot(closeWindow); //効果音再生
 
-        //ミッションの成功・失敗を判定
-        CheckMission();
-        CheckDate();
-        Save(save); //オートセーブ
+            //ミッションの成功・失敗を判定
+            CheckMission();
+            CheckDate();
+            Save(save); //オートセーブ
+        }
     }
 
     //-------------------------------------------------------------------------
@@ -2373,7 +2376,6 @@ public class GameManager : MonoBehaviour
                 break;
             case 51:
                 CanAll(false);
-                canEvent = true;
                 opWindow0.SetActive(false);
 
                 SetTutorial(0f, 700f, 1.0f, "イベントでは、ゴミごとのリサイクル方法を答える、\nクイズが出るよ。");
@@ -2652,13 +2654,15 @@ public class GameManager : MonoBehaviour
         //累計ポイントに応じて背景を変更
         SetBackImage();
 
-        //初回のみ日付を保存
+        //初回のみ日付を保存、イベントをランダム選択
         time = DateTime.Now;
         if(first == true)
         {
             day = time.Day;
             month = time.Month;
             year = time.Year;
+
+            eventID = UnityEngine.Random.Range(1, 5); //Randomは、上限の値は含まないことに注意
 
             first = false;
             Save(save);
