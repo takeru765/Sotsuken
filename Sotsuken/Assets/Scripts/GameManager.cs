@@ -458,7 +458,7 @@ public class GameManager : MonoBehaviour
                     }
                     else if(place[i] == 3)
                     {
-                        buildIntro.text = "LV:1→2\nスチール:45pt、ペットボトル:45pt\nプラスチック:45pt、かみ:45pt、他:15pt\n美化ポイント＋30";
+                        buildIntro.text = "LV:1→2\nスチール:45pt、ペットボトル:45pt\nプラスチック:45pt、紙:45pt、他:15pt\n美化ポイント＋30";
                     }
                     break;
                 case 2:
@@ -472,7 +472,7 @@ public class GameManager : MonoBehaviour
                     }
                     else if (place[i] == 3)
                     {
-                        buildIntro.text = "LV:2→3\nスチール:60pt、ペットボトル:60pt\nプラスチック:60pt、かみ:60pt、他:15pt\n美化ポイント＋30";
+                        buildIntro.text = "LV:2→3\nスチール:60pt、ペットボトル:60pt\nプラスチック:60pt、紙:60pt、他:15pt\n美化ポイント＋30";
                     }
                     break;
                 case 3:
@@ -486,11 +486,11 @@ public class GameManager : MonoBehaviour
                     }
                     else if (place[i] == 3)
                     {
-                        buildIntro.text = "LV:3→4\nスチール:75pt、ペットボトル:75pt\nプラスチック:75pt、かみ:75pt、他:15pt\n美化ポイント＋30";
+                        buildIntro.text = "LV:3→4\nスチール:75pt、ペットボトル:75pt\nプラスチック:75pt、紙:75pt、他:15pt\n美化ポイント＋30";
                     }
                     break;
                 case 4:
-                    buildIntro.text = "LV:4(Max)\nさいだいレベルです。";
+                    buildIntro.text = "LV:4(Max)\n最大レベルです。";
                     break;
                 default:
                     break;
@@ -2245,36 +2245,36 @@ public class GameManager : MonoBehaviour
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
 
-                SetOPWindow0("プレイありがとうございます。\n\nあなたはリサイクルシティのしちょうです。\n\nげんじつのゴミを「リサイクル」しながら、\nこのまちをはってんさせていくのが\nこのゲームのもくてきです。");
+                SetOPWindow0("プレイありがとうございます。\n\nあなたはリサイクルシティの市長です。\n\n現実のゴミを「リサイクル」しながら、\nこの町を発展させていくのが\nこのゲームの目的です。");
                 break;
             case 1:
                 CanAll(false);
 
-                SetOPWindow0("ひしょ「しちょう、しゅうにんおめでとうございます！」\nひしょ「ゴミをしげんとしてさいりようする「リサイクル」。リサイクルをつうじて、このまちをキレイにしていきましょう！」");
+                SetOPWindow0("秘書「市長、就任おめでとうございます！」\n秘書「ゴミを資源として再利用する「リサイクル」。リサイクルをしながら、この町をキレイにしていきましょう！」");
                 break;
             case 2:
                 CanAll(false);
 
-                SetOPWindow0("ひしょ「まずは、あなたのみのまわりにある、\n「リサイクルマーク」のついたゴミをさがしてみてください。」");
+                SetOPWindow0("秘書「まずは、あなたの身の回りにある、\n「リサイクルマーク」のついたゴミを探してみてください。」");
                 break;
             case 10: //マーク入力チュートリアル
                 CanAll(false);
                 canInput = true; //入力ボタンだけ使用を許可
                 opWindow0.SetActive(false);
 
-                SetTutorial(80f, -270f, 1.0f, "リサイクルマークを\nみつけたら、\nここをクリックしよう！！");
+                SetTutorial(80f, -270f, 1.0f, "リサイクルマークを\n見つけたら、\nここをクリックしよう！！");
                 PutArrow(300f, -550f);
                 break;
             case 11:
                 CanAll(false);
 
-                SetTutorial(-100f, 750f, 1.0f, "みつけたマークのこすうをにゅうりょくして、\n「けってい」ボタンをおそう。");
+                SetTutorial(-100f, 750f, 1.0f, "見つけたマークの個数を\n入力して、\n「けってい」ボタンを\n押そう。");
                 PutArrow(-100f, 510f);
                 break;
             case 12:
                 CanAll(false);
 
-                SetTutorial(0f, 200f, 1f, "いま にゅうりょくしたマークにおうじて、\nリサイクルポイントをかくとくできるよ。");
+                SetTutorial(0f, 200f, 1f, "今、入力したマークの\n数に応じて、\nリサイクルポイントを\n獲得できるよ。");
                 PutArrow(0f, 550f, 135f);
                 break;
             case 13:
@@ -2282,14 +2282,14 @@ public class GameManager : MonoBehaviour
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
 
-                SetOPWindow0("みつけたマークは、リサイクルずかんにとうろくされるよ！");
+                SetOPWindow0("見つけたマークは、リサイクル図鑑に登録されるよ！");
                 break;
             case 14:
                 CanAll(false);
                 canBook = true;
                 opWindow0.SetActive(false);
 
-                SetTutorial(-150f, -470f, 1.0f, "ずかんをみてみよう！");
+                SetTutorial(-150f, -470f, 1.0f, "図鑑を見てみよう！");
                 PutArrow(-300f, -700f, -90f);
                 break;
             case 20: //図鑑パートのチュートリアルを想定
@@ -2299,12 +2299,12 @@ public class GameManager : MonoBehaviour
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
 
-                SetOPWindow0("ひしょ「おめでとうございます！！」\nひしょ「さっそくリサイクルできたようですね！」");
+                SetOPWindow0("秘書「おめでとうございます！！」\n秘書「さっそくリサイクルできましたね！」");
                 break;
             case 32:
                 CanAll(false);
 
-                SetOPWindow0("ひしょ「わたしもリサイクルできるゴミを\nみつけてきました。」\nひしょ「そのぶんのポイントもさしあげますね。」");
+                SetOPWindow0("秘書「私もリサイクルできるゴミを\n見つけてきました。」\n秘書「その分のポイントも渡しますね。」");
                 break;
             case 33:
                 CanAll(false);
@@ -2321,13 +2321,13 @@ public class GameManager : MonoBehaviour
             case 34:
                 CanAll(false);
 
-                SetOPWindow0("ポイントをかくとくした！");
+                SetOPWindow0("ポイントを獲得した！");
 
                 break;
             case 35:
                 CanAll(false);
 
-                SetOPWindow0("ひしょ「つぎは、かくとくしたポイントをつかって、\nまちをはってんさせてみましょう！」");
+                SetOPWindow0("秘書「次は、獲得したポイントを使って、\n町を発展させてみましょう！」");
                 break;
             case 40: //建築パートのチュートリアル
                 CanAll(false);
@@ -2336,7 +2336,7 @@ public class GameManager : MonoBehaviour
 
                 if(lv[0] == 0) //(デバッグ用)既に建築済みの場合はチュートリアルを終了する。
                 {
-                    SetTutorial(-200f, -100f, 1.0f, "とちをタップすると、けんちくがめんにすすむよ。");
+                    SetTutorial(-200f, -100f, 1.0f, "土地をタップすると、建設画面に進むよ。");
                     PutArrow(-300f, 180f, 90f);
                 }
                 else
@@ -2347,13 +2347,13 @@ public class GameManager : MonoBehaviour
             case 41:
                 CanAll(false);
 
-                SetTutorial(-100f, 700f, 1.0f, "けんちくがめんでは、たてものをたてられるよ。\nオススメのたてものにはアイコンがつくよ！");
-                PutArrow(-350f, 450f);
+                SetTutorial(-100f, 700f, 1.0f, "建設画面では、\n建物を建てられるよ。\nオススメの建物には\nアイコンが付くよ！");
+                PutArrow(-350f, 450f, -90f);
                 break;
             case 42:
                 CanAll(false);
 
-                SetTutorial(-100f, 700f, 1.0f, "リサイクルじょうをえらんで、\n「けってい」ボタンをおそう！");
+                SetTutorial(-100f, 700f, 1.0f, "リサイクル施設を選んで、\n「けってい」ボタンを押そう！");
                 PutArrow(-350f, 450f);
                 break;
             case 43:
@@ -2361,28 +2361,28 @@ public class GameManager : MonoBehaviour
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
 
-                SetOPWindow0("ひしょ「うまくたてものを作れましたね！\nたてものをつくると、よりおおくのポイントをかくとくできるようになります。」");
+                SetOPWindow0("秘書「うまく建物を作れましたね！\n建物を作ると、より多くのポイントを\n獲得できるようになります。」");
                 break;
             case 44:
-                SetOPWindow0("これで チュートリアルはおしまいです。\nリサイクルマークをあつめて、\nきみだけのまちを つくってみよう！");
+                SetOPWindow0("これで チュートリアルはおしまいです。\nリサイクルマークを集めて、\n君だけの町を作ってみよう！");
                 break;
             case 50: //イベント
                 CanAll(false);
 
-                SetOPWindow0("ひしょ「ほかにも、このまちでゴミがでることもあります。」");
+                SetOPWindow0("秘書「他にも、この町でゴミが出ることもあります。」");
                 break;
             case 51:
                 CanAll(false);
                 canEvent = true;
                 opWindow0.SetActive(false);
 
-                SetTutorial(0f, 700f, 1.0f, "イベントでは、ゴミにあったリサイクルほうほうをこたえる、\nクイズイベントがはっせいするよ。");
+                SetTutorial(0f, 700f, 1.0f, "イベントでは、ゴミごとのリサイクル方法を答える、\nクイズが出るよ。");
                 PutArrow(0f, 500f, -45f);
                 break;
             case 52:
                 CanAll(false);
 
-                SetTutorial(0f, 700f, 1.0f, "せいかいするとリサイクルポイントをかくとくできるよ。\nこたえがわからないときは、\nリサイクルずかんをみてみよう！");
+                SetTutorial(0f, 700f, 1.0f, "正解するとリサイクルポイントを獲得できるよ。\n答えが分からないときは、\nリサイクル図鑑を見よう！");
                 //PutArrow(400f, 500f, 0f);
                 break;
             case 53:
@@ -2401,31 +2401,31 @@ public class GameManager : MonoBehaviour
                 tutorialWindow.SetActive(false);
                 arrow.SetActive(false);
 
-                SetOPWindow0("「ミッション」では、そのひのマークあつめの\nもくひょうをきめることができるよ。\n\nもくひょうをたっせいすれば、ついかでポイントゲット！！");
+                SetOPWindow0("「ミッション」では、その日のマーク集めの\n目標を決めることができるよ。\n\n目標を達成すれば、\n追加でポイントゲット！！");
                 break;
             case 81:
                 CanAll(false);
                 opWindow0.SetActive(false);
 
-                SetTutorial(0f, 650f, 1.0f, "どのマークをあつめるかえらんで……");
+                SetTutorial(0f, 700f, 1.0f, "どのマークを集めるか\n選んで……");
                 PutArrow(0f, 450f, 0f);
                 break;
             case 82:
                 CanAll(false);
 
-                SetTutorial(0f, 400f, 1.0f, "もくひょうのこすうをきめてね。\n(もくひょうがおおいほど、クリアほうしゅうもおおくなるよ！)");
+                SetTutorial(0f, 450f, 1.0f, "目標の個数を決めてね。\n(目標が多いほど、クリア報酬も多くなるよ！)");
                 PutArrow(0f, 200f, 0f);
                 break;
             case 83:
                 CanAll(false);
 
-                SetTutorial(0f, 200f, 1.0f, "さいごに「けってい」をおしてね。");
-                PutArrow(-100f, 000f, 0f);
+                SetTutorial(0f, -200f, 1.0f, "最後に「けってい」を押してね。");
+                PutArrow(-100f, -100f, 90f);
                 break;
             case 90: //累計ポイントイベント
                 CanAll(false);
 
-                SetOPWindow0("びかレベルがアップ！！！\n\n少しずつ、リサイクルがひろまってきてるようです。\nこれからもこのちょうしでがんばりましょう！！");
+                SetOPWindow0("美化レベルがアップ！！！\n\n少しずつ、リサイクルが広まってきてるようです。\nこれからもこの調子でがんばりましょう！！");
                 break;
             default:
                 //ウィンドウ等を非表示に
